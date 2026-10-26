@@ -1,0 +1,6 @@
+slug: lhg-net
+display_name: 互联网取数层
+description: 互联网取数层：给 AI Agent 装"互联网眼睛"——14 个中外平台（中文优先），每平台"首选→备选→纯流程降级"有序后端链；工具→流程双轨制，零外部依赖也能跑；动手前先体检、开工先声明、只取数不分析；开放式调研/热点选题/写作自动指路 lhg-deep-research / lhg-trend / lhg-writing。
+version: 1.2.0
+author: 刘洪光
+license: MIT

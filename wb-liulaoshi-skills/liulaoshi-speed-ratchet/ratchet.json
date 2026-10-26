@@ -1,0 +1,9 @@
+{
+  "locked_metrics": {
+    "LCP_ms": 1800.0,
+    "INP_ms": 300.0,
+    "CLS": 0.15
+  },
+  "tolerance_pct": 5,
+  "locked_at": "2026-10-24T12:06:42+00:00"
+}
