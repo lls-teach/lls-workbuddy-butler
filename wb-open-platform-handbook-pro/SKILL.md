@@ -8,12 +8,10 @@ description_en: "Publishing butler for the WorkBuddy open platform: pre-submissi
 examples_zh:
   - 帮我把这个技能包上架到 WorkBuddy 市场
   - 帮我体检这个技能包，看看能不能过审
-  - 我要做连接器，市场分类和服务类目怎么选？
-  - 给我的签到技能写一套上架推广文案
+  - 给我的技能写一套上架推广文案
 examples_en:
   - Publish my skill package to the WorkBuddy market for me
   - Run a pre-submission checkup on my skill package
-  - I am building a connector - which market and service categories should I pick?
   - Write a full promo kit for my check-in skill listing
 version: 1.1.0
 author: 社区开发者
