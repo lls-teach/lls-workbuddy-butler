@@ -17,3 +17,4 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-10-27T05:10	smoke	all	-	-	pass	-	四件套核心链路冒烟全绿（v2.2 改动后）	full_test
 2026-10-27T05:30	r1-dim5	lls-docx	80.9	82.7	keep	可执行具体性	公文格式速查：GB/T 9704 要素级规格+完整命令示例+右对齐边界声明；judge 3-0 better/clear	paired
 2026-10-27T05:40	r2-dim4	lls-docx	82.7	83.3	keep	检查点设计	批量替换>=20处🔴确认门禁+清理评审标注泄漏；judge 3-0 better（1clear+2slight）；文本层增益见顶收手	paired
+2026-10-27T06:00	baseline	lls-fapiao	-	84.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=8 d6=9 d7=9 d8=8 d9=9；dim8 证据=3 张合成数电票全链路（提取/查重/报销单 2409.5 精确）（full_test）；短板：日期独立行降置信度、OCR 路线未实测	full_test

@@ -1,0 +1,6 @@
+[
+  {"id": 1, "prompt": "帮我把这批发票 PDF 整理成报销单 Excel", "expected": "fapiao_batch 批量解析 → fapiao_baoxiao 生成带 SUM 公式与查重标注的报销单，报告合计与待核对数"},
+  {"id": 2, "prompt": "这些发票有没有重复报销的", "expected": "fapiao_batch 后按 invoice_no 查重，列出重复号码与文件名"},
+  {"id": 3, "prompt": "这张扫描件发票能识别吗", "expected": "无文字层 → 提示装 PaddleOCR 走 OCR 路线，低置信度字段标待人工核对"},
+  {"id": 4, "prompt": "生成一张测试发票 PDF 再解析它", "expected": "可用 reportlab 造样例票面 → fapiao_parse 提取字段 → 全程不虚构数据"}
+]
