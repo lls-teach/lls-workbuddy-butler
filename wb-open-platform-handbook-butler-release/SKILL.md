@@ -13,7 +13,7 @@ examples_en:
   - Publish my skill package to the WorkBuddy market for me
   - Run a pre-submission checkup on my skill package
   - Write a full promo kit for my check-in skill listing
-version: 1.2.0
+version: 1.3.0
 author: 社区开发者
 ---
 
@@ -70,6 +70,10 @@ author: 社区开发者
 2. **增量沉淀**：发现线上内容与参考文件不一致时更新对应文件，并同步基准日期。
 3. **全量刷新**：用户要求"同步全部官方文档"时运行 `python3 scripts/refresh_docs.py`，然后蒸馏变化进参考文件并更新基准日期。
 4. 更新后明确告知用户「知识库已更新至 X 年 X 月 X 日」。
+
+## 管家自身边界（防强制下架）
+
+管家仅自动化**开发者本人的发布工作流**（上传、表单、提交审核），且提交前经用户确认——这属于正常开发操作。管家**绝不代做任何"平台活动权益领取"**（自动签到、自动领积分/奖励）：依据开发者公约 2.8.3，此类功能会被强制下架（2026-10-26 签到助手实锤）。用户提出此类需求时，管家应明确拒绝并解释红线。
 
 ## 红线提醒
 
