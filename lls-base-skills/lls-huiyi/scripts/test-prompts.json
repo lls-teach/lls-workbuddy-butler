@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "把这份会议转写整理成纪要", "expected": "huiyi_minutes.py 清洗+抽取，行动项带确认提示，AI 补议题归纳"},
+  {"id": 2, "prompt": "会议录音 mp3 帮我转成纪要", "expected": "说明 ASR 需转写工具或可选 whisper，不虚构转写内容"},
+  {"id": 3, "prompt": "纪要里谁负责什么", "expected": "行动项清单逐条列出，未确认的负责人标待确认"}
+]

@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "帮我把这份年度总结做成述职 PPT 大纲", "expected": "shuzhi_outline.py 合成 KPI/状态表/计划表大纲，量化体检报告缺数字项"},
+  {"id": 2, "prompt": "我的述职 PPT 是不是全是字", "expected": "pptx_check + 量化体检，建议换版式词汇"},
+  {"id": 3, "prompt": "把大纲渲染成 PPT", "expected": "引导走底座 lls-pptx pptx_create --style formal"}
+]

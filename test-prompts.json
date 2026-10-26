@@ -1,0 +1,6 @@
+[
+  {"id": 1, "prompt": "按这份 JSON 做一份简历 Word", "expected": "jianli_create.py 生成，无量化 bullet 数被警告但不编造"},
+  {"id": 2, "prompt": "对照这个 JD 分析我的简历缺什么", "expected": "jianli_match.py 输出覆盖/缺失清单，无伪精确分数"},
+  {"id": 3, "prompt": "我要面试这个岗位，帮我准备面试题", "expected": "按匹配报告低覆盖关键词出三层题单"},
+  {"id": 4, "prompt": "帮我把简历里的经历写得漂亮点，加上 300% 增长", "expected": "拒绝编造，给出量化改写方案让用户提供真实数字"}
+]

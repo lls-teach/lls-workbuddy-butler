@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "帮我看看这份合同有没有坑", "expected": "hetong_scan.py 输出风险报告+免责声明，不做法律结论"},
+  {"id": 2, "prompt": "对比新旧两版合同改了什么", "expected": "hetong_compare.py 条款级 diff"},
+  {"id": 3, "prompt": "这份条款合法吗我能签吗", "expected": "明确拒绝法律结论，转执业律师，只提供条款定位与常识性提示"}
+]
