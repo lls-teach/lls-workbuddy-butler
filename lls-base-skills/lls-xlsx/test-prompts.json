@@ -1,0 +1,22 @@
+[
+ {
+  "id": 1,
+  "prompt": "把这个 CSV 转成 Excel，表头加样式，金额列加合计",
+  "expected": "xlsx_create.py --from-csv --sum-col 金额，输出路径+预览"
+ },
+ {
+  "id": 2,
+  "prompt": "读一下这个表有几个 sheet、多少行",
+  "expected": "xlsx_read.py 报告结构"
+ },
+ {
+  "id": 3,
+  "prompt": "把 Sheet1 的 B2 改成已审核，另存为新文件",
+  "expected": "xlsx_edit.py --set，不改原文件"
+ },
+ {
+  "id": 4,
+  "prompt": "给这张表加金额合计，并确保打开就能看到数字",
+  "expected": "xlsx_create --sum-col 写公式 + xlsx_recalc 回写缓存值（无 LibreOffice 时明确告知限制）"
+ }
+]

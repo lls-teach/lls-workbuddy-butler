@@ -1,0 +1,22 @@
+[
+ {
+  "id": 1,
+  "prompt": "帮我把这份 PDF 里的文字提取出来，保存成 txt",
+  "expected": "调用 pdf_extract_text.py，报告输出路径与页数，给出前几行预览；若含扫描页要提示走 OCR 路线"
+ },
+ {
+  "id": 2,
+  "prompt": "把我桌面上的 a.pdf、b.pdf、c.pdf 合并成一个报告.pdf",
+  "expected": "调用 pdf_merge_split.py merge，逐个报告页数，产出合并文件路径；目标已存在时先确认或改名"
+ },
+ {
+  "id": 3,
+  "prompt": "写一份一页纸的中文通知，标题是《关于下周一团建的通知》，正文三段",
+  "expected": "调用 pdf_create.py 生成中文 PDF，中文字体正常无方块，报告输出路径"
+ },
+ {
+  "id": 4,
+  "prompt": "把 a.pdf 和 b.pdf 合并后确认没问题",
+  "expected": "merge 后必跑 pdf_check.py --expect-pages，再渲染确认"
+ }
+]

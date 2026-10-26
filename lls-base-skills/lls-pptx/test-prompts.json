@@ -1,0 +1,6 @@
+[
+  {"id": 1, "prompt": "用咨询研报风格，按这份大纲做一页对比页 PPT：# 市场对比 - 供给 3.2万 - 头部 CR100 73% > 头部化决定打法", "expected": "pptx_create.py --style consulting，标题为结论句、深红强调、两列网格"},
+  {"id": 2, "prompt": "读这份 PPT 每页内容并做质量检查", "expected": "pptx_read.py + pptx_check.py，报告密度/要点数/空占位"},
+  {"id": 3, "prompt": "用这份模板的第 2 页复制 3 份，然后把所有 2025 改成 2026", "expected": "pptx_duplicate_slide.py + pptx_edit.py，复制后跑 check 验证包完整"},
+  {"id": 4, "prompt": "帮我做个 20 页的课件，内容我发你", "expected": "先确认受众/密度/风格三件事，再问大纲；要点>6 主动拆页"}
+]

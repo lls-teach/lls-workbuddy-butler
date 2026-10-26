@@ -1,0 +1,22 @@
+[
+ {
+  "id": 1,
+  "prompt": "写一份 Word 通知，标题《放假通知》，正文两段，带落款",
+  "expected": "docx_create.py 生成，标题居中、中文字体正常"
+ },
+ {
+  "id": 2,
+  "prompt": "读一下这份合同写了什么",
+  "expected": "docx_read.py 输出段落与表格"
+ },
+ {
+  "id": 3,
+  "prompt": "把文档里所有甲方替换成委托方",
+  "expected": "docx_edit.py --replace 报告处数"
+ },
+ {
+  "id": 4,
+  "prompt": "检查这份合同有没有别人改过的痕迹",
+  "expected": "docx_revisions.py 报告修订与作者，引导 Word 裁决"
+ }
+]
