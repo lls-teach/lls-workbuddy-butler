@@ -6,7 +6,7 @@
 
 ## Windows 兼容性分流（详见 windows-smoke-test.md）
 
-Windows 用户执行 E-0/E 时的 4 处必须分流：①装完 ego lite 必须**新开终端**再验证 PATH；②多行脚本一律写 UTF-8 .mjs 文件后 import（heredoc 不存在，PowerShell 5.1 会弄坏引号和中文）；③中文/双引号绝不放进 -e 参数；④所有本地路径用正斜杠（C:/Users/...）。Windows 实机全流程冒烟未完成前，Windows 代上架采用"每步截图回报"的引导模式。
+Windows 用户执行 E-0/E 时的 4 处必须分流：①装完 ego lite 必须**新开终端**再验证 PATH；②多行脚本一律写 UTF-8 .mjs 文件后 import（heredoc 不存在，PowerShell 5.1 会弄坏引号和中文）；③中文/双引号绝不放进 -e 参数；④所有本地路径用正斜杠（C:/Users/...）。Windows 实机全流程冒烟未完成前，Windows 代上架采用"每步截图回报"的引导模式，转换规则固定为：工作流 E 第 2 步的每个浏览器调用（taskSpace/goto/waitForFileChooser/setFiles/表单点击）逐条翻译成给用户的点击指令 → 用户回传截图 → 管家核对后给下一条；核对不符则按解析规则修正后重发该条指令。
 
 ## 工作流 E-0：环境自举（缺什么装什么，先于一切代操作）
 
