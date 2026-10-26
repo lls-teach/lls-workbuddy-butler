@@ -1,0 +1,4 @@
+{"exam":"WorkBuddy 上架认证测验","total":10,
+ "topics":[{"name":"平台规则","weight":0.4},{"name":"技能包结构","weight":0.4},{"name":"上架流程","weight":0.2}],
+ "types":["单选","判断"],
+ "difficulty":{"easy":0.6,"mid":0.3,"hard":0.1}}

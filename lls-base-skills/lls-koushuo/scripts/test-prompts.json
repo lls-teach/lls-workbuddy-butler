@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "给我一个 3 分钟口播稿骨架，主题是技能上架", "expected": "koushuo_outline.py 按字数预算出骨架"},
+  {"id": 2, "prompt": "检查这篇口播稿能不能用", "expected": "koushuo_check.py：时长/钩子/超长段/CTA 四项"},
+  {"id": 3, "prompt": "口播稿写多长合适", "expected": "240 字/分钟换算，按目标时长给字数预算"}
+]

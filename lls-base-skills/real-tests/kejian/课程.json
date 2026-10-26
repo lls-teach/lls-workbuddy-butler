@@ -1,0 +1,1 @@
+{"course": "WorkBuddy 技能开发入门", "audience": "零基础学员", "lessons": [{"topic": "平台认知", "points": ["平台是什么", "六类资产", "怎么选"]}, {"topic": "技能包结构", "points": ["SKILL.md", "references", "scripts", "frontmatter 规则", "打包要求"], "quiz": "现场拆一个技能包，指出三要素"}, {"topic": "提交流程", "points": ["注册认证", "上传", "表单", "审核"]}, {"topic": "冷启动", "points": ["视频引流", "课堂转化"]}], "lessons_quiz": true}

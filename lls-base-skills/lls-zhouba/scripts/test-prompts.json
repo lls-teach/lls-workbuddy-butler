@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "按这份信息生成周报", "expected": "zhouba_create.py 五段式生成 + 建议 lint"},
+  {"id": 2, "prompt": "检查我的周报写得行不行", "expected": "zhouba_lint.py 点名无数字条目与空话"},
+  {"id": 3, "prompt": "周报里写持续推进可以吗", "expected": "指出空话问题，引导量化"}
+]

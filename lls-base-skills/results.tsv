@@ -26,3 +26,8 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-10-27T07:00	r1-dim5	lls-huiyi	82.3	85.9	keep	可执行具体性	议题归纳产出规格（四行模板/议题数2-6/数字逐字一致回溯约束）；judge 3-0 better/clear	paired
 2026-10-27T07:30	baseline	lls-biaoshu	-	84.0	baseline	-	d1=9 d2=9 d3=7 d4=9 d5=8 d6=9 d7=9 d8=8 d9=9；dim8=7 条要求提取分类正确+4 项未响应准确暴露+🔴废标风险提示（full_test）	full_test
 2026-10-27T07:30	baseline	lls-gongwen	-	86.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=9 d7=9 d8=9 d9=9；dim8=GB/T 9704 版式渲染达标+预检 5 项全过（full_test）；行距 bug 被真实渲染抓出修复	full_test
+2026-10-27T08:00	baseline	lls-shujv	-	84.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=9 d7=9 d8=8 d9=8；dim8=华东 2400/集中度 75% 计算正确+透视表（full_test）	full_test
+2026-10-27T08:00	baseline	lls-zhouba	-	83.0	baseline	-	d1=9 d2=9 d3=9 d4=8 d5=8 d6=9 d7=9 d8=9 d9=9；dim8=烂周报 lint 点名 3 无数字条目+空话+缺四要素（full_test）	full_test
+2026-10-27T08:00	baseline	lls-koushuo	-	85.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=9 d7=9 d8=8 d9=9；dim8=124 字稿偏差 -48% 正确+钩子检查+时长预算（full_test）	full_test
+2026-10-27T08:00	baseline	lls-kejian	-	83.0	baseline	-	d1=9 d2=9 d3=7 d4=8 d5=8 d6=9 d7=9 d8=8 d9=8；dim8=4 知识点拆 6 页+quiz 练习页（full_test）	full_test
+2026-10-27T08:00	baseline	lls-timu	-	84.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=9 d7=9 d8=8 d9=8；dim8=蓝图权重归一+重复题检测（full_test）	full_test

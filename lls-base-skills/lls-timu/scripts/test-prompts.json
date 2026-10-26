@@ -1,0 +1,4 @@
+[
+  {"id": 1, "prompt": "按这份考纲出 20 道题", "expected": "timu_blueprint.py 出蓝图 → AI 按蓝图出题 → timu_check.py 验收"},
+  {"id": 2, "prompt": "检查题库有没有重复的题", "expected": "timu_check.py 查重与要素完整性"}
+]

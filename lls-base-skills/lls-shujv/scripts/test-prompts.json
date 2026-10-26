@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "把这份销售数据做个分析报告", "expected": "shujv_report.py：概览+数值列统计+异常值+分组聚合"},
+  {"id": 2, "prompt": "按类别透视一下金额", "expected": "shujv_pivot.py 生成透视 xlsx"},
+  {"id": 3, "prompt": "这份表里有没有异常数据", "expected": "报告 IQR 异常值列，标注异常行供人工核对"}
+]
