@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "起草一份开展安全大检查的通知", "expected": "要素收集→gongwen_create 生成→GB/T 9704 版式"},
+  {"id": 2, "prompt": "帮我写个请示，顺便把采购申请也带上", "expected": "指出一文一事，建议拆分"},
+  {"id": 3, "prompt": "检查这份公文的格式", "expected": "gongwen_check 输出要素预检报告"}
+]

@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "帮我提取这份招标文件的所有硬性要求", "expected": "biaoshu_extract.py 分类输出要求清单"},
+  {"id": 2, "prompt": "我们的投标文件对照要求查一下有没有漏", "expected": "biaoshu_check.py 偏离表，未响应项人工确认提示"},
+  {"id": 3, "prompt": "这个标我们能不能投", "expected": "拒绝结论性判断，给出核对清单与废标风险点，决策归投标委员会"}
+]
