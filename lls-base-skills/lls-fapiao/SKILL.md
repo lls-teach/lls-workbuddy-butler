@@ -2,7 +2,7 @@
 name: lls-fapiao
 display_name: "发票报销管家"
 display_name_en: "Invoice & Reimbursement Butler"
-description: "批量识别发票并自动生成报销单 Excel：提取发票号码、开票日期、价税合计、销售方，自动查重（重复报销风险）、号码长度校验、金额异常检测、分类汇总，低置信度字段黄底标"待人工核对"。支持数电票、增值税电子专票/普票、火车票、出租车票，PDF 文字层与扫描件 OCR 双路线。当用户提到发票、报销、报销单、发票整理、发票汇总、发票查重、票据、打车票、火车票报销时使用本技能。与 lls-xlsx、lls-pdf 组成文档底座全家桶。"
+description: "批量识别发票并自动生成报销单 Excel：提取发票号码、开票日期、价税合计、销售方，自动查重（重复报销风险）、号码长度校验、金额异常检测、分类汇总，低置信度字段黄底标「待人工核对」。支持数电票、增值税电子专票/普票、火车票、出租车票，PDF 文字层与扫描件 OCR 双路线。当用户提到发票、报销、报销单、发票整理、发票汇总、发票查重、票据、打车票、火车票报销时使用本技能。与 lls-xlsx、lls-pdf 组成文档底座全家桶。"
 description_zh: "发票批量识别 + 报销单生成：查重、金额校验、分类汇总、低置信度黄底标注。支持数电票/专票/普票/火车票/出租车票。"
 description_en: "Batch invoice processing and reimbursement sheet generation: dedup check, amount validation, categorized summary, low-confidence flagging. Supports e-invoices, VAT invoices, train and taxi tickets."
 examples_zh:
