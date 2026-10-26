@@ -1,0 +1,3 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-10-26T13:00	e0ad67f	wb-open-platform-handbook-pro	-	76.2	baseline	-	独立judge基线：dim4=4（无显性标记）dim8=7（E-1悬空/macOS无安装源）dim2/7=7（顺序颠倒）	dry_run
+2026-10-26T13:20	round1+2	wb-open-platform-handbook-pro	76.2	（绝对分不采信）	keep	dim8+dim4+dim2/7	paired judge 裁定 better/clear：E-1悬空修复+macOS安装源+三处🔴CHECKPOINT+重排依赖序；dim8全链路无断点	paired
