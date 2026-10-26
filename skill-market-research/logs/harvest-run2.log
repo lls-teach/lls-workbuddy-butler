@@ -1,0 +1,184 @@
+=== run 1 ===
+total: 31913 pages: 320 already harvested: 75
+page 76: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 76: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 76: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 76: FAILED after retries
+page 77: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 77: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 78: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 78: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 78: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 78: FAILED after retries
+page 79: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 79: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 79: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 79: FAILED after retries
+page 80: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 80: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 80: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 80: FAILED after retries
+page 81: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 81: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 81: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 81: FAILED after retries
+page 83: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 83: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 83: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 83: FAILED after retries
+page 84: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 85: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 85: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 85: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 85: FAILED after retries
+page 86: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 86: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 86: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 86: FAILED after retries
+page 87: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 90/320 got 9000
+page 100/320 got 10000
+page 109: ERR Error: {"code":-32000,"message":"Promise was collected"}
+=== run 2 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 3 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 4 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 5 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 6 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 7 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 8 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 9 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 10 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 11 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1
+=== run 12 ===
+node:fs:621
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: Cannot create a string longer than 0x1fffffe8 characters
+    at readFileSync (node:fs:621:20)
+    at file:///private/tmp/wb-cdp/harvest.mjs:20:22
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'ERR_STRING_TOO_LONG'
+}
+
+Node.js v26.8.1

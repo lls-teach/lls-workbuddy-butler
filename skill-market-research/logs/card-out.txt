@@ -1,0 +1,2 @@
+RESULT: {"result":{"type":"string","value":"[{\"i\":0,\"tag\":\"SPAN\",\"cls\":\"sm-card-name\",\"propKeys\":[\"className\",\"children\",\"title\",\"onPointerDown\",\"onPointerEnter\",\"onMouseMove\",\"onMouseLeave\",\"onFocus\",\"onBlur\",\"onKeyDown\",\"onClick\",\"aria-describedby\",\"data-wb-tooltip-trigger\"]},{\"i\":1,\"tag\":\"DIV\",\"cls\":\"sm-card-name-row\",\"propKeys\":[\"className\",\"children\"]},{\"i\":2,\"tag\":\"DIV\",\"cls\":\"sm-card-body\",\"propKeys\":[\"className\",\"children\"]},{
+--- captured 0 responses

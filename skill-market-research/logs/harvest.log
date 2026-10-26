@@ -1,0 +1,10 @@
+total: 31911 pages: 320 already harvested: 0
+page 1: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 2: ERR Error: {"code":-32000,"message":"Promise was collected"}
+page 10/320 got 1000
+page 20/320 got 2000
+page 30/320 got 3000
+page 40/320 got 4000
+page 50/320 got 5000
+page 60/320 got 6000
+page 70/320 got 7000

@@ -46,6 +46,7 @@ author: 社区开发者
 | 运营数据指标、开发者主页资料规范 | references/operations-profile.md |
 | 怎么过审、发布前自检、被驳回怎么办 | references/review-checklist.md |
 | 服务类目、资质要求（教育/IT/卖课等） | references/service-categories.md |
+| 为什么别人的技能爆量了、市场行情、上架选位/命名/时机/冷启动策略 | references/market-insight.md |
 
 **第二步：回答。** 要求：
 

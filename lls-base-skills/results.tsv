@@ -10,3 +10,10 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-10-27T04:00	compare	lls-pptx	-	-	backlog	可执行具体性	jingmei对比暴露：KPI数字行/状态表页/进度条/来源行四种版式词汇未内置 → v2.2 大纲语法扩展（[KPI]/[TABLE]）	dry_run
 2026-10-27T04:00	compare	lls-pptx	-	-	backlog	整体架构	jingmei风格简报流程（受众/目的/密度三问）已部分吸收，自动化交互式问答待做	dry_run
 2026-10-27T04:40	v2.2	lls-pptx	84	90	keep	可执行具体性+整体架构	全吸收 jingmei：KPI/STATUS/BAR/TABLE/来源行五种版式词汇进大纲语法；结论式标题检查；简报三问强制；实测 7 页课程路演 4 种新页型渲染达标	dry_run
+2026-10-27T05:10	baseline	lls-pdf	-	89.8	baseline	-	9维基线：d1=9 d2=9 d3=9 d4=8 d5=9 d6=10 d7=9 d8=9 d9=9；dim8 证据=结题报告2页+合集3页+冒烟（full_test）	full_test
+2026-10-27T05:10	baseline	lls-xlsx	-	86.3	baseline	-	d1=9 d2=9 d3=9 d4=8 d5=9 d6=10 d7=8 d8=8 d9=9；dim8 证据=6268.2 精确+冒烟（full_test）	full_test
+2026-10-27T05:10	baseline	lls-pptx	-	91.0	baseline	-	d1=9 d2=10 d3=9 d4=8 d5=9 d6=10 d7=9 d8=9 d9=9；dim8 证据=7页4种新页型渲染达标（full_test）	full_test
+2026-10-27T05:10	baseline	lls-docx	-	80.9	baseline	-	d1=9 d2=8 d3=8 d4=7 d5=8 d6=10 d7=8 d8=8 d9=8；dim8 证据=邀约函+修订检测（full_test）→ triage 最弱	full_test
+2026-10-27T05:10	smoke	all	-	-	pass	-	四件套核心链路冒烟全绿（v2.2 改动后）	full_test
+2026-10-27T05:30	r1-dim5	lls-docx	80.9	82.7	keep	可执行具体性	公文格式速查：GB/T 9704 要素级规格+完整命令示例+右对齐边界声明；judge 3-0 better/clear	paired
+2026-10-27T05:40	r2-dim4	lls-docx	82.7	83.3	keep	检查点设计	批量替换>=20处🔴确认门禁+清理评审标注泄漏；judge 3-0 better（1clear+2slight）；文本层增益见顶收手	paired

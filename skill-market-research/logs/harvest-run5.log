@@ -1,0 +1,29 @@
+=== run 1 ===
+resuming from page 113 known: 11100
+total: 31940 pages: 320 collection len: 11200
+page 120/320: known 11900
+page 130/320: known 12900
+=== run 2 ===
+resuming from page 137 known: 13500
+total: 31941 pages: 320 collection len: 13700
+page 137: failed
+page 140/320: known 13799
+page 150/320: known 14798
+page 160/320: known 15798
+page 170/320: known 16798
+page 180/320: known 17798
+page 190/320: known 18798
+page 200/320: known 19798
+page 210/320: known 20798
+page 220/320: known 21798
+page 230/320: known 22798
+page 240/320: known 23798
+page 250/320: known 24798
+page 260/320: known 25798
+page 270/320: known 26798
+page 280/320: known 27798
+page 290/320: known 28798
+page 300/320: known 29798
+page 310/320: known 30798
+page 320/320: known 31740
+harvest3 complete, unique: 31740

@@ -1,0 +1,17 @@
+iter 0: len=7896 hasMore=true
+iter 10: len=8096 hasMore=true
+warning: no growth at iter 19
+iter 20: len=8296 hasMore=true
+iter 30: len=8696 hasMore=true
+iter 40: len=9096 hasMore=true
+iter 50: len=9496 hasMore=true
+iter 60: len=9696 hasMore=true
+iter 70: len=9996 hasMore=true
+warning: no growth at iter 79
+iter 80: len=10296 hasMore=true
+iter 90: len=10496 hasMore=true
+warning: no growth at iter 99
+iter 100: len=10896 hasMore=true
+iter 110: len=11096 hasMore=true
+warning: no growth at iter 119
+iter 120: len=11396 hasMore=true

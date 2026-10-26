@@ -1,0 +1,363 @@
+[
+ {
+  "h": 0,
+  "type": "span",
+  "vals": {
+   "className": "\"sm-card-name\"",
+   "title": "undef",
+   "onPointerDown": "undef",
+   "onPointerEnter": "undef",
+   "onMouseMove": "undef",
+   "onMouseLeave": "undef",
+   "onFocus": "undef",
+   "onBlur": "undef",
+   "onKeyDown": "undef",
+   "onClick": "undef",
+   "aria-describedby": "undef",
+   "data-wb-tooltip-trigger": "\"\""
+  }
+ },
+ {
+  "h": 1,
+  "type": "({content:r,children:s,placeme",
+  "vals": {
+   "content": "\"PDF 文档处理\"",
+   "onlyWhenTruncated": "true",
+   "placement": "\"top\"",
+   "maxWidth": "250"
+  }
+ },
+ {
+  "h": 2,
+  "type": "div",
+  "vals": {
+   "className": "\"sm-card-name-row\""
+  }
+ },
+ {
+  "h": 3,
+  "type": "div",
+  "vals": {
+   "className": "\"sm-card-body\""
+  }
+ },
+ {
+  "h": 4,
+  "type": "div",
+  "vals": {
+   "className": "\"sm-card-top\""
+  }
+ },
+ {
+  "h": 5,
+  "type": "div",
+  "vals": {
+   "className": "\"sm-card-content\""
+  }
+ },
+ {
+  "h": 6,
+  "type": "div",
+  "vals": {
+   "className": "\"sm-card\"",
+   "data-market-perf": "undef",
+   "data-track-id": "\"skill_card_click\"",
+   "data-track-name": "\"点击技能卡片\"",
+   "data-track-props": "\"{\\\"source\\\":\\\"PDF 文档处理\\\"}\"",
+   "role": "undef",
+   "aria-checked": "undef",
+   "onClick": "undef"
+  }
+ },
+ {
+  "h": 7,
+  "type": "function CardFrame(e){let{titl",
+  "vals": {
+   "title": "\"PDF 文档处理\"",
+   "subTitle": "undef",
+   "description": "\"PDF 文档处理工具，支持文本与表格提取、PDF 创建、合并拆分、表单填写及批量分析。\"",
+   "iconUrl": "undef",
+   "stats": "[{\"id\":\"use\",\"value\":1113078,\"icon\":\"use\"},{\"id\":\"install\",\"value\":182630,\"icon\":\"download\"}]",
+   "sourceLabel": "undef",
+   "reasonLabel": "undef",
+   "needsApiKey": "false",
+   "paidBadgeText": "undef",
+   "className": "undef",
+   "installed": "false",
+   "updateStatus": "\"none\"",
+   "disabled": "false",
+   "onOpen": "undef",
+   "onUpdate": "undef",
+   "actions": "{\"key\":null,\"ref\":null,\"props\":{\"content\":\"安装\",\"placement\":\"top\",\"interactive\":false,\"children\":{\"type\":\"span\",\"key\":null,\"ref\":null,\"props\":{\"className\":\"sm-ad",
+   "isFirst": "false"
+  }
+ },
+ {
+  "h": 8,
+  "type": "function MarketSkillCard(e){le",
+  "vals": {
+   "isFirst": "false",
+   "cardInfo": "{\"title\":\"PDF 文档处理\",\"description\":\"PDF 文档处理工具，支持文本与表格提取、PDF 创建、合并拆分、表单填写及批量分析。\",\"needsApiKey\":false,\"stats\":[{\"id\":\"use\",\"value\":1113078,\"icon\":\"use\"},{\"id\":\"in",
+   "status": "\"install\"",
+   "enabled": "true",
+   "onOpen": "undef",
+   "onInstall": "undef",
+   "paidNotPurchased": "false",
+   "onTry": "undef",
+   "onToggle": "undef",
+   "onUninstall": "undef",
+   "onEdit": "undef",
+   "onOpenFolder": "undef"
+  }
+ },
+ {
+  "h": 9,
+  "type": "div",
+  "vals": {
+   "className": "\"sm-grid\""
+  }
+ },
+ {
+  "h": 10,
+  "type": "function CollectionPanel(e){le",
+  "vals": {
+   "skills": "[{\"skill_id\":\"skill_2095070772061040640\",\"icon\":\"https://openplatform-cdn.codebuddy.cn/public/common/capability_cover/2bd8018c-fe43-4701-89a3-b65997c294bf/1bd04",
+   "loading": "false",
+   "emptyText": "\"暂无推荐技能\"",
+   "hasMore": "true",
+   "onLoadMore": "undef",
+   "listTelemetrySource": "\"square\""
+  }
+ },
+ {
+  "h": 11,
+  "type": "function DiscoverCollectionPan",
+  "vals": {
+   "collectionId": "\"fixed:recommend\"",
+   "emptyText": "\"暂无推荐技能\""
+  }
+ },
+ {
+  "h": 12,
+  "type": "div",
+  "vals": {
+   "className": "\"sm-discover-panel\"",
+   "style": "{}"
+  }
+ },
+ {
+  "h": 13,
+  "type": "div",
+  "vals": {
+   "className": "\"sm-discover\""
+  }
+ },
+ {
+  "h": 14,
+  "type": "function DiscoverSection(e){le",
+  "vals": {
+   "showMcpButton": "undef",
+   "onMcpClick": "undef",
+   "panelPending": "false"
+  }
+ },
+ {
+  "h": 15,
+  "type": "div",
+  "vals": {
+   "className": "\"skill-market__content\""
+  }
+ },
+ {
+  "h": 16,
+  "type": "div",
+  "vals": {
+   "className": "\"skill-market\""
+  }
+ },
+ {
+  "h": 17,
+  "type": "function SkillsMarketContent(e",
+  "vals": {
+   "visible": "true",
+   "active": "true",
+   "headerLeft": "{\"key\":null,\"ref\":null,\"props\":{\"activeTab\":\"skills\"},\"_owner\":null}",
+   "renderDetailBack": "undef",
+   "initialLevel1Tab": "undef",
+   "navigationKey": "\"default\"",
+   "services": "[object Object]"
+  }
+ },
+ {
+  "h": 18,
+  "type": "function SkillsMarketRouteShel",
+  "vals": {
+   "visible": "true",
+   "active": "true",
+   "headerLeft": "{\"key\":null,\"ref\":null,\"props\":{\"activeTab\":\"skills\"},\"_owner\":null}",
+   "renderDetailBack": "undef",
+   "initialLevel1Tab": "undef",
+   "navigationKey": "\"default\""
+  }
+ },
+ {
+  "h": 19,
+  "type": "[object Object]",
+  "vals": {
+   "value": "[object Object]"
+  }
+ },
+ {
+  "h": 20,
+  "type": "function MarketServiceProvider",
+  "vals": {}
+ },
+ {
+  "h": 21,
+  "type": "[object Object]",
+  "vals": {
+   "visible": "true",
+   "active": "true",
+   "headerLeft": "{\"key\":null,\"ref\":null,\"props\":{\"activeTab\":\"skills\"},\"_owner\":null}",
+   "renderDetailBack": "undef",
+   "initialLevel1Tab": "undef",
+   "navigationKey": "\"default\""
+  }
+ },
+ {
+  "h": 22,
+  "type": "Symbol(react.offscreen)",
+  "vals": {
+   "mode": "\"visible\""
+  }
+ },
+ {
+  "h": 23,
+  "type": "Symbol(react.suspense)",
+  "vals": {
+   "fallback": "null"
+  }
+ },
+ {
+  "h": 24,
+  "type": "function SkillsPanel(e){return",
+  "vals": {
+   "visible": "true",
+   "active": "true",
+   "headerLeft": "{\"key\":null,\"ref\":null,\"props\":{\"activeTab\":\"skills\"},\"_owner\":null}",
+   "renderDetailBack": "undef",
+   "initialLevel1Tab": "undef",
+   "navigationKey": "\"default\""
+  }
+ },
+ {
+  "h": 25,
+  "type": "({visible:e=!0,active:t=!0,ini",
+  "vals": {
+   "visible": "true",
+   "active": "true"
+  }
+ },
+ {
+  "h": 27,
+  "type": "Symbol(react.offscreen)",
+  "vals": {
+   "mode": "\"visible\""
+  }
+ },
+ {
+  "h": 28,
+  "type": "Symbol(react.suspense)",
+  "vals": {
+   "fallback": "null"
+  }
+ },
+ {
+  "h": 29,
+  "type": "[object Object]",
+  "vals": {
+   "value": "{\"outlet\":null,\"matches\":[{\"params\":{},\"pathname\":\"/\",\"pathnameBase\":\"/\",\"route\":{\"element\":[{\"key\":null,\"ref\":null,\"props\":{},\"_owner\":null},{\"key\":null,\"ref\":"
+  }
+ },
+ {
+  "h": 30,
+  "type": "function RenderedRoute(e){let{",
+  "vals": {
+   "match": "{\"params\":{},\"pathname\":\"/skills\",\"pathnameBase\":\"/skills\",\"route\":{\"path\":\"skills\",\"element\":{\"key\":null,\"ref\":null,\"props\":{\"fallback\":null,\"children\":{\"type\"",
+   "routeContext": "{\"outlet\":null,\"matches\":[{\"params\":{},\"pathname\":\"/\",\"pathnameBase\":\"/\",\"route\":{\"element\":[{\"key\":null,\"ref\":null,\"props\":{},\"_owner\":null},{\"key\":null,\"ref\":"
+  }
+ },
+ {
+  "h": 31,
+  "type": "[object Object]",
+  "vals": {
+   "value": "{\"mainContentWidth\":1045,\"environmentType\":\"local\",\"isLocalMode\":true,\"showUserMenu\":false,\"topBarConfig\":{},\"cloudHeader\":{\"enabled\":false}}"
+  }
+ },
+ {
+  "h": 32,
+  "type": "function Outlet(e){return useO",
+  "vals": {
+   "context": "{\"mainContentWidth\":1045,\"environmentType\":\"local\",\"isLocalMode\":true,\"showUserMenu\":false,\"topBarConfig\":{},\"cloudHeader\":{\"enabled\":false}}"
+  }
+ },
+ {
+  "h": 33,
+  "type": "function MainRouteOutlet({cont",
+  "vals": {
+   "context": "{\"mainContentWidth\":1045,\"environmentType\":\"local\",\"isLocalMode\":true,\"showUserMenu\":false,\"topBarConfig\":{},\"cloudHeader\":{\"enabled\":false}}"
+  }
+ },
+ {
+  "h": 34,
+  "type": "div",
+  "vals": {
+   "className": "\"teams-main-content\""
+  }
+ },
+ {
+  "h": 35,
+  "type": "div",
+  "vals": {
+   "className": "\"teams-content-wrapper\""
+  }
+ },
+ {
+  "h": 36,
+  "type": "({box:e})=>(0,Dj.jsx)(`div`,{c",
+  "vals": {
+   "box": "{\"top\":0,\"left\":360,\"width\":1045,\"height\":850}"
+  }
+ },
+ {
+  "h": 37,
+  "type": "div",
+  "vals": {
+   "className": "\"_gridViewItem_11lon_15\"",
+   "data-view-id": "\"main-content\"",
+   "style": "{\"position\":\"absolute\",\"top\":0,\"left\":360,\"width\":1045,\"height\":850,\"overflow\":\"hidden\",\"transform\":\"translate3d(0px, 0px, 0)\",\"willChange\":\"auto\"}"
+  }
+ },
+ {
+  "h": 38,
+  "type": "7",
+  "vals": {
+   "$$typeof": "undef",
+   "type": "\"div\"",
+   "key": "null",
+   "ref": "null",
+   "props": "{\"className\":\"_gridViewItem_11lon_15\",\"data-view-id\":\"main-content\",\"style\":{\"position\":\"absolute\",\"top\":0,\"left\":360,\"width\":1045,\"height\":850,\"overflow\":\"hidd",
+   "_owner": "null"
+  }
+ },
+ {
+  "h": 39,
+  "type": "7",
+  "vals": {
+   "0": "{\"key\":\"sidebar\",\"ref\":null,\"props\":{\"children\":{\"type\":\"div\",\"key\":null,\"ref\":null,\"props\":{\"className\":\"_gridViewItem_11lon_15\",\"data-view-id\":\"sidebar\",\"styl",
+   "1": "{\"key\":\"main-content\",\"ref\":null,\"props\":{\"children\":{\"type\":\"div\",\"key\":null,\"ref\":null,\"props\":{\"className\":\"_gridViewItem_11lon_15\",\"data-view-id\":\"main-cont",
+   "2": "{\"key\":\"detail-panel\",\"ref\":null,\"props\":{\"children\":{\"type\":\"div\",\"key\":null,\"ref\":null,\"props\":{\"className\":\"_gridViewItem_11lon_15\",\"data-view-id\":\"detail-pa",
+   "3": "{\"key\":\"sources-panel\",\"ref\":null,\"props\":{\"children\":{\"type\":\"div\",\"key\":null,\"ref\":null,\"props\":{\"className\":\"_gridViewItem_11lon_15\",\"data-view-id\":\"sources-"
+  }
+ }
+]

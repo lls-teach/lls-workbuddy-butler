@@ -25,6 +25,7 @@ wb-open-platform-handbook-pro/
 │   ├── skill-spec.md / expert-spec.md / connector-spec.md / buddy-app.md
 │   ├── review-checklist.md / service-categories.md / monetization.md / monetization-playbook.md
 │   ├── onboarding.md / overview.md / operations-profile.md / third-party-openapi.md
+│   ├── market-insight.md           # 市场洞察：技能爆量五机制 + 选位/命名/时机/冷启动规则（2026-10 全量普查，数据见 skill-market-research/）
 │   └── ...                         # 官方文档蒸馏知识库（16 篇官方文档）
 ├── scripts/refresh_docs.py         # 知识库自更新脚本（抓取官方文档到 cache，蒸馏回 references）
 └── test-prompts.json               # 5 条验收测试集（darwin-skill Phase 0.5）

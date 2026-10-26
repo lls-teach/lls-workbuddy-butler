@@ -1,5 +1,4 @@
-.DS_Store
-*__pycache__/
-wb-open-platform-handbook/references/cache/
-wb-open-platform-handbook-pro/references/cache/
+__pycache__/
 *.zip
+skill-market-research/raw-data/
+.DS_Store
