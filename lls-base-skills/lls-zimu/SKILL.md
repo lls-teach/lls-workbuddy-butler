@@ -1,4 +1,22 @@
-
+---
+name: lls-zimu
+display_name: "字幕清洗与对齐"
+display_name_en: "Subtitle Cleaning and Alignment"
+description: "SRT 字幕清洗与脚本对齐：口头禅删除、错别字替换、连续重复行去重（时间轴不动），对照脚本找念错/漏念/加词出偏差报告，附语速体检。"
+description_zh: "SRT 字幕清洗与脚本对齐：口头禅删除、错别字替换、连续重复行去重（时间轴不动），对照脚本找念错/漏念/加词出偏差报告，附语速体检。"
+description_en: "SRT subtitle cleaning and script alignment: remove fillers, fix typos, dedupe repeated lines without moving timecodes, diff against the script for misread/missed/added lines, plus a speaking-pace check."
+examples_zh:
+  - 帮我清理这条字幕的口头禅和错别字
+  - 对照脚本看看我哪些地方念错了
+  - 这条字幕语速是不是太快
+examples_en:
+  - Clean the fillers and typos out of this subtitle file
+  - Compare my subtitles against the script and show where I misread
+  - Is this subtitle track speaking too fast
+version: 1.0.0
+author: 刘老师系列
+license: MIT
+---
 
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 
