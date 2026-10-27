@@ -36,3 +36,5 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-10-28T00:30	baseline	lls-xuanti	-	84.0	baseline	-	d1=9 d2=9 d3=7 d4=8 d5=9 d6=9 d7=9 d8=8 d9=8；dim8=96 卡矩阵+评分卡（full_test）	full_test
 2026-10-28T00:30	baseline	lls-naotu	-	83.0	baseline	-	d1=9 d2=9 d3=7 d4=8 d5=8 d6=10 d7=8 d8=8 d9=8；dim8=.mm+HTML 双输出 10 节点层级正确（full_test）	full_test
 2026-10-28T00:30	baseline	lls-baoshui	-	85.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=9 d7=9 d8=8 d9=9；dim8=清单+缺项报告 3/5（full_test）；d9 免责纪律强化	full_test
+2026-10-28T01:30	baseline	lls-mdppt	-	86.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=9 d7=9 d8=8 d9=8；dim8=通用笔记 md→5 页大纲（代码页/表格页映射正确）（full_test）	full_test
+2026-10-28T01:30	baseline	lls-htmlppt	-	87.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=10 d7=9 d8=9 d9=8；dim8=ego-browser 实测 3 页翻页（→供给爆发/←返回）键盘导航（full_test）	full_test
