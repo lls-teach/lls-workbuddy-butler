@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "按这份知识点做一份教案", "expected": "jiaoan_create.py 要素齐全 docx"},
+  {"id": 2, "prompt": "检查教案目标是不是都可测量", "expected": "jiaoan_check.py 弱动词点名"},
+  {"id": 3, "prompt": "过程时间加起来对不对", "expected": "时间合计与课时核对"}
+]

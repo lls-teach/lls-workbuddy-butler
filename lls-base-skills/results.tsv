@@ -44,3 +44,6 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-10-28T01:45	ideation	lls-baojia	-	-	缓	需求证据弱	judge 分裂（上1/缓1/砍1）：先车道复扫或社群验证再立项	paired
 2026-10-28T01:45	ideation	lls-jiaoyan	-	-	砍	商品化劣势	judge：纯规则质量垫底+WPS/Word 内置+与字幕校正重叠→架构并入 zimu/aiwei	paired
 2026-10-28T01:45	ideation	lls-pingyu	-	-	新漏选	受众爆发性	G/I 双 judge 独立提出：期末教师评语=爆发性刚需+docx 引擎直接复用	paired
+2026-10-28T02:00	baseline	lls-zimu	-	84.5	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=8 d6=10 d7=9 d8=8 d9=9；dim8=语速 5.3 超标检出+口头禅/重复块清洗+偏差对齐（full_test）	full_test
+2026-10-28T02:00	baseline	lls-jiaoan	-	85.7	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=10 d7=9 d8=8 d9=8；dim8=预埋弱动词「了解坐标系」点名+时间合计核对（full_test）	full_test
+2026-10-28T02:00	baseline	lls-pingyu	-	85.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=8 d6=9 d7=9 d8=8 d9=9；dim8=预埋 3 类问题（模板开头×2/负面标签/超短）全命中+修正版全绿（full_test）	full_test

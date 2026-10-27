@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "帮我清理这条字幕的口头禅和错别字", "expected": "zimu_clean.py 时间轴不动文本修正，报告处数"},
+  {"id": 2, "prompt": "对照脚本看看我哪些地方念错了", "expected": "zimu_diff.py 偏差报告"},
+  {"id": 3, "prompt": "这条字幕语速是不是太快", "expected": "zimu_parse.py 语速体检"}
+]
