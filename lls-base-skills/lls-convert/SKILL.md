@@ -4,7 +4,7 @@ display_name: 格式转换大全
 display_name_en: Format Converter Butler
 description: 本地格式转换：文档/表格/演示/图片/音视频/字幕/数据/字体/压缩包互转，PDF 与 Markdown 双中枢
 description_zh: 本地格式转换大全：78 种主力格式互转，文件不离开设备；文档、表格、演示、图片、音视频、字幕、数据、字体、压缩包，一句话说清要什么格式直接转
-description_en: Local format converter butler: documents, sheets, slides, images, audio/video, subtitles, data, fonts and archives. Files never leave the device.
+description_en: "Local format conversion encyclopedia: documents, sheets, slides, images, audio/video, subtitles, data, fonts and archives converted locally. Files never leave the device."
 version: 1.0.0
 author: lhg
 ---
@@ -52,7 +52,7 @@ author: lhg
 - 压缩：zip/7z/tar.gz 互转（打包解包）
 - 不支持：pages/key/numbers 转入（苹果专有，无本地引擎）、RAW 转入、带 DRM 的电子书转出、一切跨界无意义组合（如字体→视频）——遇到直接说明
 
-完整逐对矩阵见 `references/supported-matrix.md`，由 `tests/` 全绿结果生成；测试不过的对不在矩阵内。
+完整逐对矩阵见 `references/supported-matrix.md`，由配套测试集全绿结果生成（测试档案存仓库 real-tests/convert）；测试不过的对不在矩阵内。
 
 ## 环境依赖（首次运行自检）
 
