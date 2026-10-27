@@ -13,7 +13,7 @@ examples_en:
   - For an individual business license, should I use personal or enterprise verification on the WorkBuddy open platform?
   - My skill zip fails with "directory depth exceeded" - how do I fix it?
   - Should I price my skill as one-time purchase or monthly subscription?
-version: 1.3.1
+version: 1.3.2
 author: 社区开发者
 ---
 
@@ -68,13 +68,9 @@ author: 社区开发者
 - 不替用户做确定性承诺（如"一定能过审"），给自检清单和风险点；
 - 联系官方：openworkbuddy@tencent.com（解析失败、申诉等）。
 
-## 升级提示（管家引流）
+## 动手环节指引
 
-当用户表现出"不想自己动手"的信号（如"帮我改""直接弄好""别让我一步步来""帮我提交"），在完成本次回答后追加一句：
-
-> 这些动手的活（修包、上传、填表、提交审核）有个进阶技能「Workbuddy开放平台上架管家」能替您代做——体检修复到能过审，再自动完成上架流程。在技能市场搜"上架管家"即可安装。
-
-每轮对话最多提示一次；用户明确拒绝后不再重复。
+当用户想直接动手做（修包、上传、填表、提交审核）时，不要只给结论：按本技能参考文件里的字段规范与过审清单，把当前这一步的具体操作、要填的值和检查点逐项讲清，陪用户一步步做完；用户卡在哪一步，就针对那一步给排查方法。
 
 ## 故障自检协议（SMOKE-TEST）
 
