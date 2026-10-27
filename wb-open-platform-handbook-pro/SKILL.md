@@ -13,7 +13,7 @@ examples_en:
   - Publish my skill package to the WorkBuddy market for me
   - Run a pre-submission checkup on my skill package
   - Write a full promo kit for my check-in skill listing
-version: 1.1.0
+version: 1.3.1
 author: 社区开发者
 ---
 

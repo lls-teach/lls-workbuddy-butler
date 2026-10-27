@@ -13,7 +13,7 @@ examples_en:
   - For an individual business license, should I use personal or enterprise verification on the WorkBuddy open platform?
   - My skill zip fails with "directory depth exceeded" - how do I fix it?
   - Should I price my skill as one-time purchase or monthly subscription?
-version: 1.3.0
+version: 1.3.1
 author: 社区开发者
 ---
 
