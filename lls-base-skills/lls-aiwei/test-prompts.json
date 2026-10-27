@@ -1,0 +1,6 @@
+[
+  {"id": 1, "prompt": "帮我检测这篇文章的 AI 味", "expected": "aiwei_scan.py 密度报告：词级命中+句级特征+改写优先级"},
+  {"id": 2, "prompt": "这段太像 AI 写的了，帮我改", "expected": "五招方法论逐项改写，忠于原文事实"},
+  {"id": 3, "prompt": "改完了帮我验收", "expected": "aiwei_verify.py 密度降≥50%、字数±20%、残留≤3"},
+  {"id": 4, "prompt": "重度 AI 味的稿子改完短了 25%", "expected": "确认无内容丢失后 --allow-length 放行，并在对话中说明"}
+]
