@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<data>
+  <row>
+    <name>LHGCONVERT</name>
+    <value>12345</value>
+    <note>格式转换测试</note>
+  </row>
+  <row>
+    <name>第二行</name>
+    <value>678</value>
+    <note>数据</note>
+  </row>
+</data>

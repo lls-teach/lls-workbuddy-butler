@@ -1,0 +1,5 @@
+TOTAL 130 | PASS 129 | FAIL 1
+FAILED: sample.md -> docx :: engine not ok: libreoffice produced no output: Warning: failed to launch javaldx - java may not function correctly
+Error: no export filter for /home/hatch/workspace/office-butler/lls-convert/tests/out/case019_sample_docx/tmp_chain.docx found, aborting.
+Error: no export filter
+

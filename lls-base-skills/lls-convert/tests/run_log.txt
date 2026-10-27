@@ -1,0 +1,180 @@
+[1/123] sample.docx -> pdf: FAIL No module named 'pypdf'
+[2/123] sample.docx -> txt: PASS 
+[3/123] sample.docx -> md: FAIL engine not ok: No module named 'markdownify'
+[4/123] sample.docx -> html: PASS 
+[5/123] sample.docx -> odt: PASS 
+[6/123] sample.docx -> rtf: PASS 
+[7/123] sample.odt -> docx: PASS 
+[8/123] sample.odt -> pdf: FAIL No module named 'pypdf'
+[9/123] sample.rtf -> docx: PASS 
+[10/123] sample.rtf -> pdf: FAIL No module named 'pypdf'
+[11/123] sample.doc -> docx: PASS 
+[12/123] sample.doc -> pdf: FAIL No module named 'pypdf'
+[13/123] sample.txt -> md: PASS 
+[14/123] sample.txt -> html: PASS 
+[15/123] sample.txt -> pdf: FAIL No module named 'pypdf'
+[16/123] sample.txt -> docx: PASS 
+[17/123] sample.md -> txt: PASS 
+[18/123] sample.md -> html: FAIL engine not ok: No module named 'markdown'
+[19/123] sample.md -> pdf: FAIL engine not ok: No module named 'markdown'
+[20/123] sample.md -> docx: FAIL engine not ok: No module named 'markdown'
+[21/123] sample.md -> odt: FAIL engine not ok: No module named 'markdown'
+[22/123] sample.md -> epub: PASS 
+[23/123] sample.html -> md: FAIL engine not ok: No module named 'markdownify'
+[24/123] sample.html -> txt: PASS 
+[25/123] sample.html -> pdf: FAIL No module named 'pypdf'
+[26/123] sample.html -> docx: FAIL engine not ok: libreoffice produced no output: Warning: failed to launch javaldx - java may not function correctly
+Error: no export filter for /home/hatch/workspace/office-butler/lls-convert/tests/out/case025_sample_docx/sample.docx found, aborting.
+Error: no export filter
+
+[27/123] sample.pdf -> txt: FAIL engine not ok: No module named 'pypdf'
+[28/123] sample.pdf -> md: FAIL engine not ok: No module named 'pypdf'
+[29/123] sample.pdf -> docx: FAIL engine not ok: No module named 'pypdf'
+[30/123] sample.pdf -> png: FAIL engine not ok: No module named 'fitz'
+[31/123] sample.pdf -> jpg: FAIL engine not ok: No module named 'fitz'
+[32/123] sample.epub -> txt: PASS 
+[33/123] sample.epub -> md: PASS 
+[34/123] sample.epub -> docx: PASS 
+[35/123] sample.epub -> pdf: FAIL No module named 'pypdf'
+[36/123] sample.xlsx -> csv: PASS 
+[37/123] sample.xlsx -> tsv: PASS 
+[38/123] sample.xlsx -> json: PASS 
+[39/123] sample.xlsx -> xml: PASS 
+[40/123] sample.xlsx -> yaml: PASS 
+[41/123] sample.xlsx -> md: FAIL engine not ok: Missing optional dependency 'tabulate'.  Use pip or conda to install tabulate.
+[42/123] sample.xlsx -> html: PASS 
+[43/123] sample.xlsx -> ods: FAIL engine not ok: No module named 'odf'
+[44/123] sample.xlsx -> pdf: FAIL No module named 'pypdf'
+[45/123] sample.csv -> xlsx: PASS 
+[46/123] sample.csv -> json: PASS 
+[47/123] sample.csv -> xml: PASS 
+[48/123] sample.csv -> yaml: PASS 
+[49/123] sample.csv -> md: FAIL engine not ok: Missing optional dependency 'tabulate'.  Use pip or conda to install tabulate.
+[50/123] sample.csv -> pdf: FAIL No module named 'pypdf'
+[51/123] sample.json -> csv: PASS 
+[52/123] sample.json -> xlsx: PASS 
+[53/123] sample.json -> xml: PASS 
+[54/123] sample.json -> yaml: PASS 
+[55/123] sample.xml -> csv: PASS 
+[56/123] sample.xml -> json: PASS 
+[57/123] sample.yaml -> csv: PASS 
+[58/123] sample.yaml -> json: PASS 
+[59/123] sample.yaml -> xlsx: PASS 
+[60/123] sample.tsv -> csv: PASS 
+[61/123] sample.tsv -> json: PASS 
+[62/123] sample.ods -> xlsx: FAIL engine not ok: Missing optional dependency 'odfpy'.  Use pip or conda to install odfpy.
+[63/123] sample.ods -> csv: FAIL engine not ok: Missing optional dependency 'odfpy'.  Use pip or conda to install odfpy.
+[64/123] sample.ods -> pdf: PASS 
+[65/123] sample.xls -> xlsx: PASS 
+[66/123] sample.xls -> csv: PASS 
+[67/123] sample.pptx -> pdf: PASS 
+[68/123] sample.pptx -> odp: PASS 
+[69/123] sample.pptx -> png: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case068_sample_png/sample.png'
+[70/123] sample.pptx -> jpg: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case069_sample_jpg/sample.jpg'
+[71/123] sample.ppt -> pptx: FAIL cannot import name 'ImageFont' from 'PIL' (/usr/lib/python3/dist-packages/PIL/__init__.py)
+[72/123] sample.ppt -> pdf: PASS 
+[73/123] sample.odp -> pptx: FAIL cannot import name 'ImageFont' from 'PIL' (/usr/lib/python3/dist-packages/PIL/__init__.py)
+[74/123] sample.odp -> pdf: PASS 
+[75/123] sample.png -> jpg: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case074_sample_jpg/sample.jpg'
+[76/123] sample.png -> webp: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case075_sample_webp/sample.webp'
+[77/123] sample.png -> bmp: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case076_sample_bmp/sample.bmp'
+[78/123] sample.png -> tiff: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case077_sample_tiff/sample.tiff'
+[79/123] sample.png -> ico: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case078_sample_ico/sample.ico'
+[80/123] sample.png -> gif: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case079_sample_gif/sample.gif'
+[81/123] sample.png -> pdf: PASS 
+[82/123] sample.jpg -> png: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case081_sample_png/sample.png'
+[83/123] sample.jpg -> webp: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case082_sample_webp/sample.webp'
+[84/123] sample.jpg -> pdf: PASS 
+[85/123] sample.webp -> png: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case084_sample_png/sample.png'
+[86/123] sample.svg -> png: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case085_sample_png/sample.png'
+[87/123] sample.svg -> pdf: PASS 
+[88/123] sample.wav -> mp3: PASS 
+[89/123] sample.wav -> flac: PASS 
+[90/123] sample.wav -> ogg: PASS 
+[91/123] sample.wav -> m4a: PASS 
+[92/123] sample.wav -> aac: PASS 
+[93/123] sample.mp3 -> wav: PASS 
+[94/123] sample.mp3 -> ogg: PASS 
+[95/123] sample.mp3 -> flac: PASS 
+[96/123] sample.mp4 -> webm: PASS 
+[97/123] sample.mp4 -> mov: PASS 
+[98/123] sample.mp4 -> avi: PASS 
+[99/123] sample.mp4 -> mkv: PASS 
+[100/123] sample.mp4 -> mp3: PASS 
+[101/123] sample.mp4 -> wav: PASS 
+[102/123] sample.mp4 -> gif: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case101_sample_gif/sample.gif'
+[103/123] sample.mp4 -> png: FAIL cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case102_sample_png/sample.png'
+[104/123] sample.avi -> mp4: PASS 
+[105/123] sample.mkv -> mp4: PASS 
+[106/123] sample.webm -> mp4: PASS 
+[107/123] sample.mov -> mp4: PASS 
+[108/123] sample.srt -> vtt: PASS 
+[109/123] sample.srt -> ass: PASS 
+[110/123] sample.vtt -> srt: PASS 
+[111/123] sample.vtt -> ass: PASS 
+[112/123] sample.ass -> srt: PASS 
+[113/123] sample.ass -> vtt: PASS 
+[114/123] sample.zip -> tar.gz: PASS 
+[115/123] sample.zip -> 7z: PASS 
+[116/123] sample.tar.gz -> zip: PASS 
+[117/123] sample.7z -> zip: PASS 
+[118/123] sample.ttf -> woff: PASS 
+[119/123] sample.ttf -> woff2: PASS 
+[120/123] sample.otf -> woff2: PASS 
+[121/123] sample.otf -> woff: PASS 
+[122/123] sample.woff -> ttf: PASS 
+[123/123] sample.woff2 -> ttf: PASS 
+[neg1/7] sample.ttf -> mp4: PASS 
+[neg2/7] sample.mp3 -> docx: PASS 
+[neg3/7] sample.pages -> docx: PASS 
+[neg4/7] sample.pdf -> xlsx: PASS 
+[neg5/7] sample.svg -> mp3: PASS 
+[neg6/7] sample.zip -> pdf: PASS 
+[neg7/7] sample.docx -> mp4: PASS 
+TOTAL 130 | PASS 88 | FAIL 42
+FAILED: sample.docx -> pdf :: No module named 'pypdf'
+FAILED: sample.docx -> md :: engine not ok: No module named 'markdownify'
+FAILED: sample.odt -> pdf :: No module named 'pypdf'
+FAILED: sample.rtf -> pdf :: No module named 'pypdf'
+FAILED: sample.doc -> pdf :: No module named 'pypdf'
+FAILED: sample.txt -> pdf :: No module named 'pypdf'
+FAILED: sample.md -> html :: engine not ok: No module named 'markdown'
+FAILED: sample.md -> pdf :: engine not ok: No module named 'markdown'
+FAILED: sample.md -> docx :: engine not ok: No module named 'markdown'
+FAILED: sample.md -> odt :: engine not ok: No module named 'markdown'
+FAILED: sample.html -> md :: engine not ok: No module named 'markdownify'
+FAILED: sample.html -> pdf :: No module named 'pypdf'
+FAILED: sample.html -> docx :: engine not ok: libreoffice produced no output: Warning: failed to launch javaldx - java may not function correctly
+Error: no export filter for /home/hatch/workspace/office-butler/lls-convert/tests/out/case025_sample_docx/sample.docx found, aborting.
+Error: no export filter
+
+FAILED: sample.pdf -> txt :: engine not ok: No module named 'pypdf'
+FAILED: sample.pdf -> md :: engine not ok: No module named 'pypdf'
+FAILED: sample.pdf -> docx :: engine not ok: No module named 'pypdf'
+FAILED: sample.pdf -> png :: engine not ok: No module named 'fitz'
+FAILED: sample.pdf -> jpg :: engine not ok: No module named 'fitz'
+FAILED: sample.epub -> pdf :: No module named 'pypdf'
+FAILED: sample.xlsx -> md :: engine not ok: Missing optional dependency 'tabulate'.  Use pip or conda to install tabulate.
+FAILED: sample.xlsx -> ods :: engine not ok: No module named 'odf'
+FAILED: sample.xlsx -> pdf :: No module named 'pypdf'
+FAILED: sample.csv -> md :: engine not ok: Missing optional dependency 'tabulate'.  Use pip or conda to install tabulate.
+FAILED: sample.csv -> pdf :: No module named 'pypdf'
+FAILED: sample.ods -> xlsx :: engine not ok: Missing optional dependency 'odfpy'.  Use pip or conda to install odfpy.
+FAILED: sample.ods -> csv :: engine not ok: Missing optional dependency 'odfpy'.  Use pip or conda to install odfpy.
+FAILED: sample.pptx -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case068_sample_png/sample.png'
+FAILED: sample.pptx -> jpg :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case069_sample_jpg/sample.jpg'
+FAILED: sample.ppt -> pptx :: cannot import name 'ImageFont' from 'PIL' (/usr/lib/python3/dist-packages/PIL/__init__.py)
+FAILED: sample.odp -> pptx :: cannot import name 'ImageFont' from 'PIL' (/usr/lib/python3/dist-packages/PIL/__init__.py)
+FAILED: sample.png -> jpg :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case074_sample_jpg/sample.jpg'
+FAILED: sample.png -> webp :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case075_sample_webp/sample.webp'
+FAILED: sample.png -> bmp :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case076_sample_bmp/sample.bmp'
+FAILED: sample.png -> tiff :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case077_sample_tiff/sample.tiff'
+FAILED: sample.png -> ico :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case078_sample_ico/sample.ico'
+FAILED: sample.png -> gif :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case079_sample_gif/sample.gif'
+FAILED: sample.jpg -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case081_sample_png/sample.png'
+FAILED: sample.jpg -> webp :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case082_sample_webp/sample.webp'
+FAILED: sample.webp -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case084_sample_png/sample.png'
+FAILED: sample.svg -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case085_sample_png/sample.png'
+FAILED: sample.mp4 -> gif :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case101_sample_gif/sample.gif'
+FAILED: sample.mp4 -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case102_sample_png/sample.png'
+

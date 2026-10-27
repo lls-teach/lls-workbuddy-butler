@@ -1,0 +1,46 @@
+TOTAL 130 | PASS 88 | FAIL 42
+FAILED: sample.docx -> pdf :: No module named 'pypdf'
+FAILED: sample.docx -> md :: engine not ok: No module named 'markdownify'
+FAILED: sample.odt -> pdf :: No module named 'pypdf'
+FAILED: sample.rtf -> pdf :: No module named 'pypdf'
+FAILED: sample.doc -> pdf :: No module named 'pypdf'
+FAILED: sample.txt -> pdf :: No module named 'pypdf'
+FAILED: sample.md -> html :: engine not ok: No module named 'markdown'
+FAILED: sample.md -> pdf :: engine not ok: No module named 'markdown'
+FAILED: sample.md -> docx :: engine not ok: No module named 'markdown'
+FAILED: sample.md -> odt :: engine not ok: No module named 'markdown'
+FAILED: sample.html -> md :: engine not ok: No module named 'markdownify'
+FAILED: sample.html -> pdf :: No module named 'pypdf'
+FAILED: sample.html -> docx :: engine not ok: libreoffice produced no output: Warning: failed to launch javaldx - java may not function correctly
+Error: no export filter for /home/hatch/workspace/office-butler/lls-convert/tests/out/case025_sample_docx/sample.docx found, aborting.
+Error: no export filter
+
+FAILED: sample.pdf -> txt :: engine not ok: No module named 'pypdf'
+FAILED: sample.pdf -> md :: engine not ok: No module named 'pypdf'
+FAILED: sample.pdf -> docx :: engine not ok: No module named 'pypdf'
+FAILED: sample.pdf -> png :: engine not ok: No module named 'fitz'
+FAILED: sample.pdf -> jpg :: engine not ok: No module named 'fitz'
+FAILED: sample.epub -> pdf :: No module named 'pypdf'
+FAILED: sample.xlsx -> md :: engine not ok: Missing optional dependency 'tabulate'.  Use pip or conda to install tabulate.
+FAILED: sample.xlsx -> ods :: engine not ok: No module named 'odf'
+FAILED: sample.xlsx -> pdf :: No module named 'pypdf'
+FAILED: sample.csv -> md :: engine not ok: Missing optional dependency 'tabulate'.  Use pip or conda to install tabulate.
+FAILED: sample.csv -> pdf :: No module named 'pypdf'
+FAILED: sample.ods -> xlsx :: engine not ok: Missing optional dependency 'odfpy'.  Use pip or conda to install odfpy.
+FAILED: sample.ods -> csv :: engine not ok: Missing optional dependency 'odfpy'.  Use pip or conda to install odfpy.
+FAILED: sample.pptx -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case068_sample_png/sample.png'
+FAILED: sample.pptx -> jpg :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case069_sample_jpg/sample.jpg'
+FAILED: sample.ppt -> pptx :: cannot import name 'ImageFont' from 'PIL' (/usr/lib/python3/dist-packages/PIL/__init__.py)
+FAILED: sample.odp -> pptx :: cannot import name 'ImageFont' from 'PIL' (/usr/lib/python3/dist-packages/PIL/__init__.py)
+FAILED: sample.png -> jpg :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case074_sample_jpg/sample.jpg'
+FAILED: sample.png -> webp :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case075_sample_webp/sample.webp'
+FAILED: sample.png -> bmp :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case076_sample_bmp/sample.bmp'
+FAILED: sample.png -> tiff :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case077_sample_tiff/sample.tiff'
+FAILED: sample.png -> ico :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case078_sample_ico/sample.ico'
+FAILED: sample.png -> gif :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case079_sample_gif/sample.gif'
+FAILED: sample.jpg -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case081_sample_png/sample.png'
+FAILED: sample.jpg -> webp :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case082_sample_webp/sample.webp'
+FAILED: sample.webp -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case084_sample_png/sample.png'
+FAILED: sample.svg -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case085_sample_png/sample.png'
+FAILED: sample.mp4 -> gif :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case101_sample_gif/sample.gif'
+FAILED: sample.mp4 -> png :: cannot identify image file '/home/hatch/workspace/office-butler/lls-convert/tests/out/case102_sample_png/sample.png'
