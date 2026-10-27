@@ -38,3 +38,9 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-10-28T00:30	baseline	lls-baoshui	-	85.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=9 d7=9 d8=8 d9=9；dim8=清单+缺项报告 3/5（full_test）；d9 免责纪律强化	full_test
 2026-10-28T01:30	baseline	lls-mdppt	-	86.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=9 d7=9 d8=8 d9=8；dim8=通用笔记 md→5 页大纲（代码页/表格页映射正确）（full_test）	full_test
 2026-10-28T01:30	baseline	lls-htmlppt	-	87.0	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=10 d7=9 d8=9 d9=8；dim8=ego-browser 实测 3 页翻页（→供给爆发/←返回）键盘导航（full_test）	full_test
+2026-10-28T01:45	ideation	lls-zimu	-	-	上	需求证据	judge 3-0：剪辑车道数据最硬+SRT 确定性引擎+口播稿闭环	paired
+2026-10-28T01:45	ideation	lls-jiaoan	-	-	上	协同复用	judge 3-0：教学三件套收口+4.2 万车道+零新增引擎	paired
+2026-10-28T01:45	ideation	lls-fupan	-	-	砍	自噬风险	judge：与述职/周报高度重叠→并入 shuzhi 作模板模式（G 砍/H/I 缓）	paired
+2026-10-28T01:45	ideation	lls-baojia	-	-	缓	需求证据弱	judge 分裂（上1/缓1/砍1）：先车道复扫或社群验证再立项	paired
+2026-10-28T01:45	ideation	lls-jiaoyan	-	-	砍	商品化劣势	judge：纯规则质量垫底+WPS/Word 内置+与字幕校正重叠→架构并入 zimu/aiwei	paired
+2026-10-28T01:45	ideation	lls-pingyu	-	-	新漏选	受众爆发性	G/I 双 judge 独立提出：期末教师评语=爆发性刚需+docx 引擎直接复用	paired
