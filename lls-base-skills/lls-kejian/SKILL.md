@@ -13,7 +13,7 @@ examples_en:
   - Build a deck from this knowledge list
   - A slide has 8 points — what now?
   - Create in-class quiz pages for students
-version: 1.0.1
+version: 1.0.2
 author: 刘老师系列
 license: MIT
 ---

@@ -13,7 +13,7 @@ examples_en:
   - Draft a Word notice with title and signature block
   - Read this contract and list all clauses
   - Replace every "Party A" with "the Client" in this doc
-version: 2.0.1
+version: 2.0.2
 author: 刘老师系列
 license: MIT
 ---

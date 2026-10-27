@@ -13,7 +13,7 @@ examples_en:
   - Generate a resume Word file from my details
   - Compare my resume against this JD and report keyword gaps
   - Prepare interview questions for this position
-version: 1.0.1
+version: 1.0.2
 author: 刘老师系列
 license: MIT
 ---

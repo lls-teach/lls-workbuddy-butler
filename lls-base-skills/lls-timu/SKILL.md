@@ -13,7 +13,7 @@ examples_en:
   - Generate 20 questions per this syllabus
   - Check the question bank for duplicates
   - What question types fit this topic?
-version: 1.0.1
+version: 1.0.2
 author: 刘老师系列
 license: MIT
 ---

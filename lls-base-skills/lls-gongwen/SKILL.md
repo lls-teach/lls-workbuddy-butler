@@ -13,7 +13,7 @@ examples_en:
   - Draft a notice about launching a safety inspection
   - Check the elements and format of this request memo
   - Review the formatting of this official document
-version: 1.0.1
+version: 1.0.2
 author: 刘老师系列
 license: MIT
 ---

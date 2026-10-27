@@ -13,7 +13,7 @@ examples_en:
   - Extract all mandatory requirements from this RFP
   - Cross-check our bid document against the requirements
   - Is our submission package complete for this bid?
-version: 1.0.1
+version: 1.0.2
 author: 刘老师系列
 license: MIT
 ---

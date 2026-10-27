@@ -13,7 +13,7 @@ examples_en:
   - Analyze this sales data and write a report
   - Pivot the amounts by category
   - Any anomalies in this table?
-version: 1.0.1
+version: 1.0.2
 author: 刘老师系列
 license: MIT
 ---

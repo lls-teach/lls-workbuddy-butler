@@ -13,7 +13,7 @@ examples_en:
   - Build a 3-minute talking-head script outline
   - Check whether this script is ready to shoot
   - How long should my script be?
-version: 1.0.1
+version: 1.0.2
 author: 刘老师系列
 license: MIT
 ---

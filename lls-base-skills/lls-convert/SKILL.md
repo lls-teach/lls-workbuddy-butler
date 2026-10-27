@@ -5,7 +5,7 @@ display_name_en: Format Converter Butler
 description: 本地格式转换：文档/表格/演示/图片/音视频/字幕/数据/字体/压缩包互转，PDF 与 Markdown 双中枢
 description_zh: 本地格式转换大全：78 种主力格式互转，文件不离开设备；文档、表格、演示、图片、音视频、字幕、数据、字体、压缩包，一句话说清要什么格式直接转
 description_en: "Local format conversion encyclopedia: documents, sheets, slides, images, audio/video, subtitles, data, fonts and archives converted locally. Files never leave the device."
-version: 1.0.0
+version: 1.0.1
 author: lhg
 ---
 
