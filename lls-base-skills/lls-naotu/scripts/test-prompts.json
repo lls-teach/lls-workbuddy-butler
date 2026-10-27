@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "把这份会议纪要转成思维导图", "expected": "nanotu：纪要要点 → md 大纲 → .mm + HTML"},
+  {"id": 2, "prompt": "导出的脑图能用 XMind 打开吗", "expected": ".mm 是 FreeMind 格式，XMind/幕布均可导入"},
+  {"id": 3, "prompt": "把这份课程大纲做成脑图", "expected": "标题层级映射节点深度"}
+]

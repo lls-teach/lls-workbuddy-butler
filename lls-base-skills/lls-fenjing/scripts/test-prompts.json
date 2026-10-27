@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "把这篇口播稿转成分镜脚本", "expected": "fenjing_make.py 表格+时长按 4 字/秒校准"},
+  {"id": 2, "prompt": "检查分镜表语速", "expected": "fenjing_check.py 语速/景别/总时长"},
+  {"id": 3, "prompt": "出一份 Excel 分镜表给拍摄团队", "expected": "--xlsx 输出"}
+]

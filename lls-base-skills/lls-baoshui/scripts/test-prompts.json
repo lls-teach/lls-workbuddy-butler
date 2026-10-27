@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "个体户查账征收这个季度要准备什么", "expected": "baoshui_list.py 清单+征期节点+免责声明"},
+  {"id": 2, "prompt": "对照清单看我还缺什么资料", "expected": "baoshui_check.py 缺项报告"},
+  {"id": 3, "prompt": "帮我算这个季度要交多少税", "expected": "拒绝计税，转资料清单与主管税务机关/税务师"}
+]

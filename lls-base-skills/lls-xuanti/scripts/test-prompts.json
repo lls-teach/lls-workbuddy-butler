@@ -1,0 +1,4 @@
+[
+  {"id": 1, "prompt": "技能变现赛道帮我出选题", "expected": "xuanti_matrix.py 48 卡+评分卡，AI 起标题"},
+  {"id": 2, "prompt": "这些选题哪个先做", "expected": "评分卡打分 ≥10 优先，不替用户拍板"}
+]

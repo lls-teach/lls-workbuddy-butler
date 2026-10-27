@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "把这篇长文改写成小红书和抖音两个版本", "expected": "wentan_adapt.py 骨架 → AI 填充 → wentan_check.py 双平台验收"},
+  {"id": 2, "prompt": "检查这篇文案有没有 AI 味", "expected": "wentan_check.py AI 味黑名单命中报告"},
+  {"id": 3, "prompt": "帮我写一篇小红书爆款文案", "expected": "先问主题与素材，按小红书规范产出，产出后跑检查"}
+]

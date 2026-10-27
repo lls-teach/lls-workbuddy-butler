@@ -1,0 +1,1 @@
+<map version="1.0.1"><node TEXT="2026 技能变现路线"><node TEXT="底座先行"></node><node TEXT="pdf / xlsx / pptx / docx"></node><node TEXT="全开源 MIT"></node><node TEXT="场景开花"></node><node TEXT="发票报销管家"><node TEXT="查重是护城河"></node></node><node TEXT="选题雷达"></node><node TEXT="冷启动"></node><node TEXT="视频引流"></node><node TEXT="课堂转化"></node></node></map>
