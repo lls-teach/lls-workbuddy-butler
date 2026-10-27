@@ -52,3 +52,8 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-10-28T02:30	ideation	lls-yunying	-	-	砍	需求本身小	judge 3-0 砍（L 为 MCN 运营负责人：飞书多维表格+千瓜已覆盖，三功能无一需要技能）；<5 万次=碎片化非空位	paired
 2026-10-28T02:30	ideation	inference	-	-	修正	需求口径	145 万外溢推断一致判「部分成立」：关键词并集重复计数+共现≠因果+zhouba/shuzhi 已吸收大半→报告口径需折扣	paired
 2026-10-28T02:30	ideation	lls-jianggao	-	-	新漏选	受众匹配	K（文秘老兵）提出：领导讲话稿=体制内高频+署名口吻代入+"像不像"极敏感+gongwen 未覆盖文种；J 提出设计师方向（182 万足迹家族零覆盖）待议	paired
+2026-10-28T02:30	ideation	lls-huibao	-	-	缓	外溢未验证+三向自噬	judge 缓2上1：zhouba/shuzhi 触发词已覆盖汇报/总结→先归并路由再用行为数据验证外溢；K 提出更强替代「领导讲话稿」（体制内未覆盖文种）	paired
+2026-10-28T02:30	ideation	lls-youjian	-	-	砍	无护城河	judge 砍2缓1：邮件写作是 AI 对话内生能力，模板+语气分级一句提示词可替代；体制内走 OA 不走邮件	paired
+2026-10-28T02:30	ideation	lls-yunying	-	-	砍	需求本身小	judge 3-0 砍（L 为 MCN 运营负责人：飞书多维表格+千瓜已覆盖，三功能无一需要技能）；<5 万次=碎片化非空位	paired
+2026-10-28T02:30	ideation	inference	-	-	修正	需求口径	145 万外溢推断一致判「部分成立」：关键词并集重复计数+共现≠因果+zhouba/shuzhi 已吸收大半→报告口径需折扣	paired
+2026-10-28T02:30	ideation	lls-jianggao	-	-	新漏选	受众匹配	K（文秘老兵）提出：领导讲话稿=体制内高频+署名口吻代入+"像不像"极敏感+gongwen 未覆盖文种；J 提出设计师方向（182 万足迹家族零覆盖）待议	paired
