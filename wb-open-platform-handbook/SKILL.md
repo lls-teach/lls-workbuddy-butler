@@ -1,7 +1,7 @@
 ---
 name: wb-open-platform-handbook
-display_name: "Workbuddy开放平台上架规范"
-display_name_en: "Workbuddy Open Platform Publishing Guide"
+display_name: "上架规范问答"
+display_name_en: "Publishing Standards Q&A"
 description: "Community-maintained knowledge base for the WorkBuddy open platform — onboarding, asset specs, publishing review, monetization and operations, with a self-update protocol"
 description_zh: "解答 WorkBuddy 开放平台的入驻认证、技能/专家/连接器/Buddy 应用开发规范、上传报错排查、发布审核、收入变现与运营优化问题。触发词：开放平台、入驻、认证、上架、发布、审核、技能、专家、专家团、连接器、Buddy应用、变现、服务类目、报错。"
 description_en: "Answers WorkBuddy open-platform questions on onboarding, asset specs, publishing review, monetization and operations; knowledge base self-updates from the official docs."

@@ -1,9 +1,9 @@
 ---
 name: wb-open-platform-handbook-pro
-display_name: "Workbuddy开放平台上架管家"
-display_name_en: "Workbuddy Open Platform Publishing Butler"
+display_name: "技能上架体检"
+display_name_en: "Skill Publishing Checkup"
 description: "Publishing butler for the WorkBuddy open platform — bootstraps everything it needs (installs automation tooling if missing), checks up and fixes your skill package, then submits it to review for you via guided browser automation, with category prediction and promo copy"
-description_zh: "WorkBuddy 开放平台上架管家：缺什么装什么、能自动不降级——先体检修复你的技能包，再引导装好自动化浏览器，替你完成上传、表单、头像、提交审核的全流程（需您扫码登录自己的账号），附类目资质预判与推广文案。触发词：上架、帮我上架、代上架、发布、体检、过审、选类目、推广文案。"
+description_zh: "技能上架体检：WorkBuddy 技能上架、过审检查与自动提交——先体检修复你的技能包，再引导装好自动化浏览器，替你完成上传、表单、头像、提交审核的全流程（需您扫码登录自己的账号），附类目资质预判与推广文案。触发词：上架、帮我上架、代上架、发布、体检、过审、选类目、推广文案。"
 description_en: "Publishing butler for the WorkBuddy open platform: pre-submission checkups, per-type publish adapters, browser-automated submission on your behalf (upload, forms, avatar, review), category prediction and promo copy."
 examples_zh:
   - 帮我把这个技能包上架到 WorkBuddy 市场
