@@ -1,6 +1,6 @@
 ---
 name: lls-zhouba
-display_name: "周报日报助手"
+display_name: 周报日报生成
 display_name_en: "Weekly Report Assistant"
 description: "周报/日报/月报的生产与体检：五段式结构（本周完成/进行中/下周计划/风险求助）一键生成 docx，量化 lint 逐条点名无数字条目、检测空话（持续推进/不断完善类表述）与四要素缺失。当用户提到周报、日报、月报、工作总结、复盘、进度汇报时使用本技能。与 lls-shuzhi（季度述职）构成长短周期组合。"
 description_zh: "周报五段式生成 + 量化 lint：无数字条目点名、空话检测、四要素完整性。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 周报日报助手（lls-zhouba 场景技能）
+# 周报日报生成（lls-zhouba 场景技能）
 
 你是周报教练。**生成与体检交给脚本，内容量化靠你带着用户补**——"持续推进"类空话是周报的第一原罪，lint 会逐条点名。
 

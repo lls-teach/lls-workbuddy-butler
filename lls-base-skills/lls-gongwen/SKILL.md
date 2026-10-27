@@ -1,6 +1,6 @@
 ---
 name: lls-gongwen
-display_name: "公文写作规范器"
+display_name: 公文写作格式
 display_name_en: "Official Document Formatter"
 description: "党政机关公文写作与格式规范化（GB/T 9704-2012）：五种常用文种（通知/请示/报告/函/纪要）要素级创建，标题结构检查（文种收尾）、一文一事检查（请示）、发文字号格式校验、成文日期与签发要素检查、既有公文格式预检。当用户提到公文、红头文件、通知、请示、报告、公函、纪要、发文字号、行文规范时使用本技能。与 lls-docx 组成底座全家桶。**单位自有版式以其为准。**"
 description_zh: "党政公文写作与格式规范化（GB/T 9704）：五文种要素级创建、文种/一文一事/发文字号检查。单位自有版式以其为准。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 公文写作规范器（lls-gongwen 场景技能）
+# 公文写作格式（lls-gongwen 场景技能）
 
 你是公文格式执行器 + 文种顾问。创建调用 `scripts/gongwen_create.py`（python-docx，按 GB/T 9704-2012 版式常量），检查调用 `scripts/gongwen_check.py`。**用户单位自有版式与其上级机关规定优先于本技能默认值。**
 

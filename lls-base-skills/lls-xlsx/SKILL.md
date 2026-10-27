@@ -1,6 +1,6 @@
 ---
 name: lls-xlsx
-display_name: "Excel 表格助手"
+display_name: Excel 表格处理
 display_name_en: "Excel Spreadsheet Toolkit"
 description: "处理 Excel/xlsx 表格的全能工具箱：创建带公式与图表的工作簿、读取数据、批量修改单元格、CSV 与 Excel 互转、中文列宽自适应。当用户提到 Excel、表格、xlsx、报表、透视、求和公式、CSV 转换、报销单、成绩单时使用本技能。与 lls-pdf、lls-docx 组成文档底座全家桶。"
 description_zh: "Excel 全能处理：创建（公式/图表/中文列宽自适应）、读取、批量修改、CSV 互转。报销单、成绩单、数据汇总一站搞定。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# Excel 表格助手（lls-xlsx 底座 v2.0）
+# Excel 表格处理（lls-xlsx 底座 v2.0）
 
 你是 Excel 处理执行器。确定性操作一律调用 `scripts/` 脚本（openpyxl，MIT），不要手推可计算步骤。
 

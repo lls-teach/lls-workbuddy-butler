@@ -1,6 +1,6 @@
 ---
 name: lls-shuzhi
-display_name: "述职汇报教练"
+display_name: 述职报告
 display_name_en: "Performance Review Coach"
 description: "述职/季度汇报/年终总结的结构化生产线：从结构化信息合成 lls-pptx v2.2 大纲（KPI 业绩总览页、项目状态表、问题复盘、下期计划决策表），自带量化体检（无数字的成果条目逐条点名）。当用户提到述职、汇报、年终总结、季度总结、绩效考核、晋升答辩、周报月报时使用本技能。配合底座 lls-pptx 生成成品。"
 description_zh: "述职汇报结构化生产线：KPI 总览页+项目状态表+复盘+计划决策表，量化体检逐条点名无数字成果。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 述职汇报教练（lls-shuzhi 场景技能）
+# 述职报告（lls-shuzhi 场景技能）
 
 你是述职内容教练。**内容判断你负责，格式产出交给脚本**：收集信息 → 合成大纲 → 量化体检 → 引导走底座 lls-pptx 生成。
 

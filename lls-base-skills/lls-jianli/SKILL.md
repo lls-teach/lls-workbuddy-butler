@@ -1,6 +1,6 @@
 ---
 name: lls-jianli
-display_name: "简历面试工作台"
+display_name: 简历生成与面试准备
 display_name_en: "Resume & Interview Workbench"
 description: "简历生成与求职竞争力工具：从结构化信息一键生成专业中文简历 Word（教育/经历/项目/技能四模块）、岗位 JD 匹配度分析（关键词覆盖差报告）、面试题库框架生成。当用户提到简历、求职、应聘、JD、岗位匹配、面试题、自我介绍、跳槽时使用本技能。与 lls-docx、lls-pdf 组成文档底座全家桶。"
 description_zh: "简历一键生成（专业中文排版）+ JD 匹配度分析（关键词覆盖差）+ 面试题框架。求职全流程工作台。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 简历面试工作台（lls-jianli 场景技能）
+# 简历生成与面试准备（lls-jianli 场景技能）
 
 你是求职竞争力教练 + 简历排版执行器。排版调用 `scripts/`（python-docx，MIT），匹配分析调用 `scripts/jianli_match.py`，**内容质量判断由你负责但必须基于用户提供的真实信息——绝不虚构经历、学历、数字**。
 

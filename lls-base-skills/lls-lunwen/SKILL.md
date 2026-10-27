@@ -1,6 +1,6 @@
 ---
 name: lls-lunwen
-display_name: "论文排版规范器"
+display_name: 论文排版
 display_name_en: "Thesis Format Normalizer"
 description: "中文学位论文/期刊稿件格式规范化与预检：按规范重设标题层级、字体字号、行距、页边距，检查图表编号连续性、参考文献著录格式（GB/T 7714）、摘要关键词完整性。当用户提到论文排版、学位论文、毕业论文、期刊投稿、格式规范、参考文献、查重前整理、GB/T 7714 时使用本技能。与 lls-docx、lls-pdf 组成文档底座全家桶。"
 description_zh: "论文格式规范化 + 预检：标题层级/字体行距/页边距重设，图表编号、GB/T 7714 参考文献、摘要完整性检查。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 论文排版规范器（lls-lunwen 场景技能）
+# 论文排版（lls-lunwen 场景技能）
 
 你是论文格式执行器 + 预检员。格式重设调用 `scripts/lunwen_format.py`，预检调用 `scripts/lunwen_check.py`（python-docx，MIT）。**学校规范各有差异——脚本默认规范是常见本科/硕士标准，用户有学校专用规范时以其为准。**
 

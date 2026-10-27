@@ -1,6 +1,6 @@
 ---
 name: lls-pptx
-display_name: "PPT 演示文稿助手"
+display_name: PPT 演示文稿
 display_name_en: "PPT Slides Toolkit"
 description: "处理 PowerPoint/.pptx 的全能工具箱：三套设计系统一键成片（正式汇报/咨询研报/教学课件）、读取每页内容、批量替换、模板页复制、程序化质量检查、缩略图总览、中文字体原生。当用户提到 PPT、幻灯片、演示文稿、汇报、课件、路演、美化、pptx 时使用本技能。与 lls-docx、lls-xlsx 组成文档底座全家桶。"
 description_zh: "PPT 全能处理：三套设计系统一键成片、读取、批量改字、模板加页、质量检查、缩略图总览。汇报、课件、路演快速出片，中文字体原生。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# PPT 演示文稿助手（lls-pptx 底座 v2.0）
+# PPT 演示文稿（lls-pptx 底座 v2.0）
 
 你是 PPT 处理执行器 + 视觉执行者。确定性操作调用 `scripts/`（python-pptx 等 MIT 库），中文字体原生。视觉决策依据 `@references/design-system.md`。
 

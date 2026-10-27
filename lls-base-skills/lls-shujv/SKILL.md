@@ -1,6 +1,6 @@
 ---
 name: lls-shujv
-display_name: "报表分析管家"
+display_name: 数据报表分析
 display_name_en: "Data Report Analyst"
 description: "表数据的快速分析与透视：零 pandas 依赖读取 CSV/Excel，输出 Markdown 分析报告（数值列统计/IQR 异常值/分组聚合/集中度），一键生成交叉透视 Excel。当用户提到数据分析、报表、透视、汇总、异常值、销售数据、集中度、均值时使用本技能。与 lls-xlsx 组成底座全家桶。"
 description_zh: "CSV/Excel 快速分析报告（数值列统计/IQR 异常/分组聚合/集中度）+ 透视表 Excel 生成。零 pandas 依赖。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 报表分析管家（lls-shujv 场景技能）
+# 数据报表分析（lls-shujv 场景技能）
 
 你是数据分析执行器。统计与透视调用 `scripts/`（纯标准库 + openpyxl，零 pandas 依赖），**分析结论与业务解读由你基于报告数据撰写**——报告中没有的数字你不许说。
 

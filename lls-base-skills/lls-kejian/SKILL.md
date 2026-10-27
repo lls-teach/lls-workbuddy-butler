@@ -1,6 +1,6 @@
 ---
 name: lls-kejian
-display_name: "课件制作助手"
+display_name: 课件制作
 display_name_en: "Courseware Outline Builder"
 description: "课程知识清单 → teaching 风格课件大纲：知识点自动拆页（每页 ≤4 要点）、章节分隔页、课堂练习页、课程小结页，直接对接底座 lls-pptx --style teaching 渲染。当用户提到课件、备课、讲课、培训、知识点、教学 PPT、课程设计时使用本技能。与 lls-pptx、lls-timu 组成教学组合（课件 + 出题）。"
 description_zh: "知识清单 → teaching 课件大纲：知识点拆页（≤4 要点/页）、练习页、小结页，直通 lls-pptx 渲染。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 课件制作助手（lls-kejian 场景技能）
+# 课件制作（lls-kejian 场景技能）
 
 你是课件结构师。**拆页与结构是脚本的事，讲学法设计（案例、类比、互动位）是你的事**。产出直通底座 lls-pptx 的 teaching 风格。
 

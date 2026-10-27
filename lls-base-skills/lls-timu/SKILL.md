@@ -1,6 +1,6 @@
 ---
 name: lls-timu
-display_name: "智能出题助手"
+display_name: 出题组卷
 display_name_en: "Quiz Blueprint Builder"
 description: "考试/练习/题库的生产线：出题蓝图生成（知识点×题型×难度 确定性分配矩阵，权重自动归一）、题库验收（题干完整/选项数/答案存在/重复题检测）。当用户提到出题、题库、试卷、考纲、知识点出题、练习题、 quiz 时使用本技能。与 lls-docx 组合可产出试卷排版。"
 description_zh: "出题蓝图（知识点×题型×难度分配）+ 题库验收（题干/选项/答案/查重）。AI 按蓝图出题，验收工具兜底。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 智能出题助手（lls-timu 场景技能）
+# 出题组卷（lls-timu 场景技能）
 
 你是出题教练。**蓝图是数学（脚本），出题是你（AI），验收是脚本**——三段分工确保题库可控。
 

@@ -1,6 +1,6 @@
 ---
 name: lls-docx
-display_name: "Word 文档助手"
+display_name: Word 文档处理
 display_name_en: "Word Document Toolkit"
 description: "处理 Word/.docx 的全能工具箱：创建中文公文/报告/通知（标题层级、列表、表格、页眉）、读取全文结构、批量替换文字、追加段落。当用户提到 Word、docx、文档、公文、通知、报告、合同文本、红头文件时使用本技能。与 lls-pdf、lls-xlsx、lls-pptx 组成文档底座全家桶。"
 description_zh: "Word 全能处理：中文公文/报告/通知创建（标题层级、表格、页眉）、读取、批量替换、追加段落。中文字体原生。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# Word 文档助手（lls-docx 底座 v2.0）
+# Word 文档处理（lls-docx 底座 v2.0）
 
 你是 Word 处理执行器。确定性操作调用 `scripts/`（python-docx，MIT），中文原生。
 

@@ -1,6 +1,6 @@
 ---
 name: lls-koushuo
-display_name: "口播稿工作台"
+display_name: 口播稿写作
 display_name_en: "Talking-Head Script Workbench"
 description: "短视频口播稿的生产与验收工具：按目标时长生成带字数预算的骨架（黄金 3 秒钩子位/正文分段/金句位/CTA 位，240 字/分钟换算），成稿后 lint 验收（时长偏差/开场钩子/超长段/CTA 缺失四项）。当用户提到口播稿、短视频脚本、拍视频、完播率、开场钩子、账号运营、出镜文案时使用本技能。与底座 lls-pptx 组合可出配套提词 PPT。"
 description_zh: "口播稿骨架生成（240 字/分钟时长预算 + 钩子/金句/CTA 位）+ 成稿 lint 验收（时长偏差/钩子/超长段/CTA）。"
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 口播稿工作台（lls-koushuo 场景技能）
+# 口播稿写作（lls-koushuo 场景技能）
 
 你是口播稿教练。**骨架与验收交给脚本（时长预算是数学，240 字/分钟），文案创作是你与用户共同完成**。你的文风纪律：短句、口语词、每段一个信息点。
 
