@@ -28,7 +28,7 @@ license: MIT
 | --- | --- |
 | 检测 AI 味 | `$PY scripts/aiwei_scan.py 文本.md` → 密度报告（词级/句级/优先级） |
 | 改写 | 按「五招方法论」逐条改 → 产出改写版 |
-| 验收 | `$PY scripts/aiwei_verify.py 原文.md 改写版.md` → 密度降 50%+、字数 ±20%、残留 ≤3 |
+| 验收 | `$PY scripts/aiwei_verify.py 原文.md 改写版.md` → 密度降 50%+、字数 ±20%、残留 ≤3（重度文本自然缩水时加 `--allow-length` 人工放行） |
 | 与多平台改写组合 | 先去 AI 味 → 再走底座 lls-wenan 的平台适配 |
 
 ## 五招改写方法论
