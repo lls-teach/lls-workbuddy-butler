@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""课程信息 → PPT 演示文稿技能 teaching 风格课件大纲（知识点拆页 + 练习页 + 章节分隔页）。
+"""课程信息 → teaching 风格课件大纲（知识点拆页 + 练习页 + 章节分隔页）。
 
 用法: python3 kejian_outline.py --json 课程.json -o 课件大纲.md
 JSON: {"course":"课程名","audience":"受众","lessons":[{"topic":"知识点","points":["a","b","c"],"quiz":"练习题?"}]}
@@ -47,4 +47,4 @@ ensure_parent(args.output)
 open(args.output, "w", encoding="utf-8").write("\n".join(out))
 n_pages = sum(1 for l in out if l.startswith("## "))
 print(f"[lls-kejian] 课件大纲 → {args.output}（知识点 {len(lessons)} 个 → 约 {n_pages} 内容页）")
-print("[lls-kejian] 下一步：将本大纲交给 PPT 演示文稿技能，以 teaching 风格渲染成片")
+print("[lls-kejian] 下一步：按 teaching 风格将本大纲渲染成片")

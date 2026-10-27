@@ -2,7 +2,7 @@
 name: lls-jianli
 display_name: 简历生成与面试准备
 display_name_en: "Resume & Interview Workbench"
-description: "简历生成与求职竞争力工具：从结构化信息一键生成专业中文简历 Word（教育/经历/项目/技能四模块）、岗位 JD 匹配度分析（关键词覆盖差报告）、面试题库框架生成。当用户提到简历、求职、应聘、JD、岗位匹配、面试题、自我介绍、跳槽时使用本技能。与 Word 文档处理技能、PDF 文档处理技能 组成文档底座全家桶。"
+description: "简历生成与求职竞争力工具：从结构化信息一键生成专业中文简历 Word（教育/经历/项目/技能四模块）、岗位 JD 匹配度分析（关键词覆盖差报告）、面试题库框架生成。当用户提到简历、求职、应聘、JD、岗位匹配、面试题、自我介绍、跳槽时使用本技能。。"
 description_zh: "简历一键生成（专业中文排版）+ JD 匹配度分析（关键词覆盖差）+ 面试题框架。求职全流程工作台。"
 description_en: "Resume workbench: generate professional Chinese resumes from structured data, analyze JD-resume keyword match, build interview question frameworks."
 examples_zh:
@@ -13,7 +13,7 @@ examples_en:
   - Generate a resume Word file from my details
   - Compare my resume against this JD and report keyword gaps
   - Prepare interview questions for this position
-version: 1.0.0
+version: 1.0.1
 author: 刘老师系列
 license: MIT
 ---
@@ -70,7 +70,7 @@ PY="$VENV/bin/python"
 
 | # | 症状 | 一线修复 | 仍失败兜底 |
 | --- | --- | --- | --- |
-| 1 | 用户给的是旧简历 PDF/图片 | 走底座 PDF 文档处理技能 提取文字 → 你人工整理成 JSON → 🔴 让用户确认 | 无法提取则让用户口头补齐 |
+| 1 | 用户给的是旧简历 PDF/图片 | 先提取 PDF/图片中的文字 → 你人工整理成 JSON → 🔴 让用户确认 | 无法提取则让用户口头补齐 |
 | 2 | JD 文本太短无法分析 | 提示用户补全岗位职责与要求部分 | 明确说明样本不足，只做粗匹配 |
 | 3 | 中文字体方块 | python-docx 已设宋体/雅黑 east-asia | 用户机器缺字体时提示 |
 | 4 | 用户要求"美化设计感强的简历" | 说明本技能产出标准单栏商务简历；强设计需求建议 Canva/创客贴并保留内容 | — |

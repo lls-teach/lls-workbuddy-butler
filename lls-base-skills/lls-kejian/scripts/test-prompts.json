@@ -1,5 +1,5 @@
 [
-  {"id": 1, "prompt": "按这份知识清单做课件", "expected": "kejian_outline.py 拆页 → PPT 演示文稿技能 --style teaching 渲染"},
+  {"id": 1, "prompt": "按这份知识清单做课件", "expected": "kejian_outline.py 拆页 → PPT 渲染 --style teaching 渲染"},
   {"id": 2, "prompt": "一页塞了 8 个要点", "expected": "拆页规则强制 ≤4 要点/页"},
   {"id": 3, "prompt": "给学生出几道课堂练习", "expected": "quiz 字段生成练习页"}
 ]

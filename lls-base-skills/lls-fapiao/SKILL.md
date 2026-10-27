@@ -2,7 +2,7 @@
 name: lls-fapiao
 display_name: 发票识别报销
 display_name_en: "Invoice & Reimbursement Butler"
-description: "批量识别发票并自动生成报销单 Excel：提取发票号码、开票日期、价税合计、销售方，自动查重（重复报销风险）、号码长度校验、金额异常检测、分类汇总，低置信度字段黄底标「待人工核对」。支持数电票、增值税电子专票/普票、火车票、出租车票，PDF 文字层与扫描件 OCR 双路线。当用户提到发票、报销、报销单、发票整理、发票汇总、发票查重、票据、打车票、火车票报销时使用本技能。与 Excel 表格处理技能、PDF 文档处理技能 组成文档底座全家桶。"
+description: "批量识别发票并自动生成报销单 Excel：提取发票号码、开票日期、价税合计、销售方，自动查重（重复报销风险）、号码长度校验、金额异常检测、分类汇总，低置信度字段黄底标「待人工核对」。支持数电票、增值税电子专票/普票、火车票、出租车票，PDF 文字层与扫描件 OCR 双路线。当用户提到发票、报销、报销单、发票整理、发票汇总、发票查重、票据、打车票、火车票报销时使用本技能。。"
 description_zh: "发票批量识别 + 报销单生成：查重、金额校验、分类汇总、低置信度黄底标注。支持数电票/专票/普票/火车票/出租车票。"
 description_en: "Batch invoice processing and reimbursement sheet generation: dedup check, amount validation, categorized summary, low-confidence flagging. Supports e-invoices, VAT invoices, train and taxi tickets."
 examples_zh:
@@ -13,14 +13,14 @@ examples_en:
   - Turn this batch of invoices into a reimbursement sheet
   - Check whether any of these invoices are duplicates
   - Summarize this month's taxi and train tickets
-version: 1.0.0
+version: 1.0.1
 author: 刘老师系列
 license: MIT
 ---
 
 # 发票识别报销（lls-fapiao 场景技能）
 
-你是发票报销执行器。确定性操作一律调用 `scripts/`（pypdfium2 + openpyxl，MIT），**绝不编造发票字段**——所有字段来自文字层提取或 OCR，低置信度一律标注。底层能力来自底座技能 PDF 文档处理技能（渲染/OCR）与 Excel 表格处理技能（表格规范）。
+你是发票报销执行器。确定性操作一律调用 `scripts/`（pypdfium2 + openpyxl，MIT），**绝不编造发票字段**——所有字段来自文字层提取或 OCR，低置信度一律标注。底层为本地渲染/OCR 与表格规范处理。
 
 ## 第 0 步：环境自举
 
@@ -47,7 +47,7 @@ PY="$VENV/bin/python"
 3. 🔴 CHECKPOINT：生成报销单前，把解析出的发票清单（号码/日期/金额）展示给用户核对；金额合计与用户手工对不上时停下排查，不要硬生成。
 4. 🔴 CHECKPOINT：覆盖已有报销单前确认（脚本默认改名 `_new`）。
 5. 报销单列固定为：序号/报销人/发票号码/开票日期/类型/金额(元)/待人工核对/问题——不要随意增删列。
-6. 写完报销单后可用底座 Excel 表格处理技能 的 xlsx_recalc.py 回写公式缓存值，再用 docx/pdf 渲染链出图供用户预览。
+6. 写完报销单后回写公式缓存值，再渲染出图供用户预览。
 
 ## 失败分支
 
@@ -57,7 +57,7 @@ PY="$VENV/bin/python"
 | 2 | 数电票版式识别不全 | 数电票版式多变：把文字层 dump 出来人工确认字段位置；标注待人工核对 | 引导用户从"全国增值税发票查验平台"核对真伪 |
 | 3 | 发票号码 8/10 位 | 老版票面合法长度，非错误——但与数电票 20 位混批时在问题列注明 | — |
 | 4 | 金额带千分位/全角 | 已内置归一化；仍失败则 dump 原文行人工看 | — |
-| 5 | 文件加密 | 提示输入密码（继承 PDF 文档处理技能 的 --password 路线） | 无法处理则明确说明 |
+| 5 | 文件加密 | 提示输入密码（按密码提示路线重试） | 无法处理则明确说明 |
 
 ## 反例黑名单（不要做）
 

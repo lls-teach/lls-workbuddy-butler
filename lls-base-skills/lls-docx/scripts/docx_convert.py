@@ -4,7 +4,7 @@
 用法:
   验证输出（转 PDF 供人工/视觉检查）: python3 docx_convert.py 输出.docx --to pdf
   旧格式迁移:                          python3 docx_convert.py 老文档.doc --to docx
-输出: 同名 .pdf / .docx（同目录）。转完 PDF 后可用 PDF 文档处理技能 的 pdf_render.py 渲染逐页查看。
+输出: 同名 .pdf / .docx（同目录）。转完 PDF 后可渲染逐页查看。
 """
 import argparse
 import glob
@@ -52,7 +52,7 @@ def main() -> None:
         die(f"转换失败: {r.stderr[:300]}")
     print(f"[lls-docx] 已转换 → {produced}")
     if args.to == "pdf":
-        print("[lls-docx] 写入后验证纪律：用 PDF 文档处理技能 的 pdf_render.py 渲染，逐页核对标题/表格/页眉是否如预期。")
+        print("[lls-docx] 写入后验证纪律：渲染成图，逐页核对标题/表格/页眉是否如预期。")
     if args.to == "docx":
         print("[lls-docx] 旧格式已迁移为 .docx，后续用 docx_read/docx_edit 处理。")
 

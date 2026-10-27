@@ -2,7 +2,7 @@
 name: lls-koushuo
 display_name: 口播稿写作
 display_name_en: "Talking-Head Script Workbench"
-description: "短视频口播稿的生产与验收工具：按目标时长生成带字数预算的骨架（黄金 3 秒钩子位/正文分段/金句位/CTA 位，240 字/分钟换算），成稿后 lint 验收（时长偏差/开场钩子/超长段/CTA 缺失四项）。当用户提到口播稿、短视频脚本、拍视频、完播率、开场钩子、账号运营、出镜文案时使用本技能。与底座 PPT 演示文稿技能 组合可出配套提词 PPT。"
+description: "短视频口播稿的生产与验收工具：按目标时长生成带字数预算的骨架（黄金 3 秒钩子位/正文分段/金句位/CTA 位，240 字/分钟换算），成稿后 lint 验收（时长偏差/开场钩子/超长段/CTA 缺失四项）。当用户提到口播稿、短视频脚本、拍视频、完播率、开场钩子、账号运营、出镜文案时使用本技能。可出配套提词 PPT。"
 description_zh: "口播稿骨架生成（240 字/分钟时长预算 + 钩子/金句/CTA 位）+ 成稿 lint 验收（时长偏差/钩子/超长段/CTA）。"
 description_en: "Talking-head script workbench: duration-budgeted outlines (hook/body/golden-line/CTA at 240 chars per minute) and post-write lint."
 examples_zh:
@@ -13,7 +13,7 @@ examples_en:
   - Build a 3-minute talking-head script outline
   - Check whether this script is ready to shoot
   - How long should my script be?
-version: 1.0.0
+version: 1.0.1
 author: 刘老师系列
 license: MIT
 ---
@@ -28,7 +28,7 @@ license: MIT
 | --- | --- |
 | 出骨架 | `$PY scripts/koushuo_outline.py --title 主题 --minutes 3 --points "要点1,要点2,要点3" -o 骨架.md` |
 | 成稿验收 | `$PY scripts/koushuo_check.py 口播稿.md --minutes 3`（时长/钩子/节奏/CTA 四项） |
-| 配套提词页 | 骨架确认后走底座 PPT 演示文稿技能（teaching 风格） |
+| 配套提词页 | 骨架确认后按 teaching 风格生成提词页 |
 
 ## 时长预算表（内置换算：240 字/分钟）
 

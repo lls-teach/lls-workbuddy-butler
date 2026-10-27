@@ -1,8 +1,8 @@
 ---
 name: lls-huiyi
-display_name: 录音转会议纪要（本地版）
+display_name: 录音转 会议纪要
 display_name_en: "Meeting Notes Builder"
-description: "会议/课程转写稿 → 结构化纪要：清洗口头禅、说话人分离、行动项与决策规则抽取（负责人/截止时间待确认清单），AI 补写议题归纳。已有转写文本（讯飞见外/飞书妙记/微信语音转文字导出）即可运行。当用户提到会议纪要、录音整理、转写、访谈整理、课程逐字稿、行动项时使用本技能。与 Word 文档处理技能、PPT 演示文稿技能 组成底座全家桶。"
+description: "会议/课程转写稿 → 结构化纪要：清洗口头禅、说话人分离、行动项与决策规则抽取（负责人/截止时间待确认清单），AI 补写议题归纳。已有转写文本（讯飞见外/飞书妙记/微信语音转文字导出）即可运行。当用户提到会议纪要、录音整理、转写、访谈整理、课程逐字稿、行动项时使用本技能。。"
 description_zh: "转写稿 → 会议纪要：清洗口头禅、说话人分离、行动项/决策抽取、待确认清单。录音先转写再进本技能。"
 description_en: "Transcript to meeting minutes: filler cleaning, speaker turns, action/decision extraction with confirmation checklist."
 examples_zh:
@@ -37,7 +37,7 @@ PY="$VENV/bin/python"
 | --- | --- |
 | 转写文本（.txt/.md，含"说话人："前缀最佳） | `$PY scripts/huiyi_minutes.py 转写.txt -o 纪要骨架.md --title 会议名 --date 2026-10-27` |
 | 音频文件（mp3/m4a/wav） | 本技能**不做 ASR**——引导先用讯飞听见/飞书妙记/通义听悟/whisper 导出文本，再进本技能（见失败分支 1） |
-| 纪要骨架 → 成品 | 你基于骨架写议题归纳与总结（行动项保留待确认标记）→ 可用底座 Word 文档处理技能 产出正式版 |
+| 纪要骨架 → 成品 | 你基于骨架写议题归纳与总结（行动项保留待确认标记）→ 产出正式版 Word 文档 |
 
 ## 抽取规则（huiyi_minutes.py 内置）
 

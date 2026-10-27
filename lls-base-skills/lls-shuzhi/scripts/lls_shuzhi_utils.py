@@ -29,7 +29,7 @@ def quant_score(text: str) -> tuple[int, int]:
     return hit, len(items)
 
 def compose_outline(data: dict) -> str:
-    """结构化述职 JSON → PPT 演示文稿技能 v2.2 大纲（KPI 页 + 状态表 + 决策表）。"""
+    """结构化述职 JSON → PPT 大纲（KPI 页 + 状态表 + 决策表）。"""
     lines = []
     kpis = data.get("kpis", [])
     if kpis:

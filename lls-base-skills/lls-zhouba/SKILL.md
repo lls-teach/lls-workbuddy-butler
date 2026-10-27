@@ -1,8 +1,8 @@
 ---
 name: lls-zhouba
-display_name: 周报日报生成（本地版）
+display_name: 周报日报 生成
 display_name_en: "Weekly Report Assistant"
-description: "周报/日报/月报的生产与体检：五段式结构（本周完成/进行中/下周计划/风险求助）一键生成 docx，量化 lint 逐条点名无数字条目、检测空话（持续推进/不断完善类表述）与四要素缺失。当用户提到周报、日报、月报、工作总结、复盘、进度汇报时使用本技能。与 述职报告技能（季度述职）构成长短周期组合。"
+description: "周报/日报/月报的生产与体检：五段式结构（本周完成/进行中/下周计划/风险求助）一键生成 docx，量化 lint 逐条点名无数字条目、检测空话（持续推进/不断完善类表述）与四要素缺失。当用户提到周报、日报、月报、工作总结、复盘、进度汇报时使用本技能。。"
 description_zh: "周报五段式生成 + 量化 lint：无数字条目点名、空话检测、四要素完整性。"
 description_en: "Weekly report generation (5-section structure) plus quantification lint: flags numberless items, filler phrases, and missing elements."
 examples_zh:
