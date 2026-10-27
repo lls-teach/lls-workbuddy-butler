@@ -1,7 +1,7 @@
 ---
 name: lls-aiwei
-display_name: "去AI味改写"
-display_name_en: "AI-Flavor Rewriter"
+display_name: "去AI味检测改写"
+display_name_en: "AI-Flavor Detector and Rewriter"
 description: "AI 味检测与改写验收：80+ 词级黑名单（结构套话/动词套话/空洞强化，逐词给改写方向）+ 4 类句级结构特征（排比三连/总结腔/抽象名词堆叠/句长均匀度），量化 AI 味密度（每千字），改写前后对比验收（密度下降≥50%、字数±20% 防改丢内容）。当用户提到去AI味、AI味、降AI味、文案太AI、像机器人写的、改写、润色去味时使用本技能。与 lls-wenan（多平台改写）组成内容创作组合。"
 description_zh: "AI 味检测（80+ 词黑名单+4 类句级特征+密度量化）+ 改写前后验收（密度降 50%、防改丢内容）。"
 description_en: "AI-flavor detection (80+ word blacklist, 4 structural patterns, per-1k-chars density) and rewrite acceptance (50% density drop, ±20% length guard)."
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 去AI味改写（lls-aiwei 场景技能）
+# 去AI味检测改写（lls-aiwei 场景技能）
 
 你是去 AI 味改写执行器。**检测与验收交给脚本（可量化的才可信），改写由你按方法论执行**。铁律：改写基于用户原文的事实，不编造细节。
 

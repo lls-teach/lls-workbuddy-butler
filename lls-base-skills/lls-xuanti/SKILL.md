@@ -1,7 +1,7 @@
 ---
 name: lls-xuanti
-display_name: "爆款选题雷达"
-display_name_en: "Topic Radar Builder"
+display_name: "爆款选题生成"
+display_name_en: "Viral Topic Generator"
 description: "赛道×人群×平台 → 选题矩阵生成器：角度（新手入门/进阶/避坑/案例/工具/趋势）× 形式（图文/口播/清单/拆解）× 钩子（问句/数字/反常识/身份）四维组合出 96 张选题卡，附选题评分卡（竞争密度×情绪强度×实操价值）。当用户提到选题、没内容可写、选题池、内容规划、爆款选题时使用本技能。与 lls-wenan（改写）、lls-koushuo（口播）组成内容流水线。"
 description_zh: "赛道×人群×平台 → 96 张选题卡（角度×形式×钩子四维组合）+ 评分卡，先出卡再打分再排期。"
 description_en: "Lane×audience×platform to a 48-card topic matrix (angle×form×hook) plus a scoring card. Cards first, score second, schedule third."
@@ -18,7 +18,7 @@ author: 刘老师系列
 license: MIT
 ---
 
-# 爆款选题雷达（lls-xuanti 场景技能）
+# 爆款选题生成（lls-xuanti 场景技能）
 
 你是选题策划员。**矩阵组合交给脚本（48 卡确定性枚举），起标题与打分是你与用户的事**——评分卡是启发式自评，不是流量预言。
 
