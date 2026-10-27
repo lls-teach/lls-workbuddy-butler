@@ -1,8 +1,8 @@
 ---
 name: lls-xlsx
-display_name: Excel 表格处理
+display_name: Excel 表格处理（本地版）
 display_name_en: "Excel Spreadsheet Toolkit"
-description: "处理 Excel/xlsx 表格的全能工具箱：创建带公式与图表的工作簿、读取数据、批量修改单元格、CSV 与 Excel 互转、中文列宽自适应。当用户提到 Excel、表格、xlsx、报表、透视、求和公式、CSV 转换、报销单、成绩单时使用本技能。与 lls-pdf、lls-docx 组成文档底座全家桶。"
+description: "处理 Excel/xlsx 表格的全能工具箱：创建带公式与图表的工作簿、读取数据、批量修改单元格、CSV 与 Excel 互转、中文列宽自适应。当用户提到 Excel、表格、xlsx、报表、透视、求和公式、CSV 转换、报销单、成绩单时使用本技能。与 PDF 文档处理技能、Word 文档处理技能 组成文档底座全家桶。"
 description_zh: "Excel 全能处理：创建（公式/图表/中文列宽自适应）、读取、批量修改、CSV 互转。报销单、成绩单、数据汇总一站搞定。"
 description_en: "All-in-one Excel toolkit: create workbooks with formulas and charts, read data, batch cell edits, CSV conversion, CJK-aware column widths."
 examples_zh:
@@ -57,7 +57,7 @@ PY="$VENV/bin/python"
 | --- | --- | --- | --- |
 | 1 | 打开报错（.xls 旧格式） | 提示用户另存为 .xlsx；或 `pip install xlrd` 后告知仅支持读 | 明确说明格式限制 |
 | 2 | 读取乱码 CSV | `--encoding gbk` 重试（国内 Excel 导出常为 GBK） | 让用户用文本编辑器确认编码 |
-| 3 | 单元格是图片/合并单元格读不出 | 合并单元格自动取左上值并标注；图片需走 lls-pdf OCR 路线 | 告知限制 |
+| 3 | 单元格是图片/合并单元格读不出 | 合并单元格自动取左上值并标注；图片需走 PDF 文档处理技能 OCR 路线 | 告知限制 |
 | 4 | 公式写入后打开是 0 | openpyxl 不计算公式：跑 `xlsx_recalc.py`（需 LibreOffice）回写缓存值；无 LibreOffice 则告知用户在 Excel/WPS 中打开即自动重算 | — |
 
 ## 反例黑名单（不要做）

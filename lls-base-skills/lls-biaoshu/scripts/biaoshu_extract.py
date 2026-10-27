@@ -2,7 +2,7 @@
 """从招标文件提取硬性要求清单 → JSON（内部核对用偏离检查的输入）。
 
 用法: python3 biaoshu_extract.py 招标文件.txt -o 要求清单.json
-注意：输入应为纯文本（docx/pdf 先走底座 lls-docx/lls-pdf 提取）。
+注意：输入应为纯文本（docx/pdf 先走底座 Word 文档处理技能/PDF 文档处理技能 提取）。
 """
 import argparse
 import json

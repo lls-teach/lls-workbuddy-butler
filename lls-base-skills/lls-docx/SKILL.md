@@ -1,8 +1,8 @@
 ---
 name: lls-docx
-display_name: Word 文档处理
+display_name: Word 文档处理（本地版）
 display_name_en: "Word Document Toolkit"
-description: "处理 Word/.docx 的全能工具箱：创建中文公文/报告/通知（标题层级、列表、表格、页眉）、读取全文结构、批量替换文字、追加段落。当用户提到 Word、docx、文档、公文、通知、报告、合同文本、红头文件时使用本技能。与 lls-pdf、lls-xlsx、lls-pptx 组成文档底座全家桶。"
+description: "处理 Word/.docx 的全能工具箱：创建中文公文/报告/通知（标题层级、列表、表格、页眉）、读取全文结构、批量替换文字、追加段落。当用户提到 Word、docx、文档、公文、通知、报告、合同文本、红头文件时使用本技能。与 PDF 文档处理技能、Excel 表格处理技能、PPT 演示文稿技能 组成文档底座全家桶。"
 description_zh: "Word 全能处理：中文公文/报告/通知创建（标题层级、表格、页眉）、读取、批量替换、追加段落。中文字体原生。"
 description_en: "All-in-one Word toolkit: create Chinese documents with headings, tables and headers, read structure, batch replace, append paragraphs."
 examples_zh:
@@ -55,7 +55,7 @@ PY="$VENV/bin/python"
 
 1. 🔴 CHECKPOINT：编辑已有文档前先 `docx_read.py` 展示将受影响的段落，确认后再改（默认输出 `_new`）。
 2. 批量替换报告替换次数，0 次命中要明说；🔴 CHECKPOINT：替换预计影响 ≥20 处或整份文档时，先列出受影响段落清单，等用户确认再执行。
-3. **写入后验证（必做）**：docx_create / docx_edit 完成后跑 `docx_revisions.py`（确认没留下意外修订）+ `docx_convert.py --to pdf` 转 PDF 后用 lls-pdf 渲染抽查关键页。
+3. **写入后验证（必做）**：docx_create / docx_edit 完成后跑 `docx_revisions.py`（确认没留下意外修订）+ `docx_convert.py --to pdf` 转 PDF 后用 PDF 文档处理技能 渲染抽查关键页。
 4. **修订边界**：`docx_revisions.py` 能检测别人留下的修订（谁改的、改了什么），但接受/拒绝是文档所有者的裁决——不代做，明确引导到 Word/WPS。
 5. 公文类请求按用户要求的格式要素逐项确认（标题、主送、正文、落款、日期）。
 

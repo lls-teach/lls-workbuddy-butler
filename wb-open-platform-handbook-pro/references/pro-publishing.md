@@ -16,6 +16,8 @@
 
 - zip ≤3MB；**仅支持两级目录**（根目录/二级目录/文件），`.github` 等三层结构直接拒绝，报"目录层级超限"
 - frontmatter **必含 `display_name`（中文）与 `display_name_en`（英文）**，缺任一拒绝解析
+- **display_name 全平台唯一**（同类型资产内）：与市场已有技能同名直接解析失败（2026-10-27 九支实测），提审前先搜市场同名；差异化后缀如「（本地版）」
+- **包内禁止跨技能引用**：SKILL.md 及包内文件出现其他技能 slug 或 ../ 跨包路径，文件质量检测判「内置文件缺失」驳回（2026-10-27 三支实测）；组合关系只写推广文案，技能文本用通用能力名词
 - frontmatter 值中含"英文冒号+空格"必须整体加引号，否则报 "yaml: mapping values are not allowed"
 - 真实报错样式：`解析失败：缺少 Skill 中文展示名（display_name），请在 SKILL.md frontmatter 中填写`
 - 上传解析通过后自动生成技能 ID（`os_xxxxxxxxxxxx`）；审核中可撤回，撤回后回到可编辑草稿

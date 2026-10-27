@@ -1,6 +1,6 @@
 ---
 name: lls-hetong
-display_name: 合同审查
+display_name: 合同审查（本地版）
 display_name_en: "Contract Risk Scanner"
 description: "合同条款级风险扫描与两版对比：按 第X条 切分条款，扫违约金/管辖/自动续约/单方解除/知识产权/竞业/定金等 12 类风险点并定位原文，检查违约条款/争议解决/签署栏缺失，两版合同条款级 diff。当用户提到合同、协议、条款、签约、审查合同、合同对比、违约金、管辖时使用本技能。**规则级扫描，不构成法律意见。**"
 description_zh: "合同条款级风险扫描：12 类风险点定位、缺失要素检查、两版条款 diff。规则级，不构成法律意见。"
@@ -20,7 +20,7 @@ license: MIT
 
 # 合同审查（lls-hetong 场景技能）
 
-你是合同文本的**结构化扫描器**。规则级关键词扫描 + 条款定位 + 缺失要素检查是你的全部能力；**法律判断永远不属于你**。文本提取可借助底座 lls-docx（docx→文本）与 lls-pdf（PDF 提取）。
+你是合同文本的**结构化扫描器**。规则级关键词扫描 + 条款定位 + 缺失要素检查是你的全部能力；**法律判断永远不属于你**。文本提取可借助底座 Word 文档处理技能（docx→文本）与 PDF 文档处理技能（PDF 提取）。
 
 ## 任务路由
 
@@ -29,7 +29,7 @@ license: MIT
 | 风险扫描 | 提取文本 → `$PY scripts/hetong_scan.py 合同.txt -o 风险报告.md` |
 | 两版对比 | `$PY scripts/hetong_compare.py 旧版.txt 新版.txt -o 对比.md` |
 | 定位某条款 | 先 hetong_scan 看条款切分，再引述原文位置 |
-| docx/pdf 输入 | 先用底座 lls-docx 的 docx_read / lls-pdf 的 pdf_extract_text 转出文本 |
+| docx/pdf 输入 | 先用底座 Word 文档处理技能 的 docx_read / PDF 文档处理技能 的 pdf_extract_text 转出文本 |
 
 ## 12 类扫描风险（内置规则库）
 
@@ -47,7 +47,7 @@ license: MIT
 
 | # | 症状 | 一线修复 | 仍失败兜底 |
 | --- | --- | --- | --- |
-| 1 | 扫描件 PDF 无法提取 | 走底座 lls-pdf 的 OCR 路线（注明 OCR 合同需逐条人工核对） | 建议索取可复制文本版 |
+| 1 | 扫描件 PDF 无法提取 | 走底座 PDF 文档处理技能 的 OCR 路线（注明 OCR 合同需逐条人工核对） | 建议索取可复制文本版 |
 | 2 | 条款不用"第X条"编号 | split_clauses 回退为全文 Preamble 模式，扫描仍可用但无条款定位 | 建议用户按段落告知范围 |
 | 3 | 两个版本结构差异大 | hetong_compare 按 条款头 精确匹配，对不上的列删除/新增 | 人工对照目录 |
 | 4 | 用户追问法律后果 | 引导咨询执业律师；可提供同类条款的常识性风险提示 | — |

@@ -1,8 +1,8 @@
 ---
 name: lls-lunwen
-display_name: 论文排版
+display_name: 论文排版（本地版）
 display_name_en: "Thesis Format Normalizer"
-description: "中文学位论文/期刊稿件格式规范化与预检：按规范重设标题层级、字体字号、行距、页边距，检查图表编号连续性、参考文献著录格式（GB/T 7714）、摘要关键词完整性。当用户提到论文排版、学位论文、毕业论文、期刊投稿、格式规范、参考文献、查重前整理、GB/T 7714 时使用本技能。与 lls-docx、lls-pdf 组成文档底座全家桶。"
+description: "中文学位论文/期刊稿件格式规范化与预检：按规范重设标题层级、字体字号、行距、页边距，检查图表编号连续性、参考文献著录格式（GB/T 7714）、摘要关键词完整性。当用户提到论文排版、学位论文、毕业论文、期刊投稿、格式规范、参考文献、查重前整理、GB/T 7714 时使用本技能。与 Word 文档处理技能、PDF 文档处理技能 组成文档底座全家桶。"
 description_zh: "论文格式规范化 + 预检：标题层级/字体行距/页边距重设，图表编号、GB/T 7714 参考文献、摘要完整性检查。"
 description_en: "Chinese thesis formatting and pre-submission checks: heading hierarchy, fonts, spacing, figure numbering, GB/T 7714 references, abstract completeness."
 examples_zh:

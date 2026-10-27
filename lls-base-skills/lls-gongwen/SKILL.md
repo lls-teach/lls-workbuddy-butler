@@ -2,7 +2,7 @@
 name: lls-gongwen
 display_name: 公文写作格式
 display_name_en: "Official Document Formatter"
-description: "党政机关公文写作与格式规范化（GB/T 9704-2012）：五种常用文种（通知/请示/报告/函/纪要）要素级创建，标题结构检查（文种收尾）、一文一事检查（请示）、发文字号格式校验、成文日期与签发要素检查、既有公文格式预检。当用户提到公文、红头文件、通知、请示、报告、公函、纪要、发文字号、行文规范时使用本技能。与 lls-docx 组成底座全家桶。**单位自有版式以其为准。**"
+description: "党政机关公文写作与格式规范化（GB/T 9704-2012）：五种常用文种（通知/请示/报告/函/纪要）要素级创建，标题结构检查（文种收尾）、一文一事检查（请示）、发文字号格式校验、成文日期与签发要素检查、既有公文格式预检。当用户提到公文、红头文件、通知、请示、报告、公函、纪要、发文字号、行文规范时使用本技能。与 Word 文档处理技能 组成底座全家桶。**单位自有版式以其为准。**"
 description_zh: "党政公文写作与格式规范化（GB/T 9704）：五文种要素级创建、文种/一文一事/发文字号检查。单位自有版式以其为准。"
 description_en: "Chinese official document writing per GB/T 9704: five document types with element-level creation and format/structure checks."
 examples_zh:

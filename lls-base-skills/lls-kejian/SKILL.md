@@ -2,9 +2,9 @@
 name: lls-kejian
 display_name: 课件制作
 display_name_en: "Courseware Outline Builder"
-description: "课程知识清单 → teaching 风格课件大纲：知识点自动拆页（每页 ≤4 要点）、章节分隔页、课堂练习页、课程小结页，直接对接底座 lls-pptx --style teaching 渲染。当用户提到课件、备课、讲课、培训、知识点、教学 PPT、课程设计时使用本技能。与 lls-pptx、lls-timu 组成教学组合（课件 + 出题）。"
-description_zh: "知识清单 → teaching 课件大纲：知识点拆页（≤4 要点/页）、练习页、小结页，直通 lls-pptx 渲染。"
-description_en: "Course knowledge list to teaching-style deck outline: auto page splitting (≤4 points), quiz pages, section dividers — feeds lls-pptx directly."
+description: "课程知识清单 → teaching 风格课件大纲：知识点自动拆页（每页 ≤4 要点）、章节分隔页、课堂练习页、课程小结页，直接对接底座 PPT 演示文稿技能 --style teaching 渲染。当用户提到课件、备课、讲课、培训、知识点、教学 PPT、课程设计时使用本技能。与 PPT 演示文稿技能、出题组卷技能 组成教学组合（课件 + 出题）。"
+description_zh: "知识清单 → teaching 课件大纲：知识点拆页（≤4 要点/页）、练习页、小结页，直通 PPT 演示文稿技能 渲染。"
+description_en: "Course knowledge list to teaching-style deck outline: auto page splitting (≤4 points), quiz pages, section dividers — feeds PPT 演示文稿技能 directly."
 examples_zh:
   - 按这份知识清单做课件
   - 一页塞了 8 个要点怎么办
@@ -20,7 +20,7 @@ license: MIT
 
 # 课件制作（lls-kejian 场景技能）
 
-你是课件结构师。**拆页与结构是脚本的事，讲学法设计（案例、类比、互动位）是你的事**。产出直通底座 lls-pptx 的 teaching 风格。
+你是课件结构师。**拆页与结构是脚本的事，讲学法设计（案例、类比、互动位）是你的事**。产出直通底座 PPT 演示文稿技能 的 teaching 风格。
 
 ## 课程信息 JSON
 
@@ -34,8 +34,8 @@ license: MIT
 | 用户要做什么 | 执行 |
 | --- | --- |
 | 知识清单 → 课件大纲 | `$PY scripts/kejian_outline.py --json 课程.json -o 课件大纲.md` |
-| 大纲 → 成品 | `$PY ../lls-pptx/scripts/pptx_create.py --style teaching --outline 课件大纲.md -o 课件.pptx` |
-| 配套测验 | 走底座 lls-timu（蓝图→出题→验收） |
+| 大纲 → 成品 | 将大纲交给 PPT 演示文稿技能，以 teaching 风格渲染成课件成品 |
+| 配套测验 | 走底座 出题组卷技能（蓝图→出题→验收） |
 
 ## 拆页规则（脚本内置）
 
@@ -56,7 +56,7 @@ license: MIT
 | # | 症状 | 一线修复 | 仍失败兜底 |
 | --- | --- | --- | --- |
 | 1 | 知识点粒度不一（有大有小） | 大知识点人工拆成并列子知识点后重跑 | 保持原样并告知页密度 |
-| 2 | 需要 Kejian 以外的风格（路演） | 换 lls-pptx --style formal/consulting | — |
+| 2 | 需要 Kejian 以外的风格（路演） | 换 PPT 演示文稿技能 --style formal/consulting | — |
 | 3 | quiz 写不出 | 删 quiz 字段用纯讲授流，练习课下移 | — |
 
 ## 反例黑名单（不要做）

@@ -1,8 +1,8 @@
 ---
 name: lls-pdf
-display_name: PDF 文档处理
+display_name: PDF 文档处理（本地版）
 display_name_en: "PDF Document Toolkit"
-description: "处理 PDF 文件的全能工具箱：提取文字与表格、创建新 PDF、合并拆分、填写表单、渲染成图片、中文 OCR 识别、发票扫描件批量处理。当用户提到 PDF、发票、扫描件、提取文字、合并、拆分、转图片、填表单、报销时使用本技能。与 lls-xlsx、lls-docx、lls-pptx 组成文档底座全家桶。"
+description: "处理 PDF 文件的全能工具箱：提取文字与表格、创建新 PDF、合并拆分、填写表单、渲染成图片、中文 OCR 识别、发票扫描件批量处理。当用户提到 PDF、发票、扫描件、提取文字、合并、拆分、转图片、填表单、报销时使用本技能。与 Excel 表格处理技能、Word 文档处理技能、PPT 演示文稿技能 组成文档底座全家桶。"
 description_zh: "PDF 全能处理：文字与表格提取、创建、合并拆分、表单填写、转图片、中文 OCR、发票批量整理。原生支持中文字体与中文扫描件。"
 description_en: "All-in-one PDF toolkit: extract text and tables, create, merge and split, fill forms, render to images, Chinese OCR, batch invoice processing. Chinese-font native."
 examples_zh:

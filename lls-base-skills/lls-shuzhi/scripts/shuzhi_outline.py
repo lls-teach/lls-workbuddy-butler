@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""结构化述职 JSON → lls-pptx v2.2 大纲，并输出量化体检。
+"""结构化述职 JSON → PPT 演示文稿技能 v2.2 大纲，并输出量化体检。
 
 用法: python3 shuzhi_outline.py 述职.json -o 述职大纲.md
 JSON 键: period/kpis[{value,label,note}]/projects[{name,status_rows,bullets,takeaway}]/

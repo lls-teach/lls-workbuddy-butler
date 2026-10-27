@@ -2,7 +2,7 @@
 name: lls-timu
 display_name: 出题组卷
 display_name_en: "Quiz Blueprint Builder"
-description: "考试/练习/题库的生产线：出题蓝图生成（知识点×题型×难度 确定性分配矩阵，权重自动归一）、题库验收（题干完整/选项数/答案存在/重复题检测）。当用户提到出题、题库、试卷、考纲、知识点出题、练习题、 quiz 时使用本技能。与 lls-docx 组合可产出试卷排版。"
+description: "考试/练习/题库的生产线：出题蓝图生成（知识点×题型×难度 确定性分配矩阵，权重自动归一）、题库验收（题干完整/选项数/答案存在/重复题检测）。当用户提到出题、题库、试卷、考纲、知识点出题、练习题、 quiz 时使用本技能。与 Word 文档处理技能 组合可产出试卷排版。"
 description_zh: "出题蓝图（知识点×题型×难度分配）+ 题库验收（题干/选项/答案/查重）。AI 按蓝图出题，验收工具兜底。"
 description_en: "Quiz blueprint (topic×type×difficulty allocation) and question-bank acceptance checks. AI writes per blueprint, tool verifies."
 examples_zh:
@@ -28,7 +28,7 @@ license: MIT
 | --- | --- |
 | 出题蓝图 | `$PY scripts/timu_blueprint.py --json 考纲.json -o 蓝图.md` |
 | 题库验收 | AI 按蓝图出题（JSON）→ `$PY scripts/timu_check.py 题库.json` |
-| 试卷排版 | 题库 JSON → 底座 lls-docx 排版 |
+| 试卷排版 | 题库 JSON → 底座 Word 文档处理技能 排版 |
 
 ## 考纲 JSON
 
