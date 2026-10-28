@@ -9,12 +9,10 @@ examples_zh:
   - 写一份 Word 版的通知，要有标题和落款
   - 把这份 CSV 转成 Excel，加上表头样式和求和公式
   - 按这份大纲做一个 8 页的 PPT，用正式汇报风格
-  - 把这 5 份 PDF 合并成一个文件，再转成 Word
 examples_en:
   - Write a Word notice with title and signature block
   - Convert this CSV to Excel with styled headers and a SUM formula
   - Build an 8-slide deck from this outline in formal report style
-  - Merge these 5 PDFs into one file, then convert it to Word
 version: 1.0.0
 author: lhg
 ---
