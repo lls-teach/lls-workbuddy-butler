@@ -13,11 +13,11 @@ examples_en:
   - Run the AI quality gate before sending this
   - Check this summary for work-shifting language before delivery
   - Run the AI quality gate over this reply
-version: 2.1.2
+version: 2.1.3
 author: lhg
 ---
 
-# AI交付前自检（lls-aizhijian v2.1.2）
+# AI交付前自检（lls-aizhijian v2.1.3）
 
 交付前最后一道拦截关，同时是多 skill 协作的迭代驱动器。**声明"我检查过了"不算过闸**，贴出逐项核对过程才算。
 
