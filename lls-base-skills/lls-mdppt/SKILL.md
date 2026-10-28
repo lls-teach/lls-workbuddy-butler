@@ -2,9 +2,9 @@
 name: lls-mdppt
 display_name: "Markdown转PPT"
 display_name_en: "Markdown to Slides"
-description: "通用 Markdown 一键转演示大纲：# 章节 / ## 内容页 / - 要点 / > 结论 / 代码块 / 表格全部映射，超 4 条要点自动拆页，长段落自动标 AI 提炼位，产出直通底座 lls-pptx 三套设计系统渲染。当用户提到 markdown 转 PPT、笔记转演示、md 转幻灯片、把文档做成 PPT、大纲转演示时使用本技能。与 lls-shuzhi、lls-kejian、lls-xuanti 的大纲生态互通。"
-description_zh: "通用 Markdown 一键转演示大纲：章节/要点/代码/表格全映射，超 4 条自动拆页，长段落标 AI 提炼位，直通 lls-pptx 渲染。"
-description_en: "Generic Markdown to slide outline: headings, bullets, code blocks and tables mapped with auto page splitting; feeds the lls-pptx engine directly."
+description: "通用 Markdown 一键转演示大纲：# 章节 / ## 内容页 / - 要点 / > 结论 / 代码块 / 表格全部映射，超 4 条要点自动拆页，长段落自动标 AI 提炼位，产出直通 PPT 三套设计系统渲染。当用户提到 markdown 转 PPT、笔记转演示、md 转幻灯片、把文档做成 PPT、大纲转演示时使用本技能。与其他大纲类能力生态互通。"
+description_zh: "通用 Markdown 一键转演示大纲：章节/要点/代码/表格全映射，超 4 条自动拆页，长段落标 AI 提炼位，直通 PPT 渲染。"
+description_en: "Generic Markdown to slide outline: headings, bullets, code blocks and tables mapped with auto page splitting; feeds the PPT engine directly."
 examples_zh:
   - 把这份 markdown 笔记转成 PPT
   - 这篇长文档帮我做成演示
@@ -20,13 +20,13 @@ license: MIT
 
 # Markdown转PPT（lls-mdppt 场景技能）
 
-你是 md → 演示的转换执行器。**结构映射交给脚本（拆页/预算是数学），长段落提炼与风格判断由你完成**。产出直通底座 lls-pptx（三套设计系统）。
+你是 md → 演示的转换执行器。**结构映射交给脚本（拆页/预算是数学），长段落提炼与风格判断由你完成**。产出直通 PPT（三套设计系统）。
 
 ## 任务路由
 
 | 用户给什么 | 执行 |
 | --- | --- |
-| 大纲式 md（#/##/- 结构清晰） | `$PY scripts/mdppt_convert.py 笔记.md -o 大纲.md` → 底座 lls-pptx `pptx_create.py --outline 大纲.md` |
+| 大纲式 md（#/##/- 结构清晰） | `$PY scripts/mdppt_convert.py 笔记.md -o 大纲.md` → 再按大纲渲染成 PPT |
 | 文档式 md（长段落） | 同上 → 大纲中 🔶 提炼位由你提炼成要点 → 🔴 用户确认提炼结果 → 再渲染 |
 
 ## 映射规则（脚本内置）
@@ -47,13 +47,13 @@ license: MIT
 1. 🔴 CHECKPOINT：转换后把「页数预算 + AI 提炼位清单」展示给用户，提炼结果经确认再渲染。
 2. **提炼忠实原文**：要点必须能回溯到原段落——转写不是创作。
 3. 代码页 ≤14 行/页，超出拆页；表格 ≤8 行/页。
-4. 渲染后走底座 lls-pptx 的 pptx_check.py 验收。
+4. 渲染后用 PPT 验收能力验收。
 
 ## 失败分支
 
 | # | 症状 | 一线修复 | 仍失败兜底 |
 | --- | --- | --- | --- |
-| 1 | md 是 lls-pptx 大纲语法 | 已兼容（#/##/-/> 原样通过）——无需转换可直接渲染 | — |
+| 1 | md 是 PPT 大纲语法 | 已兼容（#/##/-/> 原样通过）——无需转换可直接渲染 | — |
 | 2 | 无任何标题层级 | 全部按长段落 AI 提炼位处理，量大时先与用户确认提纲 | 让用户先补层级 |
 | 3 | 表格列数不齐 | 自动补空单元格；错位严重提示人工核对 | — |
 | 4 | md 里有 HTML 标签 | 剥离标签取纯文本 | 提示用户清理 |

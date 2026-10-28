@@ -2,7 +2,7 @@
 name: lls-fenjing
 display_name: "视频分镜脚本"
 display_name_en: "Storyboard Script Builder"
-description: "口播稿/要点 → 拍摄级分镜脚本表：镜头号、起点与时长（按 4 字/秒语速校准台词）、景别建议（近景建信任/特写强调数据/中景放缓节奏）、画面描述位，输出 Markdown 表格 + Excel 拍摄版，附分镜 lint（语速/景别词表/总时长上限）。当用户提到分镜、拍摄脚本、镜头、景别、短视频拍摄、口播拍摄时使用本技能。与 lls-koushuo（口播稿）组成短视频前后道工序。"
+description: "口播稿/要点 → 拍摄级分镜脚本表：镜头号、起点与时长（按 4 字/秒语速校准台词）、景别建议（近景建信任/特写强调数据/中景放缓节奏）、画面描述位，输出 Markdown 表格 + Excel 拍摄版，附分镜 lint（语速/景别词表/总时长上限）。当用户提到分镜、拍摄脚本、镜头、景别、短视频拍摄、口播拍摄时使用本技能。与口播稿能力组成短视频前后道工序。"
 description_zh: "口播稿 → 分镜脚本表：镜头号/景别建议/画面位/台词/时长（4 字/秒校准），Markdown+Excel 双输出，附语速 lint。"
 description_en: "Talking-head script to storyboard table: shot numbers, framing suggestions, durations calibrated at 4 chars/second, Markdown + Excel output with lint."
 examples_zh:
@@ -20,7 +20,7 @@ license: MIT
 
 # 视频分镜脚本（lls-fenjing 场景技能）
 
-你是分镜脚本执行器。切分、时长、表格全部交给 `scripts/`（4 字/秒校准），景别与画面的艺术判断可以建议但标注"建议值"。上游来自 lls-koushuo 的口播稿，下游交付拍摄团队。
+你是分镜脚本执行器。切分、时长、表格全部交给 `scripts/`（4 字/秒校准），景别与画面的艺术判断可以建议但标注"建议值"。上游来自口播稿，下游交付拍摄团队。
 
 ## 任务路由
 

@@ -2,7 +2,7 @@
 name: lls-xuanti
 display_name: "爆款选题生成"
 display_name_en: "Viral Topic Generator"
-description: "赛道×人群×平台 → 选题矩阵生成器：角度（新手入门/进阶/避坑/案例/工具/趋势）× 形式（图文/口播/清单/拆解）× 钩子（问句/数字/反常识/身份）四维组合出 96 张选题卡，附选题评分卡（竞争密度×情绪强度×实操价值）。当用户提到选题、没内容可写、选题池、内容规划、爆款选题时使用本技能。与 lls-wenan（改写）、lls-koushuo（口播）组成内容流水线。"
+description: "赛道×人群×平台 → 选题矩阵生成器：角度（新手入门/进阶/避坑/案例/工具/趋势）× 形式（图文/口播/清单/拆解）× 钩子（问句/数字/反常识/身份）四维组合出 96 张选题卡，附选题评分卡（竞争密度×情绪强度×实操价值）。当用户提到选题、没内容可写、选题池、内容规划、爆款选题时使用本技能。与改写、口播能力组成内容流水线。"
 description_zh: "赛道×人群×平台 → 96 张选题卡（角度×形式×钩子四维组合）+ 评分卡，先出卡再打分再排期。"
 description_en: "Lane×audience×platform to a 48-card topic matrix (angle×form×hook) plus a scoring card. Cards first, score second, schedule third."
 examples_zh:
@@ -27,7 +27,7 @@ license: MIT
 | 用户要做什么 | 执行 |
 | --- | --- |
 | 出选题池 | `$PY scripts/xuanti_matrix.py --lane 赛道 --crowd 人群 --platform 平台 -o 选题矩阵.md` |
-| 选题排期 | 为矩阵卡起具体标题 → 评分卡打分 → ≥10 分进排期 → 排期表可用底座 lls-xlsx 生成 |
+| 选题排期 | 为矩阵卡起具体标题 → 评分卡打分 → ≥10 分进排期 → 排期表可用表格能力生成 |
 
 ## 六角度 × 四形式 × 四钩子
 

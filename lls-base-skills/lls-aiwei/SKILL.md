@@ -2,7 +2,7 @@
 name: lls-aiwei
 display_name: "去AI味检测改写"
 display_name_en: "AI-Flavor Detector and Rewriter"
-description: "AI 味检测与改写验收：80+ 词级黑名单（结构套话/动词套话/空洞强化，逐词给改写方向）+ 4 类句级结构特征（排比三连/总结腔/抽象名词堆叠/句长均匀度），量化 AI 味密度（每千字），改写前后对比验收（密度下降≥50%、字数±20% 防改丢内容）。当用户提到去AI味、AI味、降AI味、文案太AI、像机器人写的、改写、润色去味时使用本技能。与 lls-wenan（多平台改写）组成内容创作组合。"
+description: "AI 味检测与改写验收：80+ 词级黑名单（结构套话/动词套话/空洞强化，逐词给改写方向）+ 4 类句级结构特征（排比三连/总结腔/抽象名词堆叠/句长均匀度），量化 AI 味密度（每千字），改写前后对比验收（密度下降≥50%、字数±20% 防改丢内容）。当用户提到去AI味、AI味、降AI味、文案太AI、像机器人写的、改写、润色去味时使用本技能。与多平台改写能力组成内容创作组合。"
 description_zh: "AI 味检测（80+ 词黑名单+4 类句级特征+密度量化）+ 改写前后验收（密度降 50%、防改丢内容）。"
 description_en: "AI-flavor detection (80+ word blacklist, 4 structural patterns, per-1k-chars density) and rewrite acceptance (50% density drop, ±20% length guard)."
 examples_zh:
@@ -29,7 +29,7 @@ license: MIT
 | 检测 AI 味 | `$PY scripts/aiwei_scan.py 文本.md` → 密度报告（词级/句级/优先级） |
 | 改写 | 按「五招方法论」逐条改 → 产出改写版 |
 | 验收 | `$PY scripts/aiwei_verify.py 原文.md 改写版.md` → 密度降 50%+、字数 ±20%、残留 ≤3（重度文本自然缩水时加 `--allow-length` 人工放行） |
-| 与多平台改写组合 | 先去 AI 味 → 再走底座 lls-wenan 的平台适配 |
+| 与多平台改写组合 | 先去 AI 味 → 再做多平台适配 |
 
 ## 五招改写方法论
 

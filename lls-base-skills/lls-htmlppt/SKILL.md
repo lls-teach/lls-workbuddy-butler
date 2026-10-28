@@ -2,7 +2,7 @@
 name: lls-htmlppt
 display_name: "HTML交互演示"
 display_name_en: "HTML Interactive Deck"
-description: "大纲 → 自包含单文件 HTML 交互演示：键盘/触摸翻页、进度条、全屏（F 键）、零外部依赖离线可用、发链接即看无需 Office。与 .pptx 互补——一份内容两种载体。当用户提到 HTML 演示、网页 PPT、H5 演示、发链接的演示、网页版幻灯、免安装放映时使用本技能。md 大纲语法与底座 lls-pptx 完全兼容，一源两载体。"
+description: "大纲 → 自包含单文件 HTML 交互演示：键盘/触摸翻页、进度条、全屏（F 键）、零外部依赖离线可用、发链接即看无需 Office。与 .pptx 互补——一份内容两种载体。当用户提到 HTML 演示、网页 PPT、H5 演示、发链接的演示、网页版幻灯、免安装放映时使用本技能。md 大纲语法与 PPT 载体完全兼容，一源两载体。"
 description_zh: "大纲 → 单文件 HTML 交互演示：键盘/触摸翻页、进度条、全屏、离线可用、发链接即看。与 .pptx 一源两载体。"
 description_en: "Outline to a self-contained single-file HTML deck: keyboard/touch navigation, progress bar, fullscreen, offline-ready. One source, two formats."
 examples_zh:
@@ -20,15 +20,15 @@ license: MIT
 
 # HTML交互演示（lls-htmlppt 场景技能）
 
-你是 HTML 演示构建器。**转换全部交给脚本（单文件、零依赖、离线可用），翻页体验即开即用**。与底座 lls-pptx 一源两载体：`.pptx` 交给要编辑的人，HTML 交给要观看的人。
+你是 HTML 演示构建器。**转换全部交给脚本（单文件、零依赖、离线可用），翻页体验即开即用**。与 PPT 载体一源两载体：`.pptx` 交给要编辑的人，HTML 交给要观看的人。
 
 ## 任务路由
 
 | 用户给什么 | 执行 |
 | --- | --- |
-| 大纲 md（与 lls-pptx 同语法：#/##/-/>） | `$PY scripts/htmlppt_build.py --outline 大纲.md -o 演示.html` |
-| md 笔记（非大纲语法） | 先走底座 lls-mdppt 转换 → 再进本技能 |
-| 两种载体都要 | 大纲 → lls-pptx 出 .pptx + 本技能出 HTML（一份内容，两种交付） |
+| 大纲 md（与 PPT 载体同语法：#/##/-/>） | `$PY scripts/htmlppt_build.py --outline 大纲.md -o 演示.html` |
+| md 笔记（非大纲语法） | 先把笔记转成大纲 → 再进本技能 |
+| 两种载体都要 | 大纲 → 出 .pptx + 本技能出 HTML（一份内容，两种交付） |
 
 ## 内置特性（脚本已实现，无需配置）
 
@@ -68,5 +68,5 @@ license: MIT
 
 - **不要**引入 CDN 或外部字体——离线可用是本技能的承诺。
 - **不要**加自动播放动画——演示的节奏权在演讲者手里。
-- **不要**在 HTML 里塞超过 6 个要点——拆页规则与 lls-pptx 一致。
+- **不要**在 HTML 里塞超过 6 个要点——拆页规则与 PPT 载体一致。
 - **不要**两种载体内容不同步——同一份大纲同时出 .pptx 和 HTML，或者只出一种并说明原因。
