@@ -12,6 +12,7 @@ examples_zh:
 examples_en:
   - Run the AI quality gate before sending this
   - Check this summary for work-shifting language before delivery
+  - Run the AI quality gate over this reply
 version: 2.1.2
 author: lhg
 ---
