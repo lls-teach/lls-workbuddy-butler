@@ -2,7 +2,7 @@
 name: lls-naotu
 display_name: "思维导图生成"
 display_name_en: "Mind Map Generator"
-description: "Markdown 大纲 → 思维导图双输出：FreeMind .mm 格式（XMind/幕布/FreeMind 直接导入）+ 自包含 HTML 缩进树（浏览器打开即用）。输入即 # 中心主题 / ## 一级分支 / - 要点 的普通 md。当用户提到思维导图、脑图、大纲可视化、结构图、XMind、会议纪要转导图时使用本技能。与纪要、课件类能力联动。"
+description: "Markdown 大纲 → 思维导图双输出：FreeMind .mm 格式（XMind/幕布/FreeMind 直接导入）+ 自包含 HTML 缩进树（浏览器打开即用）。输入即 # 中心主题 / ## 一级分支 / - 要点 的普通 md。当用户提到思维导图、脑图、大纲可视化、结构图、XMind、会议纪要转导图时使用本技能。纪要骨架、课件大纲这类层级 md 可直接转换。"
 description_zh: "md 大纲 → 思维导图双输出：FreeMind .mm（XMind/幕布可导入）+ 自包含 HTML 树。零依赖。"
 description_en: "Markdown outline to mind map: FreeMind .mm (importable to XMind/Mubu) plus a self-contained HTML tree. Zero dependencies."
 examples_zh:
@@ -13,7 +13,7 @@ examples_en:
   - Turn this meeting minutes into a mind map
   - Can XMind open the exported file?
   - Make a mind map from this course outline
-version: 1.0.0
+version: 1.0.1
 author: 刘老师系列
 license: MIT
 ---
@@ -27,7 +27,7 @@ license: MIT
 | 用户给什么 | 执行 |
 | --- | --- |
 | markdown 大纲 | `$PY scripts/naotu_make.py 大纲.md -o 导图 [--html]` |
-| 会议纪要 | 先由纪要能力出纪要骨架 → 提取层级 → 本脚本 |
+| 会议纪要 | 先整理出纪要骨架 → 提取层级 → 本脚本 |
 | 课件大纲 | 课件大纲天然是层级 md → 直接转换 |
 
 ## 层级语法

@@ -2,7 +2,7 @@
 name: lls-pingyu
 display_name: "教师评语生成"
 display_name_en: "Student Comment Writer"
-description: "期末/学期学生评语的批量生产与质检：从学生特点清单生成个性化评语，lint 逐条检查模板化开头（家长群一眼穿帮）、负面标签词（笨/懒→成长性表述）、长度健康（30-150 字）、批内去重。当用户提到评语、期末评语、学生评语、素质报告册、成长手册、班主任评语时使用本技能。与 Word 排版能力组合可产出打印版。"
+description: "期末/学期学生评语的批量生产与质检：从学生特点清单生成个性化评语，lint 逐条检查模板化开头（家长群一眼穿帮）、负面标签词（笨/懒→成长性表述）、长度健康（30-150 字）、批内去重。当用户提到评语、期末评语、学生评语、素质报告册、成长手册、班主任评语时使用本技能。排版后可产出打印版。"
 description_zh: "学生评语批量生产与质检：模板化开头检测、负面标签→成长性表述、长度健康、批内去重。"
 description_en: "Batch student comment production and QA: template-opener detection, negative-label to growth rephrasing, length health, batch dedup."
 examples_zh:
@@ -28,7 +28,7 @@ license: MIT
 | --- | --- |
 | 批量起草 | 收集学生特点清单（JSON：姓名/性格关键词/具体事例/成长点）→ AI 逐条起草 → `$PY scripts/pingyu_lint.py 评语.md` 质检 |
 | 体检既有评语 | `$PY scripts/pingyu_lint.py 评语.md`（家长群发之前必跑） |
-| 打印版 | 通过后走 Word 排版 |
+| 打印版 | 通过后排版 |
 
 ## 学生特点清单 JSON
 
