@@ -1,0 +1,22 @@
+# 办公四件套合并依赖（四组 + 转换中枢）
+python-docx>=1.1
+openpyxl>=3.1
+python-pptx>=0.6.23
+pypdf>=4.0
+pdfplumber>=0.11
+reportlab>=4.0
+pypdfium2>=4.25
+# 转换中枢依赖（原转换 skill 以文字形式声明，现并入本文件，避免悬空 import）
+Pillow
+pandas
+PyMuPDF
+fonttools
+py7zr
+markdown
+markdownify
+PyYAML
+odfpy
+xlrd
+# 可选：中文 OCR（首次使用会下载模型，按需安装）
+# paddleocr>=2.7
+# paddlepaddle>=2.5
