@@ -1,0 +1,1 @@
+（Node >=18；python-docx 仅 docx 导出回退路线需要）

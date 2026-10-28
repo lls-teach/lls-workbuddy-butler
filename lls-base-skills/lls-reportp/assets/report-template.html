@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>报告标题</title>
+<link rel="stylesheet" href="assets/doc.css">
+</head>
+<body>
+<article class="doc">
+  <header class="doc-header">
+    <h1>报告标题</h1>
+    <p class="doc-meta">作者 · 日期 · 数据截至</p>
+  </header>
+
+  <nav class="doc-toc" id="toc">
+    <h2>目录</h2>
+    <!-- doc.js 会自动从 h2.doc-h2 生成目录 -->
+  </nav>
+
+  <section>
+    <h2 class="doc-h2" id="s1">一、核心结论</h2>
+    <p>结论先行：一句话说清这份报告要读者记住什么。</p>
+    <p class="doc-source">来源：__SOURCE__，数据截至 __DATE__</p>
+  </section>
+
+  <section>
+    <h2 class="doc-h2" id="s2">二、证据与图表</h2>
+    <p>图表前必须先有一句结论句，再放图。</p>
+    <figure>
+      <div id="chart1" style="width:100%;height:360px"></div>
+      <figcaption>图 1：图表标题（数据来源：__SOURCE__）</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2 class="doc-h2" id="s3">三、结论与行动</h2>
+    <ul>
+      <li>结论一</li>
+      <li>结论二</li>
+    </ul>
+  </section>
+</article>
+<script src="assets/doc.js"></script>
+<!-- 有图表时取消下一行注释 -->
+<!-- <script src="assets/echarts.min.js"></script> -->
+<!-- 有 Mermaid 图时取消下一行注释 -->
+<!-- <script src="assets/mermaid.min.js"></script> -->
+<script>
+// 最小 ECharts 用法（仅在有图表时启用）
+if (window.echarts && document.getElementById('chart1')) {
+  const el = document.getElementById('chart1');
+  const chart = echarts.init(el);
+  chart.setOption({
+    tooltip: { trigger: 'axis' },
+    xAxis: { type: 'category', data: ['一月', '二月', '三月'] },
+    yAxis: { type: 'value' },
+    series: [{ type: 'line', data: [120, 200, 150], smooth: true }],
+    grid: { left: 48, right: 24, top: 24, bottom: 40 }
+  });
+  addEventListener('resize', () => chart.resize());
+}
+</script>
+</body>
+</html>

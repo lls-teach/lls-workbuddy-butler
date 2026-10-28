@@ -1,0 +1,72 @@
+---
+name: lls-docpage
+display_name: "文档页生成"
+display_name_en: "A4 Document Page Builder"
+description: "生成 A4 版式的 HTML 文档页：报告/表单/日程/简历/备忘录/记录六类文档形态，屏幕呈现纸张分页效果，浏览器直接打印成 PDF 或导出 docx。当用户提到文档页、A4 排版、可打印文档、表单生成、简历页面、备忘录、纸质感文档时使用本技能。与 lls-docx（可编辑 Word）互补：docx 要改，docpage 要打印。"
+description_zh: "A4 版式 HTML 文档页：报告/表单/日程/简历/备忘六形态，屏幕纸张分页、打印成 PDF、可导出 docx。"
+description_en: "A4 HTML document pages: report/form/schedule/resume/memo shapes with on-screen paper pagination, print-to-PDF and docx export."
+examples_zh:
+  - 帮我做一份 A4 版式的简历页面，能直接打印
+  - 这个表单做成可打印的文档页
+  - 我想要有纸张分页效果的文档
+examples_en:
+  - Create an A4 resume page I can print directly
+  - Turn this form into a printable document page
+  - I want a document with paper-like pagination
+version: 1.0.0
+author: 刘老师系列
+license: MIT
+---
+
+# 文档页生成（lls-docpage 场景技能）
+
+你是 A4 文档页构建器。**内容与分页分离**是核心原则：写一份连续的语义文档 → 同一份内容生成屏幕分页预览 → 浏览器打印负责最终 A4 切分。**不要手写"第 1 页/第 2 页"**，除非用户明确要求手工排版。
+
+## 任务路由
+
+| 用户要做什么 | 执行 |
+| --- | --- |
+| 选文档形态 | 先读 `@references/document-types.md` 判定是报告/表单/日程/简历/备忘/记录 |
+| 定视觉基调 | 读 `@references/design.md`（正式度、密度、读者体验） |
+| 报告类配色 | 读 `@references/research-palettes.md`（科研/医疗/政策/工程） |
+| 分页与版心 | `@references/pagination.md`、`@references/typography-print.md` |
+| 内容块与图片 | `@references/content-blocks.md`、`@references/images-media.md` |
+| 导出 | `$PY scripts/export-paper-to-pdf.mjs` 或 `export-paper-to-docx.mjs`（docx 失败用 `export-paper-docx-fallback.py`） |
+| 交付前校验 | `@references/validation.md` 逐项过 |
+
+## 处理纪律
+
+1. **先判文档类型再动手**：把表单/简历/日程硬塞进报告模板 = 形态错误，是本技能最常见的失败。
+2. **内容与分页分离**：连续语义 HTML → CSS 分页；手工分页只在用户明说时做。
+3. **打印优先**：所有排版以浏览器打印结果为准（用 `theme-smoke-test.html` 做打印预检）。
+4. 🔴 CHECKPOINT：文档类型与目标读者确认后再选模板。
+5. 交付时说明三种用法：屏幕阅读 / 打印 PDF / 导出 docx。
+
+## 失败分支
+
+| # | 症状 | 一线修复 | 仍失败兜底 |
+| --- | --- | --- | --- |
+| 1 | 打印后分页断裂（标题孤行/表格截断） | 按 `@references/pagination.md` 加 break-inside-avoid | 手工插入分页符并说明是特例 |
+| 2 | docx 导出样式丢失 | 用 `export-paper-docx-fallback.py` 降级方案 | 建议用户直接打印 PDF |
+| 3 | Mermaid 图不渲染 | `$PY scripts/render-mermaid-to-svg.mjs` 预渲染成 SVG | 改用静态图片 |
+| 4 | 中文字体打印异常 | 指定中文 serif/sans 回退链 | 提示用户系统字体情况 |
+
+## 反例黑名单（不要做）
+
+- **不要**把所有文档做成研究报告的样子——形态要匹配用途。
+- **不要**手写分页号（除用户要求）。
+- **不要**用屏幕样式糊弄打印样式——打印稿是交付物。
+- **不要**省略打印预检。
+
+## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
+
+执行中遇到报错/输出偏离/异常结果时，按以下流程处理，**不盲目重试同一失败命令**：
+
+1. **最小冒烟**：
+   ```bash
+   node --version && node scripts/export-paper-to-pdf.mjs --help 2>&1 | head -5
+   ```
+   （导出脚本需 Node；docx 路线需 Python 的 python-docx）
+2. **定位偏离点**：冒烟通过 → 问题在本次文档内容或样式；冒烟失败 → 先修环境。
+3. **回归验证**：用 `theme-smoke-test.html` 打印预览单元格，确认分页与字体后回原任务。
+4. **记录**：反复出现的问题记入上表。

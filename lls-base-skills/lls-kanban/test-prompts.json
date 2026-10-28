@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "帮我做一个每月经营数据的看板", "expected": "六项口径确认→模板生成→validate 通过→离线可开"},
+  {"id": 2, "prompt": "看板要在没网的电脑上打开", "expected": "echarts.min.js 同目录，无 CDN"},
+  {"id": 3, "prompt": "数据每天要更新", "expected": "appendable 快照目录规则"}
+]

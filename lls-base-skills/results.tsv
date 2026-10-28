@@ -57,3 +57,7 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-10-28T02:30	ideation	lls-yunying	-	-	砍	需求本身小	judge 3-0 砍（L 为 MCN 运营负责人：飞书多维表格+千瓜已覆盖，三功能无一需要技能）；<5 万次=碎片化非空位	paired
 2026-10-28T02:30	ideation	inference	-	-	修正	需求口径	145 万外溢推断一致判「部分成立」：关键词并集重复计数+共现≠因果+zhouba/shuzhi 已吸收大半→报告口径需折扣	paired
 2026-10-28T02:30	ideation	lls-jianggao	-	-	新漏选	受众匹配	K（文秘老兵）提出：领导讲话稿=体制内高频+署名口吻代入+"像不像"极敏感+gongwen 未覆盖文种；J 提出设计师方向（182 万足迹家族零覆盖）待议	paired
+2026-10-29T00:40	baseline	lls-kanban	-	85.5	baseline	-	d1=9 d2=9 d3=7 d4=8 d5=8 d6=9 d7=9 d8=9 d9=8；dim8=模板生成+validate 全绿+浏览器实测 3 canvas/4 KPI 渲染（full_test）；改造自 Trae dashboard-page，去 Trae 强依赖	full_test
+2026-10-29T00:40	baseline	lls-docpage	-	86.0	baseline	-	d1=9 d2=9 d3=7 d4=8 d5=9 d6=10 d7=9 d8=9 d9=8；dim8=打印预检页 3 页+@page 样式生效（full_test）；改造自 doc-page	full_test
+2026-10-29T00:40	baseline	lls-pptp	-	86.5	baseline	-	d1=9 d2=9 d3=8 d4=8 d5=9 d6=10 d7=9 d8=9 d9=8；dim8=15 卡 deck validate 通过+浏览器实测 13796px 滚动/注释存在（full_test）；改造自 ppt-page	full_test
+2026-10-29T00:40	baseline	lls-reportp	-	85.0	baseline	-	d1=9 d2=9 d3=7 d4=8 d5=8 d6=9 d7=9 d8=9 d9=8；dim8=模板 TOC+4 h2 渲染（full_test）；改造自 report-page，mermaid 改可选下载瘦身 5MB→1MB	full_test

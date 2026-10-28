@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "做一份能直接打印的 A4 简历页面", "expected": "document-types 判形态→pagination 分页→打印预检"},
+  {"id": 2, "prompt": "这个表单打印后分页断了", "expected": "break-inside-avoid 修复"},
+  {"id": 3, "prompt": "导出成 docx 给我改", "expected": "export-paper-to-docx 或 fallback 路线"}
+]

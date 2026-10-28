@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "把这个大纲做成能往下滚的网页演示", "expected": "template→替换卡片→validate 通过"},
+  {"id": 2, "prompt": "演示页要能导出 PDF", "expected": "export-waterfall-to-pdf"},
+  {"id": 3, "prompt": "注释太长了", "expected": "缩短为要点式，完整稿另存"}
+]

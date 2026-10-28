@@ -1,0 +1,5 @@
+[
+  {"id": 1, "prompt": "把这份数据做成带图表的报告页", "expected": "手写 index.html + doc.css/js + echarts"},
+  {"id": 2, "prompt": "报告要有目录", "expected": "doc.js 自动生成 TOC"},
+  {"id": 3, "prompt": "报告里要画流程图", "expected": "说明 mermaid 需自行下载或改静态 SVG"}
+]
