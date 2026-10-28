@@ -2,7 +2,7 @@
 name: lls-kanban
 display_name: "数据看板生成"
 display_name_en: "Offline Data Dashboard"
-description: "生成单文件夹离线 ECharts 数据看板：KPI 指标块、时间范围控件、数据新鲜度指示、来源追溯弹窗、可追加的每日数据快照目录，index.html 双击即看无需服务器。当用户提到数据看板、dashboard、监控面板、KPI 面板、经营数据大屏、离线看板时使用本技能。与 lls-shujv（分析报告）互补：shujv 出结论，kanban 盯变化。"
+description: "生成单文件夹离线 ECharts 数据看板：KPI 指标块、时间范围控件、数据新鲜度指示、来源追溯弹窗、可追加的每日数据快照目录，index.html 双击即看无需服务器。当用户提到数据看板、dashboard、监控面板、KPI 面板、经营数据大屏、离线看板时使用本技能。与分析报告 skill 互补：分析报告出结论，数据看板盯变化。"
 description_zh: "离线 ECharts 数据看板：KPI 块/时间控件/数据新鲜度/来源追溯/每日快照，双击即看无需服务器。"
 description_en: "Offline ECharts dashboard: KPI tiles, time-range controls, freshness indicators, source modals, appendable daily snapshots."
 examples_zh:
@@ -56,7 +56,7 @@ license: MIT
 
 - **不要**引用任何 CDN——离线可用是硬承诺。
 - **不要**编造指标数据填充看板。
-- **不要**把看板做成报告（那用 lls-reportp）或演示（那用 lls-pptp）。
+- **不要**把看板做成报告（那是图文报告页 skill 的活）或演示（那是瀑布流演示 skill 的活）。
 - **不要**省略数据新鲜度标识——旧数比没数更危险。
 
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）

@@ -2,7 +2,7 @@
 name: lls-docpage
 display_name: "文档页生成"
 display_name_en: "A4 Document Page Builder"
-description: "生成 A4 版式的 HTML 文档页：报告/表单/日程/简历/备忘录/记录六类文档形态，屏幕呈现纸张分页效果，浏览器直接打印成 PDF 或导出 docx。当用户提到文档页、A4 排版、可打印文档、表单生成、简历页面、备忘录、纸质感文档时使用本技能。与 lls-docx（可编辑 Word）互补：docx 要改，docpage 要打印。"
+description: "生成 A4 版式的 HTML 文档页：报告/表单/日程/简历/备忘录/记录六类文档形态，屏幕呈现纸张分页效果，浏览器直接打印成 PDF 或导出 docx。当用户提到文档页、A4 排版、可打印文档、表单生成、简历页面、备忘录、纸质感文档时使用本技能。与可编辑 Word 文档 skill 互补：Word 文档要改，文档页要打印。"
 description_zh: "A4 版式 HTML 文档页：报告/表单/日程/简历/备忘六形态，屏幕纸张分页、打印成 PDF、可导出 docx。"
 description_en: "A4 HTML document pages: report/form/schedule/resume/memo shapes with on-screen paper pagination, print-to-PDF and docx export."
 examples_zh:

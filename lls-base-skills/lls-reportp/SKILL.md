@@ -2,7 +2,7 @@
 name: lls-reportp
 display_name: "图文报告页面"
 display_name_en: "Source-Backed Report Page"
-description: "生成证据型静态 HTML 报告页：叙事章节 + 侧边动态目录 + ECharts 图表 + 表格与图示 + 来源标注，单文件交付可直接编辑。适合研究报告、战略备忘、市场简报、运营更新、技术说明。当用户提到报告页、图文报告、研究报告、市场简报、运营周报页面、带图表的长文时使用本技能。与 lls-reportp 出网页、lls-docx 出可改文档、lls-docpage 出打印稿形成三态。"
+description: "生成证据型静态 HTML 报告页：叙事章节 + 侧边动态目录 + ECharts 图表 + 表格与图示 + 来源标注，单文件交付可直接编辑。适合研究报告、战略备忘、市场简报、运营更新、技术说明。当用户提到报告页、图文报告、研究报告、市场简报、运营周报页面、带图表的长文时使用本技能。报告页出网页、可编辑 Word 文档可改、文档页出打印稿，三者形成三态。"
 description_zh: "证据型 HTML 报告页：叙事章节+动态目录+ECharts 图表+来源标注，单文件可直接编辑。"
 description_en: "Source-backed static HTML report: narrative sections, dynamic TOC, ECharts figures, citations — a single editable file."
 examples_zh:
@@ -47,14 +47,14 @@ license: MIT
 | 1 | 页面过大（>3MB） | 检查是否带了用不到的 mermaid/echarts；图片转 webp | 大图改外链或压缩 |
 | 2 | 图表不渲染 | 确认 echarts.min.js 与 html 同目录、初始化在 DOM 后 | 换最小官方示例定位 |
 | 3 | 目录不跟随滚动 | 检查 doc.js 是否加载、锚点 id 是否匹配 | 改静态目录列表 |
-| 4 | 打印样式差 | 报告以网页为主；需要打印稿走 lls-docpage | — |
+| 4 | 打印样式差 | 报告以网页为主；需要打印稿走文档页 skill | — |
 
 ## 反例黑名单（不要做）
 
 - **不要**写 Python/JS 生成器来产出这个页面。
 - **不要**无来源地写数据（假数据比没数据更糟）。
 - **不要**堆砌图表——每张图必须回答一个问题。
-- **不要**把报告做成看板（那用 lls-kanban）。
+- **不要**把报告做成看板（那是数据看板 skill 的活）。
 
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 
