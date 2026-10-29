@@ -67,7 +67,7 @@ async function loadDependencies(nodeModules) {
   try {
     playwright = req("playwright");
   } catch (error) {
-    throw new Error(`Cannot resolve playwright. Pass --node-modules or set NODE_PATH to bundled node_modules. ${error.message}`);
+    throw new Error(`Cannot resolve playwright. Pass --node-modules or set NODE_PATH to bundled node_modules.`);
   }
   try {
     artifactTool = await import("@oai/artifact-tool");
@@ -75,13 +75,14 @@ async function loadDependencies(nodeModules) {
     try {
       artifactTool = req("@oai/artifact-tool");
     } catch (error) {
-      throw new Error(`Cannot resolve @oai/artifact-tool. Initialize the presentation workspace or pass --node-modules. ${error.message}`);
+      throw new Error(`Cannot resolve @oai/artifact-tool. Initialize the presentation workspace or pass --node-modules.`);
     }
   }
   return { chromium: playwright.chromium, ...artifactTool };
 }
 
 async function findBrowserExecutable(explicitPath) {
+  const win = (base, ...parts) => (base ? path.win32.join(base, ...parts) : null);
   const candidates = [
     explicitPath,
     process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE,
@@ -91,6 +92,14 @@ async function findBrowserExecutable(explicitPath) {
     "/usr/bin/google-chrome",
     "/usr/bin/chromium",
     "/usr/bin/chromium-browser",
+    // Windows 常规安装位置（非 Windows 上只是永远不存在的候选，不影响其他平台）。
+    win(process.env.ProgramFiles, "Google", "Chrome", "Application", "chrome.exe"),
+    win(process.env.LOCALAPPDATA, "Google", "Chrome", "Application", "chrome.exe"),
+    win(process.env.ProgramFiles, "Microsoft", "Edge", "Application", "msedge.exe"),
+    win(process.env["ProgramFiles(x86)"], "Microsoft", "Edge", "Application", "msedge.exe"),
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
   ].filter(Boolean);
   for (const candidate of candidates) {
     try {
@@ -508,6 +517,11 @@ async function main() {
     process.exit(args.help ? 0 : 1);
   }
   if (!["editable", "raster"].includes(args.mode)) throw new Error("--mode must be editable or raster");
+  try {
+    await fs.access(path.resolve(args.input));
+  } catch {
+    throw new Error(`找不到输入文件：${args.input}。请确认路径存在，含空格或中文的路径请加引号。`);
+  }
   const deps = await loadDependencies(args.nodeModules);
   let presentation;
   if (args.mode === "raster") {
@@ -529,6 +543,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error(error);
+  console.error(`导出失败：${error.message}`);
   process.exitCode = 1;
 });

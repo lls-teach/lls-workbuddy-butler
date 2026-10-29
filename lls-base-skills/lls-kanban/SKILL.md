@@ -2,7 +2,7 @@
 name: lls-kanban
 display_name: "数据看板生成"
 display_name_en: "Offline Data Dashboard"
-description: "生成单文件夹离线 ECharts 数据看板：KPI 指标块、时间范围控件、数据新鲜度指示、来源追溯弹窗、可追加的每日数据快照目录，index.html 双击即看无需服务器。当用户提到数据看板、dashboard、监控面板、KPI 面板、经营数据大屏、离线看板时使用本技能。与分析报告 skill 互补：分析报告出结论，数据看板盯变化。"
+description: "生成单文件夹离线 ECharts 数据看板：KPI 指标块、时间范围控件、数据新鲜度指示、来源追溯弹窗、可追加的每日数据快照目录，index.html 双击即看无需服务器。当用户提到数据看板、dashboard、监控面板、KPI 面板、经营数据大屏、离线看板时使用本技能。与结论型报告互补：报告出结论，看板盯变化。"
 description_zh: "离线 ECharts 数据看板：KPI 块/时间控件/数据新鲜度/来源追溯/每日快照，双击即看无需服务器。"
 description_en: "Offline ECharts dashboard: KPI tiles, time-range controls, freshness indicators, source modals, appendable daily snapshots."
 examples_zh:
@@ -26,10 +26,13 @@ license: MIT
 
 | 用户要做什么 | 执行 |
 | --- | --- |
-| 新建看板 | 确认指标口径 → `$PY assets/dashboard_template.py` 生成 `看板slug/dashboard.py` → 改 ECharts 配置 → `node scripts/validate-echarts-dashboard.mjs 看板slug/index.html` |
+| 新建看板 | 确认指标口径 → 把三件套一并拷入 `看板slug/`：`assets/dashboard_template.py` 改名为 `dashboard.py`，`assets/echarts.min.js` 与 `assets/dashboard_runtime.js` 原名保留 → 改 ECharts 配置 → `python 看板slug/dashboard.py` 生成 `index.html` → `node scripts/validate-echarts-dashboard.mjs 看板slug/index.html` |
+
 | 每日快照追加 | 读 `@references/data-and-automation.md` 的自动化规则 |
 | 版式与交互规则 | `@references/dashboard-structure.md`、`@references/visual-interactions.md` |
 | 输出目录规范 | `@references/output-layout.md` |
+
+> 生成器以自身所在目录定位两个 JS 资产：只拷 `dashboard.py` 单文件必报 `echarts.min.js` 不存在而失败，三件套缺一不可。
 
 ## 动手前必确认（六项指标口径）
 
@@ -40,8 +43,9 @@ license: MIT
 1. **离线优先**：`echarts.min.js` 随包分发，index.html 不得引用 CDN——离线双击即看是本技能的核心承诺。
 2. **数据新鲜度必须显示**：看板的每个面板都要标"数据截止到 X"，否则用户会拿旧数做决策。
 3. **来源可追溯**：每个 KPI 块可点开来源弹窗（原始文件/口径说明）。
-4. 🔴 CHECKPOINT：指标口径（六项）与用户逐项确认后再生成代码。
-5. 交付后跑 validate 脚本，校验通过才算完成。
+4. **无快照不静默**：`data/snapshots/` 为空时生成器会回落内置演示数据，同时在终端打印 WARNING、看板新鲜度行标注 DEMO DATA、`dashboard_data.json` 记 `dataMode: demo`；演示数仅用于占位演示，交付前必须换成真实快照并重新生成。
+5. 🔴 CHECKPOINT：指标口径（六项）与用户逐项确认后再生成代码。
+6. 交付后跑 validate 脚本，校验通过才算完成。
 
 ## 失败分支
 
@@ -56,12 +60,14 @@ license: MIT
 
 - **不要**引用任何 CDN——离线可用是硬承诺。
 - **不要**编造指标数据填充看板。
-- **不要**把看板做成报告（那是图文报告页 skill 的活）或演示（那是瀑布流演示 skill 的活）。
+- **不要**把看板做成结论报告或演示文稿：看板盯变化，报告出结论、演示讲故事，三者不要混用。
 - **不要**省略数据新鲜度标识——旧数比没数更危险。
 
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 
 执行中遇到报错/输出偏离/异常结果时，按以下流程处理，**不盲目重试同一失败命令**：
+
+**做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟（最小冒烟 + 最小看板），循环往复，直到冒烟全部通过才回原任务。**
 
 1. **最小冒烟**（区分环境问题 vs 逻辑问题）：
    ```bash

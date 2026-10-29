@@ -37,9 +37,10 @@ def main() -> None:
     if not records:
         print("[lls-fapiao] 输入为空，未生成文件")
         return
-    key = {"owner": "owner", "kind": None, "none": None}[args.by]
-    if key == "owner":
+    if args.by == "owner":
         records.sort(key=lambda r: (r.get("owner", ""), str(r.get("date", {}).get("value") or "")))
+    elif args.by == "kind":
+        records.sort(key=lambda r: str((r.get("kind") or {}).get("value") or ""))
 
     wb = Workbook()
     ws = wb.active

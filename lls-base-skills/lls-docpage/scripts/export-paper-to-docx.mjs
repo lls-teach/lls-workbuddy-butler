@@ -152,6 +152,7 @@ function findClosingTag(html, openIndex, tagName) {
 
 function cleanSourceHtml(html) {
   return html
+    .replace(/<!--[\s\S]*?-->/g, "")
     .replace(/<script\b[\s\S]*?<\/script>/gi, "")
     .replace(/<style\b[\s\S]*?<\/style>/gi, "")
     .replace(/\saria-hidden=["'][^"']*["']/gi, "")
@@ -197,6 +198,12 @@ ${sourceHtml}
 }
 
 function findExecutable(command) {
+  // Windows 没有 Unix 的 `command -v`，用 where.exe 查找；否则查到的一律为空。
+  if (process.platform === "win32") {
+    const result = spawnSync("where", [command], { encoding: "utf8" });
+    if (result.status === 0) return result.stdout.trim().split(/\r?\n/)[0];
+    return "";
+  }
   const result = spawnSync("command", ["-v", command], {
     encoding: "utf8",
     shell: true,
@@ -366,6 +373,9 @@ def add_table(table_el):
 
 def handle_element(el):
     global source_counter
+    # lxml 注释节点的 tag 不是字符串，跳过（否则 text_content 会抛错）。
+    if not isinstance(el.tag, str):
+        return
     tag = el.tag.lower() if isinstance(el.tag, str) else ""
     cls = el.get("class", "")
     if tag in ("section", "main", "div"):

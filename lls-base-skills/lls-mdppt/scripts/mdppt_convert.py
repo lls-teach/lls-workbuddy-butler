@@ -3,12 +3,18 @@
 
 用法: python3 mdppt_convert.py 笔记.md -o 大纲.md [--max-bullets 4]
 映射: # 首个=封面 / 其余#=章节分隔页 / ##=内容页标题 / - 要点(≤4/页)
-      > =结论带 / ```=代码页 / |=表格页 / 长段落=AI 提炼位（标 🔶）
-输出可直接用于渲染成 PPT 文件。
+      > =结论带 / ```=代码页(≤14 行/页，超出拆页) / |=表格页(≤8 行/页，超出拆页)
+      / 长段落=AI 提炼位（标 🔶）
+输出大纲再由 mdppt_render.py 渲染成 PPT 文件，内容页数与本脚本的
+页数预算一致（渲染另加封面 1 页）。
 """
 import argparse
+import os
+import sys
 
-from lls_mdppt_utils import die, ensure_parent, parse_md
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from lls_mdppt_utils import die, ensure_parent, iter_pages, parse_md
 
 ap = argparse.ArgumentParser()
 ap.add_argument("input")
@@ -22,61 +28,46 @@ slides = data["slides"]
 if not slides:
     die("md 为空或无可用结构")
 
+pages = iter_pages(slides, args.max_bullets)
 out = []
 page_est = 0
 ai_spots = []
 
-for sl in slides:
-    kind = sl["kind"]
+for pg in pages:
+    kind = pg["kind"]
     if kind == "cover":
         continue  # 封面由渲染步骤生成
+    page_est += 1
     if kind == "section":
-        out.append(f"# {sl['title']}")
-        page_est += 1
+        out.append(f"# {pg['title']}")
         continue
     if kind == "code":
-        out.append(f"## {sl['title'] or '代码'}")
-        lang, code = sl.get("code") or ("", "")
-        for ln in code.split("\n")[:14]:
+        out.append(f"## {pg['title']}")
+        for ln in pg["lines"]:
             out.append("    " + ln)
         out.append("")
-        page_est += 1
         continue
     if kind == "table":
-        rows = sl["table"]
-        out.append(f"## {sl['title'] or '表格'}")
-        for r in rows[:8]:
+        out.append(f"## {pg['title']}")
+        for r in pg["rows"]:
             out.append("| " + " | ".join(r) + " |")
         out.append("")
-        page_est += 1
         continue
     if kind == "para":
-        text = sl.get("para", "")
-        if len(text) > 80:
-            out.append(f"## 🔶 提炼：{text[:40]}…")
-            out.append(f"- （AI 提炼位）将以下段落提炼为 ≤{args.max_bullets} 条要点：")
-            out.append(f"- 原文：{text[:200]}")
-            ai_spots.append(text[:40])
-        else:
-            out.append(f"## {text[:40]}")
-        out.append("")
-        page_est += 1
-        continue
-
-    # bullets 页（自动拆页）
-    title = sl.get("title", "")
-    bullets = sl.get("bullets", [])
-    take = sl.get("takeaway")
-    chunks = [bullets[i:i + args.max_bullets] for i in range(0, len(bullets), args.max_bullets)] or [[]]
-    for ci, chunk in enumerate(chunks):
-        suffix = f"（{ci+1}/{len(chunks)}）" if len(chunks) > 1 else ""
-        out.append(f"## {title}{suffix}")
-        for b in chunk:
+        out.append(f"## {pg['title']}")
+        for b in pg["bullets"]:
             out.append(f"- {b}")
-        if take and ci == len(chunks) - 1:
-            out.append(f"> {take}")
+        if pg.get("ai_spot"):
+            ai_spots.append(pg["para"][:40])
         out.append("")
-        page_est += 1
+        continue
+    # bullets 页（自动拆页）
+    out.append(f"## {pg['title']}")
+    for b in pg["bullets"]:
+        out.append(f"- {b}")
+    if pg.get("takeaway"):
+        out.append(f"> {pg['takeaway']}")
+    out.append("")
 
 cover_title = next((s["title"] for s in slides if s["kind"] == "cover"), "")
 header = (f"<!-- 由 lls-mdppt 转换：{len(slides)} 个结构块 → 约 {page_est} 页 -->\n"

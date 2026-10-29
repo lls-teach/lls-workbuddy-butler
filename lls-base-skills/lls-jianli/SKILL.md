@@ -31,6 +31,14 @@ VENV=~/.lls-venv
 PY="$VENV/bin/python"
 ```
 
+Windows（PowerShell，虚拟环境在 Scripts 而非 bin 下，勿照抄上方 bash 写法）：
+
+```powershell
+python -m venv "$env:USERPROFILE\.lls-venv"
+& "$env:USERPROFILE\.lls-venv\Scripts\pip.exe" install -q -r <skill目录>\scripts\requirements.txt
+$PY = "$env:USERPROFILE\.lls-venv\Scripts\python.exe"
+```
+
 ## 任务路由
 
 | 用户要做什么 | 执行 |
@@ -86,6 +94,7 @@ PY="$VENV/bin/python"
 2. **定位偏离点**：冒烟通过 → 问题在本次输入或参数，检查输入后重试；冒烟失败 → 先修依赖与脚本，不碰原任务。
 3. **回归验证**：修复后重跑最小冒烟 + 一次真实最小案例，全绿后再回到原任务从失败步骤继续。
 4. **记录**：反复出现的问题记入本技能失败分支表，下次直接命中。
+5. **循环到底**：做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟（最小冒烟 + 一次真实最小案例），循环往复，直到冒烟全部通过才算完成，方可回到原任务。
 
 ## 反例黑名单（不要做）
 

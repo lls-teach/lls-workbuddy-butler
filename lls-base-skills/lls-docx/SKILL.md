@@ -31,6 +31,16 @@ VENV=~/.lls-venv
 PY="$VENV/bin/python"
 ```
 
+Windows（PowerShell，bash 写法不适用，`$VENV/bin/python` 路径在 Windows 下不存在）：
+
+```powershell
+py -m venv $env:USERPROFILE\.lls-venv
+$env:USERPROFILE\.lls-venv\Scripts\pip install -q -r <skill目录>\scripts\requirements.txt
+$PY = "$env:USERPROFILE\.lls-venv\Scripts\python.exe"
+```
+
+Windows 下没有 `printf` 管道写法时，把正文存为 UTF-8 文本文件后用 `--stdin-file 正文.txt` 代替 stdin 管道。
+
 ## 任务路由
 
 | 用户要做什么 | 执行 |
@@ -94,6 +104,8 @@ printf '各部门：\n\n现将有关事项通知如下：\n\n- 事项一……\n
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 
 执行中遇到报错/输出偏离/异常结果时，按以下流程处理，**不盲目重试同一失败命令**：
+
+**做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过才算完成。**
 
 1. **最小冒烟**（区分环境问题 vs 逻辑问题）：
    ```bash

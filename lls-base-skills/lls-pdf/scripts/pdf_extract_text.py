@@ -8,7 +8,7 @@ import sys
 
 from pypdf import PdfReader
 
-from lls_pdf_utils import die, ensure_parent, parse_page_range
+from lls_pdf_utils import die, ensure_parent, ensure_utf8_stdio, parse_page_range
 
 
 def main() -> None:
@@ -20,6 +20,7 @@ def main() -> None:
     ap.add_argument("--preview", type=int, default=5, help="stdout 预览前 N 行（默认 5，0=关闭）")
     args = ap.parse_args()
 
+    ensure_utf8_stdio()
     try:
         reader = PdfReader(args.input)
         if reader.is_encrypted:

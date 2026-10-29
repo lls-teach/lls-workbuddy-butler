@@ -8,6 +8,7 @@
 """
 import argparse
 import json
+import sys
 
 from openpyxl import Workbook
 from openpyxl.chart import BarChart, LineChart, PieChart, Reference
@@ -25,7 +26,7 @@ def autofit(ws) -> None:
 
 def add_chart(ws, kind: str, ncols: int, nrows: int) -> None:
     if ncols < 2 or nrows < 2:
-        print("[lls-xlsx] ⚠️ 数据不足两行两列，跳过图表", file=__import__("sys").stderr)
+        print("[lls-xlsx] ⚠️ 数据不足两行两列，跳过图表", file=sys.stderr)
         return
     cls = {"bar": BarChart, "line": LineChart, "pie": PieChart}.get(kind)
     if not cls:
@@ -56,7 +57,8 @@ def main() -> None:
     if args.from_csv:
         matrix = smart_read_csv(args.from_csv)
     elif args.from_json:
-        data = json.load(open(args.from_json, encoding="utf-8"))
+        with open(args.from_json, encoding="utf-8") as f:
+            data = json.load(f)
         if data and isinstance(data[0], dict):
             headers = list(data[0].keys())
             matrix = [headers] + [[str(r.get(h, "")) for h in headers] for r in data]
@@ -66,6 +68,9 @@ def main() -> None:
         matrix = [[h.strip() for h in args.headers.split(",")]]
     else:
         die("需要 --from-csv / --from-json / --headers 之一")
+
+    if not matrix:
+        die("输入为空：CSV/JSON 无数据行，请检查输入文件是否为空")
 
     def coerce(v: str):
         """数值型字符串转数字（否则 SUM/COUNT 类公式按 0 处理）。"""
@@ -107,7 +112,7 @@ def main() -> None:
             ws.cell(row=n + 1, column=1, value="合计")
             print(f"[lls-xlsx] 已加合计行: {letter}{n + 1} =SUM({letter}2:{letter}{n})")
         else:
-            print(f"[lls-xlsx] ⚠️ --sum-col {args.sum_col!r} 不在表头 {headers} 中", file=__import__("sys").stderr)
+            print(f"[lls-xlsx] ⚠️ --sum-col {args.sum_col!r} 不在表头 {headers} 中", file=sys.stderr)
 
     autofit(ws)
     if args.chart:

@@ -6,12 +6,16 @@
 """
 import argparse
 import re
+from typing import Optional
 
-from docx import Document
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.shared import Cm, Pt
+from lls_lunwen_utils import die, ensure_parent, guard_overwrite, set_body_font, set_cn_font
 
-from lls_lunwen_utils import die, ensure_parent, guard_overwrite, set_cn_font
+try:
+    from docx import Document
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.shared import Cm, Pt
+except ImportError:
+    die("缺少 python-docx，请先安装依赖：pip install -r scripts/requirements.txt")
 
 STYLE = {
     "body_font": "宋体", "body_size": 12, "body_line": 1.5, "body_indent_chars": 2,
@@ -19,15 +23,25 @@ STYLE = {
 }
 H_PAT = re.compile(r"^(?:(\d+)\.|(\d+\.\d+)\.|(\d+\.\d+\.\d+)\s)")
 
-def level_of(text: str, style_name: str) -> int | None:
-    # 标题层级：先长模式后短模式（1.1.1 优先于 1.1 优先于 1.）
-    if "Heading 3" in style_name or re.match(r"^\d+\.\d+\.\d+[\s　]", text):
+def level_of(text: str, style_name: str) -> Optional[int]:
+    # 标题层级：先长模式后短模式（1.1.1 优先于 1.1 优先于 1.）。
+    # 样式名同时认英文 Heading 与中文 Word 的“标题”（中文版 Word 样式名即“标题 1/2/3”）。
+    if "Heading 3" in style_name or "标题 3" in style_name or re.match(r"^\d+\.\d+\.\d+[\s　]", text):
         return 3
-    if "Heading 2" in style_name or re.match(r"^\d+\.\d+[\s　][^\d.]", text):
+    if "Heading 2" in style_name or "标题 2" in style_name or re.match(r"^\d+\.\d+[\s　][^\d.]", text):
         return 2
-    if "Heading 1" in style_name or re.match(r"^\d+[\.、]?\s*[\u4e00-\u9fffA-Za-z]", text):
+    if "Heading 1" in style_name or "标题 1" in style_name or re.match(r"^\d+[\.、]?\s*[\u4e00-\u9fffA-Za-z]", text):
         return 1
     return None
+
+CAPTION_PAT = re.compile(r"^(图|表)\s*(\d+)-(\d+)[\s　]")
+SENTENCE_END = ("。", "；", "？", "！")
+
+def is_caption(text: str) -> bool:
+    """题注段：以“图/表 章-序号”开头且不是完整句子（带句末标点的是正文引用句，不是题注）。"""
+    return bool(CAPTION_PAT.match(text)) and not any(p in text for p in SENTENCE_END)
+
+REF_PAT = re.compile(r"^\[\d+\]")
 
 def main() -> None:
     ap = argparse.ArgumentParser()
@@ -61,14 +75,33 @@ def main() -> None:
             para.paragraph_format.space_after = Pt(6)
             para.alignment = WD_ALIGN_PARAGRAPH.LEFT
             stats[f"h{lvl}"] += 1
-        else:
+        elif is_caption(text):
+            # 图表题注：宋体五号（10.5pt）居中，不首行缩进
             for run in para.runs:
                 set_cn_font(run, STYLE["body_font"])
+                run.font.size = Pt(10.5)
+            pf = para.paragraph_format
+            pf.line_spacing = STYLE["body_line"]
+            pf.first_line_indent = Pt(0)
+            para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            stats["body"] += 1
+        elif REF_PAT.match(text):
+            # 参考文献：宋体五号，悬挂缩进（左缩进 2 字符、首行反向 2 字符）
+            for run in para.runs:
+                set_cn_font(run, STYLE["body_font"])
+                run.font.size = Pt(10.5)
+            pf = para.paragraph_format
+            pf.line_spacing = STYLE["body_line"]
+            pf.left_indent = Pt(10.5 * 2)
+            pf.first_line_indent = Pt(-10.5 * 2)
+            stats["body"] += 1
+        else:
+            for run in para.runs:
+                set_body_font(run, STYLE["body_font"])
                 run.font.size = Pt(STYLE["body_size"])
             pf = para.paragraph_format
             pf.line_spacing = STYLE["body_line"]
-            if text and not text.startswith(("图", "表", "[")):
-                pf.first_line_indent = Pt(STYLE["body_size"] * STYLE["body_indent_chars"])
+            pf.first_line_indent = Pt(STYLE["body_size"] * STYLE["body_indent_chars"])
             stats["body"] += 1
 
     out = guard_overwrite(args.output, args.force)

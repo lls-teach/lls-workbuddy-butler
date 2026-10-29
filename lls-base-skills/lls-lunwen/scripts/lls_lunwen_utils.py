@@ -31,3 +31,15 @@ def set_cn_font(run, name: str = CN_FONT) -> None:
         rfonts = rpr.makeelement(qn("w:rFonts"), {})
         rpr.append(rfonts)
     rfonts.set(ns + "eastAsia", name)
+
+def set_body_font(run, cn: str = CN_FONT, latin: str = "Times New Roman") -> None:
+    """正文：中文用中文字体、西文用 Times New Roman（只改字体属性，不动内容）。"""
+    run.font.name = latin  # python-docx：同时写 w:ascii 与 w:hAnsi
+    rpr = run._element.get_or_add_rPr()
+    ns = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+    rfonts = rpr.find(ns + "rFonts")
+    if rfonts is None:
+        from docx.oxml.ns import qn
+        rfonts = rpr.makeelement(qn("w:rFonts"), {})
+        rpr.append(rfonts)
+    rfonts.set(ns + "eastAsia", cn)

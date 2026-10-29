@@ -4,10 +4,13 @@
 用法:
   改单元格: python3 xlsx_edit.py 表.xlsx --set "Sheet1!B2=已审核" --set "Sheet1!C2=100" -o 新表.xlsx
   追加一行: python3 xlsx_edit.py 表.xlsx --append-sheet Sheet1 --row-json '["张三","市场部",3000]' -o 新表.xlsx
-  加公式列: python3 xlsx_edit.py 表.xlsx --set "Sheet1!E1=小计" --set "Sheet1!E2=C2+D2" -o 新表.xlsx
+  加公式列: python3 xlsx_edit.py 表.xlsx --set "Sheet1!E1=小计" --set "Sheet1!E2==C2+D2" -o 新表.xlsx
+  注意: --set 里第一个 "=" 是分隔符，公式本身的 "=" 要再写一个，所以公式写两个 "="。
+  数值型字符串（如 100）会转成数字写入，与创建脚本一致；以 "=" 开头的公式原样写入。
 """
 import argparse
 import json
+import sys
 
 from openpyxl import load_workbook
 
@@ -30,16 +33,35 @@ def parse_cell_ref(ref: str) -> tuple[str, int, int, str]:
     return sheet, int(digits), col, value
 
 
+def coerce_value(value: str):
+    """与创建脚本一致：数值型字符串转数字；公式（以 = 开头）与普通文本原样保留。"""
+    if not isinstance(value, str) or not value.strip() or value.startswith("="):
+        return value
+    s = value.strip().replace(",", "")
+    try:
+        return int(s)
+    except ValueError:
+        pass
+    try:
+        return float(s)
+    except ValueError:
+        return value
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("input")
-    ap.add_argument("--set", dest="sets", action="append", default=[], help='表!单元格=值，可多次')
+    ap.add_argument("--set", dest="sets", action="append", default=[],
+                    help='表!单元格=值，可多次；写公式时写两个 "="，如 "Sheet1!E2==C2+D2"')
     ap.add_argument("--append-sheet", help="向该表追加行")
     ap.add_argument("--row-json", help='追加的行: ["a","b",1]（配合 --append-sheet）')
     ap.add_argument("-o", "--output", required=True, help="输出文件（不会改动原文件）")
     ap.add_argument("--password", default="")
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
+
+    if args.password:
+        print("[lls-xlsx] ⚠️ --password 暂不支持加密工作簿，已忽略；加密文件请先在 Excel/WPS 中解密另存为 .xlsx", file=sys.stderr)
 
     try:
         wb = load_workbook(args.input)
@@ -49,6 +71,7 @@ def main() -> None:
     if args.sets:
         for ref in args.sets:
             sheet, row, col, value = parse_cell_ref(ref)
+            value = coerce_value(value)
             if sheet not in wb.sheetnames:
                 die(f"工作表 {sheet!r} 不存在，可选: {wb.sheetnames}")
             wb[sheet].cell(row=row, column=col, value=value)

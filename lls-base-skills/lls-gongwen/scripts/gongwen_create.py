@@ -39,7 +39,16 @@ def main() -> None:
     args = ap.parse_args()
 
     import json
-    e = json.load(open(args.json, encoding="utf-8"))
+    from lls_gongwen_utils import die as _die
+    try:
+        with open(args.json, encoding="utf-8") as _f:
+            e = json.load(_f)
+    except FileNotFoundError:
+        _die(f"要素 JSON 不存在: {args.json}")
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        _die(f"要素 JSON 无法解析: {args.json}（{exc}）")
+    if not isinstance(e, dict):
+        _die(f"要素 JSON 顶层须为对象: {args.json}")
     for k in ("title", "main_to", "body", "issuer", "date"):
         if not e.get(k):
             from lls_gongwen_utils import die

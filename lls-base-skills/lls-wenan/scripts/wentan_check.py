@@ -7,7 +7,7 @@
 import argparse
 import re
 
-from lls_wenan_utils import AI_FLAVOR, PLATFORMS
+from lls_wenan_utils import AI_FLAVOR, PLATFORMS, die
 
 ap = argparse.ArgumentParser()
 ap.add_argument("input")
@@ -15,10 +15,18 @@ ap.add_argument("--platform", required=True, choices=list(PLATFORMS))
 args = ap.parse_args()
 
 spec = PLATFORMS[args.platform]
-text = open(args.input, encoding="utf-8").read()
+try:
+    text = open(args.input, encoding="utf-8").read()
+except FileNotFoundError:
+    die(f"找不到输入文件：{args.input}")
 lines = [l for l in text.split("\n") if l.strip()]
-title = lines[0].strip() if lines else ""
-body_wo_title = "\n".join(lines[1:]) if len(lines) > 1 else ""
+if spec["title_max"]:
+    title = lines[0].strip() if lines else ""
+    body_wo_title = "\n".join(lines[1:]) if len(lines) > 1 else ""
+else:
+    # 无标题平台（如朋友圈）：全文都算正文，首行不豁免
+    title = ""
+    body_wo_title = text
 
 problems, passed = [], []
 
@@ -54,7 +62,7 @@ for w in AI_FLAVOR:
 if flavor:
     flavor.sort(key=lambda kv: -kv[1])
     problems.append(f"🤖 AI 味命中 {sum(n for _, n in flavor)} 处：")
-    for w, n in flavor[:8]:
+    for w, n in flavor:
         problems.append(f"    「{w}」×{n} → 改写方向：{AI_FLAVOR[w]}")
 else:
     passed.append("✅ AI 味黑名单 0 命中")

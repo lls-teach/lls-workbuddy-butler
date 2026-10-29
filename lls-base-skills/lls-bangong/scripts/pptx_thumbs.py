@@ -48,7 +48,7 @@ def main() -> None:
     tmp = tempfile.mkdtemp(prefix="lls_pptx_thumbs_")
     print(f"[lls-pptx] LibreOffice 转换中（大文件可能较慢）…", file=sys.stderr)
     r = subprocess.run([soffice, "--headless", "--convert-to", "pdf", "--outdir", tmp, args.input],
-                       capture_output=True, text=True, timeout=180)
+                       capture_output=True, text=True, errors="replace", timeout=180)
     pdfs = glob.glob(os.path.join(tmp, "*.pdf"))
     if not pdfs:
         die(f"soffice 转换失败: {r.stderr[:300]}")

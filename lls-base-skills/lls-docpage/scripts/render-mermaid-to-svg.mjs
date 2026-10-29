@@ -9,6 +9,7 @@ const positional = args.filter((arg) => !arg.startsWith("--"));
 const inputFile = positional[0];
 const outputFile = positional[1];
 const mmdcArg = readOption("--mmdc");
+const puppeteerConfigArg = readOption("--puppeteer-config");
 const theme = readOption("--theme") || "neutral";
 const background = readOption("--backgroundColor") || "transparent";
 const quiet = args.includes("--quiet");
@@ -22,6 +23,7 @@ if (!inputFile || !outputFile) {
     "  --mmdc=/path/to/mmdc              Use a specific Mermaid CLI executable.",
     "  --theme=neutral                  Mermaid theme: default, neutral, forest, dark, base.",
     "  --backgroundColor=transparent    SVG background color.",
+  "  --puppeteer-config=config.json   Pass a puppeteer config file to mmdc (e.g. --no-sandbox on root/CI).",
     "  --quiet                          Print only the output path.",
     "",
     "Renders Mermaid source to SVG for insertion into Build Doc figures.",
@@ -46,14 +48,19 @@ if (!mmdc) {
 }
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-const result = spawnSync(mmdc, [
+// Windows 上 npm 安装的 mmdc 是 .cmd 垫片，不用 shell 无法直接启动。
+const useShell = process.platform === "win32" && /\.cmd$/i.test(mmdc);
+const mmdcArgs = [
   "-i", inputPath,
   "-o", outputPath,
   "--theme", theme,
   "--backgroundColor", background,
-], {
+];
+if (puppeteerConfigArg) mmdcArgs.push("-p", puppeteerConfigArg);
+const result = spawnSync(mmdc, mmdcArgs, {
   encoding: "utf8",
   maxBuffer: 1024 * 1024 * 10,
+  shell: useShell,
 });
 
 if (result.error) fail(`Failed to run mmdc: ${result.error.message}`);
@@ -76,10 +83,19 @@ function readOption(name) {
 }
 
 function findExecutable(command) {
-  const local = path.resolve("node_modules/.bin", command);
-  if (fs.existsSync(local)) return local;
-  const userLocal = path.join(os.homedir(), ".local/bin", command);
-  if (fs.existsSync(userLocal)) return userLocal;
+  // Windows 上 npm 的本地可执行文件是 .cmd/.exe 垫片，无后缀的原名不存在。
+  const suffixes = process.platform === "win32" ? ["", ".cmd", ".exe"] : [""];
+  for (const base of [path.resolve("node_modules/.bin", command), path.join(os.homedir(), ".local/bin", command)]) {
+    for (const suffix of suffixes) {
+      if (fs.existsSync(base + suffix)) return base + suffix;
+    }
+  }
+  // Windows 没有 Unix 的 `command -v`，用 where.exe 查找；否则查到的一律为空。
+  if (process.platform === "win32") {
+    const result = spawnSync("where", [command], { encoding: "utf8" });
+    if (result.status === 0) return result.stdout.trim().split(/\r?\n/)[0];
+    return "";
+  }
   const result = spawnSync("command", ["-v", command], {
     encoding: "utf8",
     shell: true,

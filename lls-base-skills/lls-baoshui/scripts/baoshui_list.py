@@ -36,5 +36,5 @@ lines += ["", "## 三、自查要点", "",
           "- [ ] 是否有逾期未申报记录", "",
           DISCLAIMER]
 ensure_parent(args.output)
-open(args.output, "w", encoding="utf-8").write("\n".join(lines))
+open(args.output, "w", encoding="utf-8", newline="\n").write("\n".join(lines))
 print(f"[lls-baoshui] 清单已生成 → {args.output}（{args.type} · {len(data['按季资料' if freq == '按季' else '按月资料'])} 项资料 + {len(data['动作'])} 项动作）")

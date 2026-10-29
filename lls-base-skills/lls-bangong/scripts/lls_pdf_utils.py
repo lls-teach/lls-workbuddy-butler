@@ -23,13 +23,25 @@ FONT_CANDIDATES = [
 
 def find_cjk_font() -> tuple[str, int] | None:
     """返回 (字体路径, ttc子字体索引)；找不到返回 None。"""
+    fonts = find_cjk_fonts()
+    return fonts[0] if fonts else None
+
+
+def find_cjk_fonts() -> list[tuple[str, int]]:
+    """按回退链顺序返回全部已存在的中文字体（路径, ttc子字体索引）。
+
+    调用方应逐个尝试注册：排在前面的字体未必能被当前渲染器接受
+    （例如 Linux 上常见的 Noto CJK 集合是 CFF 轮廓，reportlab 的
+    TTFont 只接受 TrueType 轮廓，注册会失败），跳过失败项继续往后试，
+    而不是在第一个候选上直接报错退出。
+    """
+    found: list[tuple[str, int]] = []
     for pattern in FONT_CANDIDATES:
         for path in glob.glob(pattern):
             if os.path.exists(path):
                 # ttc 集合默认取第 0 个子字体；PingFang 用 0（常规体）
-                idx = 0
-                return path, idx
-    return None
+                found.append((path, 0))
+    return found
 
 
 def parse_page_range(spec: str | None, total: int) -> list[int]:

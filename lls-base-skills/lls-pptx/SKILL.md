@@ -31,6 +31,15 @@ VENV=~/.lls-venv
 PY="$VENV/bin/python"
 ```
 
+Windows（PowerShell，虚拟环境在 `Scripts` 而非 `bin` 下）：
+
+```powershell
+$VENV = "$HOME\.lls-venv"
+if (-not (Test-Path "$VENV\Scripts\python.exe")) { py -3 -m venv $VENV }
+& "$VENV\Scripts\pip.exe" install -q -r <skill目录>\scripts\requirements.txt
+$PY = "$VENV\Scripts\python.exe"
+```
+
 ## 第 1 步：风格简报（生成类任务必做，缺一不可）
 
 生成 PPT 前先定三件事（读 @references/design-system.md 第一节）：
@@ -54,7 +63,7 @@ PY="$VENV/bin/python"
 | 添加原生图表 | `$PY scripts/pptx_add_chart.py 输入.pptx --slide N --type bar --title 标题 --categories "a,b,c" --series "系列=1,2,3" -o 新.pptx`（图表为原生对象可在 Office 中编辑；目标页应为空证据场页，避免与要点重叠） |
 | 缩略图总览 | `$PY scripts/pptx_thumbs.py 输入.pptx 前缀`（需 LibreOffice，见失败分支 5） |
 
-**大纲语法**（吸收 jingmei 版式词汇，按内容选形状）：
+**大纲语法**（按内容选版式形状）：
 
 | 语法 | 渲染为 | 适用内容 |
 | --- | --- | --- |
@@ -96,6 +105,8 @@ PY="$VENV/bin/python"
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 
 执行中遇到报错/输出偏离/异常结果时，按以下流程处理，**不盲目重试同一失败命令**：
+
+**做冒烟测试直到问题解决：冒烟未全部通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过才算完成、才能回到原任务。**
 
 1. **最小冒烟**（区分环境问题 vs 逻辑问题）：
    ```bash

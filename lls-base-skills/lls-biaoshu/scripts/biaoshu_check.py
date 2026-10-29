@@ -15,8 +15,14 @@ ap.add_argument("bid")
 ap.add_argument("-o", "--output", required=True)
 args = ap.parse_args()
 
-reqs = json.load(open(args.requirements, encoding="utf-8"))["requirements"]
-bid = open(args.bid, encoding="utf-8", errors="ignore").read()
+try:
+    reqs = json.load(open(args.requirements, encoding="utf-8"))["requirements"]
+except (OSError, json.JSONDecodeError, KeyError) as e:
+    die(f"找不到或无法解析要求清单：{args.requirements}（{e}）")
+try:
+    bid = open(args.bid, encoding="utf-8", errors="ignore").read()
+except OSError as e:
+    die(f"找不到或无法读取投标文件：{args.bid}（{e}）")
 
 lines = ["# 投标偏离核对表（内部核对用）", "",
          "> ⚠️ 机器核对仅供内部自查：判定基于关键词覆盖，正式偏离表以招标文件指定格式与投标文件原文为准。", ""]

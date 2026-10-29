@@ -18,6 +18,8 @@ def die(msg, code=1):
 
 def parse_comments(text: str) -> list[dict]:
     """评语 md → [{name, comment}]，支持 '姓名：评语' 行或 '### 姓名' 段落。"""
+    if text.startswith("\ufeff"):  # Windows 记事本 UTF-8 BOM：去 BOM，防首个姓名被污染
+        text = text[1:]
     students = []
     for raw in text.split("\n"):
         line = raw.strip()

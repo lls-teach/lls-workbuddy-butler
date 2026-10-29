@@ -12,7 +12,7 @@ import re
 import shutil
 import zipfile
 
-from lls_pptx_utils import die
+from lls_pptx_utils import die, ensure_parent, guard_overwrite
 
 CT = "[Content_Types].xml"
 PRES = "ppt/presentation.xml"
@@ -69,13 +69,16 @@ def main() -> None:
                 rels = re.sub(r'slide\d+\.xml', f"slide{new_num}.xml", rels)
                 copy_files[f"ppt/slides/_rels/slide{new_num}.xml.rels"] = rels.encode("utf-8")
         # 2) 注册 Content-Type Override
-        ct = copy_files.get("_ct") or src_zip.read(CT).decode("utf-8")
+        # 注意：首轮存入的是 bytes，次轮起必须先解码，否则 str.replace 会报 TypeError
+        _ct_raw = copy_files.get("_ct") or src_zip.read(CT)
+        ct = _ct_raw.decode("utf-8") if isinstance(_ct_raw, bytes) else _ct_raw
         override = (f'<Override PartName="/ppt/slides/slide{new_num}.xml" '
                     f'ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>')
         ct = ct.replace("</Types>", override + "</Types>")
         copy_files["_ct"] = ct.encode("utf-8")
-        # 3) presentation.xml.rels 加关系
-        rels = copy_files.get("_prels") or src_zip.read(PRES_RELS).decode("utf-8")
+        # 3) presentation.xml.rels 加关系（同上：次轮起是 bytes，需解码）
+        _prels_raw = copy_files.get("_prels") or src_zip.read(PRES_RELS)
+        rels = _prels_raw.decode("utf-8") if isinstance(_prels_raw, bytes) else _prels_raw
         rid += 1
         rels = rels.replace("</Relationships>",
                             f'<Relationship Id="rId{rid}" '
@@ -84,7 +87,8 @@ def main() -> None:
         copy_files["_prels"] = rels.encode("utf-8")
         # 4) presentation.xml 的 sldIdLst 登记（--after 时插到第 N 个之后，否则追加）
         sid += 1
-        pres = copy_files.get("_pres") or src_zip.read(PRES).decode("utf-8")
+        _pres_raw = copy_files.get("_pres") or src_zip.read(PRES)
+        pres = _pres_raw.decode("utf-8") if isinstance(_pres_raw, bytes) else _pres_raw
         entry = f'<p:sldId id="{sid}" r:id="rId{rid}"/>'
         m_lst = re.search(r"<p:sldIdLst>(.*?)</p:sldIdLst>", pres, re.S)
         if not m_lst:
@@ -96,8 +100,12 @@ def main() -> None:
         copy_files["_pres"] = pres.encode("utf-8")
         new_entries.append((sid, rid))
 
-    # 重写包
-    out_tmp = args.output + ".tmp"
+    # 重写包：与其他脚本一致走覆盖保护（--force 才覆盖已存在目标，
+    # 否则改写到 _new；Windows 下直接覆盖已存在文件行为与 Linux 不一致，
+    # 故不在此直接 move 覆盖），并确保输出目录存在。
+    out = guard_overwrite(args.output, args.force)
+    ensure_parent(out)
+    out_tmp = out + ".tmp"
     with zipfile.ZipFile(out_tmp, "w", zipfile.ZIP_DEFLATED) as zout:
         for n in names:
             if n in (CT, PRES, PRES_RELS):
@@ -112,9 +120,9 @@ def main() -> None:
             if path.startswith("ppt/slides/slide") or path.startswith("ppt/slides/_rels/"):
                 zout.writestr(path, data)
     src_zip.close()
-    shutil.move(out_tmp, args.output)
+    shutil.move(out_tmp, out)
     action = f"插入到第 {args.after} 页后" if args.after else f"追加到末尾"
-    print(f"[lls-pptx] 已复制第 {args.slide} 页 ×{copies}（{action}）→ {args.output}")
+    print(f"[lls-pptx] 已复制第 {args.slide} 页 ×{copies}（{action}）→ {out}")
     print("[lls-pptx] 建议随后运行 pptx_check.py 验证包完整性")
 
 

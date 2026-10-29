@@ -4,7 +4,8 @@ def find_soffice():
     for p in (shutil.which("soffice"),
               "/Applications/LibreOffice.app/Contents/MacOS/soffice",
               "/usr/lib/libreoffice/program/soffice",
-              "/opt/homebrew/bin/soffice"):
+              "/opt/homebrew/bin/soffice",
+              "C:/Program Files/LibreOffice/program/soffice.exe"):
         if p and os.path.exists(p):
             return p
     return None

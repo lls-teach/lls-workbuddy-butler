@@ -16,7 +16,11 @@ ap.add_argument("--accent", default="1F469C")
 ap.add_argument("--force", action="store_true")
 args = ap.parse_args()
 
-data = parse_outline(open(args.outline, encoding="utf-8", errors="ignore").read())
+try:
+    with open(args.outline, encoding="utf-8-sig", errors="ignore") as f:
+        data = parse_outline(f.read())
+except OSError as e:
+    die(f"无法读取大纲文件 {args.outline}: {e}")
 slides = data["slides"]
 if not slides:
     die("大纲为空")
@@ -90,7 +94,11 @@ addEventListener('touchend',e=>{{
 </script></body></html>"""
 
 out = guard_overwrite(args.output, args.force)
-ensure_parent(out)
-open(out, "w", encoding="utf-8").write(DOC)
+try:
+    ensure_parent(out)
+    with open(out, "w", encoding="utf-8", newline="\n") as f:
+        f.write(DOC)
+except OSError as e:
+    die(f"无法写入演示文件 {out}: {e}")
 print(f"[lls-htmlppt] 单文件 HTML 演示 {len(slides)} 页 → {out}")
 print(f"[lls-htmlppt] 浏览器打开即放映：←→ 翻页 · F 全屏 · 发链接即可分享")

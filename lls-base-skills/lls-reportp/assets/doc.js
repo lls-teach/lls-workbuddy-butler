@@ -144,7 +144,15 @@
   function setupToc() {
     const nav = document.querySelector(".toc-rail");
     const page = document.querySelector(".doc-page");
-    if (!nav || !page) return;
+    if (!nav || !page) {
+      if (document.querySelector("header[id], section[id]")) {
+        console.warn(
+          "doc.js: 未找到 nav.toc-rail 或 article.doc-page，目录未生成；" +
+            "请按 report-template.html 使用 toc-rail + doc-page，旧的 doc-toc/doc 类名不再被识别。"
+        );
+      }
+      return;
+    }
 
     const targets = Array.from(
       page.querySelectorAll("header[id], section[id]")
@@ -193,16 +201,47 @@
     }
   }
 
+  function showChartFallback(block, message) {
+    if (block.querySelector(".chart-fallback")) return;
+    const note = document.createElement("p");
+    note.className = "chart-fallback";
+    note.textContent = message;
+    block.appendChild(note);
+  }
+
   function setupCharts() {
-    if (!window.echarts) return;
+    const blocks = Array.from(document.querySelectorAll("[data-chart]"));
+    if (!blocks.length) return;
+    if (!window.echarts) {
+      console.warn(
+        "doc.js: 未找到 window.echarts，图表未渲染；" +
+          "请确认 assets/echarts.min.js 已随页交付并在 doc.js 之前引入。"
+      );
+      blocks.forEach((block) =>
+        showChartFallback(block, "图表未能加载：未找到 ECharts 资源，请确认 assets/echarts.min.js 已随页交付并在 doc.js 之前引入。")
+      );
+      return;
+    }
     const instances = [];
-    document.querySelectorAll("[data-chart]").forEach((block) => {
+    blocks.forEach((block) => {
       const canvas = block.querySelector(".chart-canvas");
       const dataId = block.getAttribute("data-data");
       const chartKind = block.getAttribute("data-chart");
       const initialType = block.getAttribute("data-type") || "line";
       const rows = readJson(dataId);
-      if (!canvas || !rows) return;
+      if (!canvas || !rows) {
+        console.warn("doc.js: 图表块缺少画布或数据，跳过渲染", {
+          chart: chartKind,
+          data: dataId,
+          hasCanvas: Boolean(canvas),
+          hasRows: Boolean(rows)
+        });
+        showChartFallback(block, "图表未能加载：请检查 data-data 指向的 JSON 数据块与 .chart-canvas 画布是否齐全。");
+        return;
+      }
+      if (chartKind !== "market-trend" && chartKind !== "share-ranking") {
+        console.warn("doc.js: 未知的 data-chart 类型，图表将为空", chartKind);
+      }
 
       const chart = echarts.init(canvas, null, { renderer: "canvas" });
       function optionFor(type) {

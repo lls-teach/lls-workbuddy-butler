@@ -24,12 +24,24 @@ license: MIT
 
 ## 第 0 步：环境自举
 
+macOS/Linux（bash）：
+
 ```bash
 VENV=~/.lls-venv
 [ -x "$VENV/bin/python" ] || python3 -m venv "$VENV"
 "$VENV/bin/pip" install -q -r <skill目录>/scripts/requirements.txt
 PY="$VENV/bin/python"
 ```
+
+Windows（PowerShell；不要用上面 bash 的 `[ -x … ]` 与 `bin/python` 写法，Windows 虚拟环境在 `Scripts` 目录下）：
+
+```powershell
+python -m venv .lls-venv
+.\.lls-venv\Scripts\pip install -q -r <skill目录>\scripts\requirements.txt
+$PY = ".\.lls-venv\Scripts\python.exe"
+```
+
+此后命令中的 `$PY scripts/…` 在 Windows 下对应 `$PY scripts\…`，其余参数不变。
 
 ## 任务路由
 
@@ -46,7 +58,7 @@ PY="$VENV/bin/python"
 ## 步骤纪律
 
 1. 改已有文件前先 `xlsx_read.py` 看结构（表头、行数、数据形状），🔴 CHECKPOINT：**覆盖已有文件前必须向用户复述并确认**（脚本默认改名 `_new`）。
-2. 公式一律用 Excel 公式字符串（如 `=SUM(D2:D10)`）由脚本写入，不要预计算后填死数值——用户改数后公式要能联动。
+2. 公式一律用 Excel 公式字符串（如 `=SUM(D2:D10)`）由脚本写入，不要预计算后填死数值——用户改数后公式要能联动。用批量改单元格脚本写公式时，`--set` 里第一个 `=` 是分隔符，公式本身的 `=` 要再写一个，即写两个 `=`，如 `--set "Sheet1!E2==C2+D2"`。
 3. **公式重算（必做）**：openpyxl 写的公式没有缓存值，不重算的话所有读取器里公式格都是空的。凡写了公式，最后必须 `$PY scripts/xlsx_recalc.py 输出.xlsx`（需 LibreOffice）。**重算通过只证明公式算得通，不证明算得对**——范围差一行照样零报错，结果要抽查一行人工核对。
 4. 大于 5,000 行的数据先报行数再处理。
 5. 输出完成后引用实际文件路径 + 前 3 行预览。
@@ -70,6 +82,7 @@ PY="$VENV/bin/python"
    ```
 2. **定位偏离点**：冒烟通过 → 问题在本次输入或参数，检查输入后重试；冒烟失败 → 先修依赖与脚本，不碰原任务。
 3. **回归验证**：修复后重跑最小冒烟 + 一次真实最小案例，全绿后再回到原任务从失败步骤继续。
+**做冒烟测试直到问题解决**：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过才算完成；未全绿不得回到原任务。
 4. **记录**：反复出现的问题记入本技能失败分支表，下次直接命中。
 
 ## 反例黑名单（不要做）

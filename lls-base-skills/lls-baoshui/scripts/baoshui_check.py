@@ -19,7 +19,12 @@ if args.type not in CHECKLISTS:
 data = CHECKLISTS[args.type]
 freq = "按月" if args.type == "一般纳税人" else "按季"
 items = data["按季资料" if freq == "按季" else "按月资料"]
-have = open(args.have, encoding="utf-8", errors="ignore").read()
+try:
+    have = open(args.have, encoding="utf-8", errors="ignore").read()
+except FileNotFoundError:
+    die(f"已备清单文件不存在: {args.have}")
+except OSError as e:
+    die(f"已备清单文件无法读取: {args.have}（{e}）")
 
 lines = [f"# 报税资料缺项报告（{args.type}）", ""]
 missing = []
@@ -32,5 +37,5 @@ for item in items:
         missing.append(item)
 lines += ["", DISCLAIMER]
 ensure_parent(args.output)
-open(args.output, "w", encoding="utf-8").write("\n".join(lines))
+open(args.output, "w", encoding="utf-8", newline="\n").write("\n".join(lines))
 print(f"[lls-baoshui] 缺项报告 → {args.output}（缺 {len(missing)}/{len(items)}）")

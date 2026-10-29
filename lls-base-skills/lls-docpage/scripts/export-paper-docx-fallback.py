@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import shutil
 from zipfile import ZipFile, ZIP_DEFLATED
 from lxml import html, etree
 from docx import Document
@@ -294,6 +295,9 @@ def build_document(clean_html_path, output_path):
     source_counter = {"value": 0}
 
     def handle(element):
+        # lxml 注释节点的 tag 不是字符串，跳过（否则 text_content 会抛错）。
+        if not isinstance(element.tag, str):
+            return
         tag = element.tag.lower() if isinstance(element.tag, str) else ""
         classes = element.get("class", "")
         if tag in {"section", "main", "div"}:
@@ -512,7 +516,9 @@ def postprocess_docx(docx_path, chart_data):
             for file in work.rglob("*"):
                 if file.is_file() and file.name != "rebuilt.docx":
                     zout.write(file, file.relative_to(work).as_posix())
-        rebuilt.replace(docx_path)
+        # 临时目录与输出目录可能不在同一设备/盘符（如沙盒 /tmp、Windows 跨盘），
+        # Path.replace 跨设备会失败，shutil.move 会自动降级为复制。
+        shutil.move(str(rebuilt), str(docx_path))
 
 
 def first_row_text(table):

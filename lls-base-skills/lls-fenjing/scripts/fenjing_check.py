@@ -13,8 +13,15 @@ ap.add_argument("input")
 ap.add_argument("--limit", type=int, default=60, help="视频总时长上限（秒）")
 args = ap.parse_args()
 
-md = open(args.input, encoding="utf-8").read()
+try:
+    md = open(args.input, encoding="utf-8").read()
+except FileNotFoundError:
+    die(f"找不到输入文件: {args.input}")
+except UnicodeDecodeError:
+    die(f"输入文件不是 UTF-8 编码，请另存为 UTF-8 后重试: {args.input}")
 rows = [l for l in md.split("\n") if l.startswith("|") and "---" not in l][1:]
+if not rows:
+    die("未找到分镜表表格行：输入不是 fenjing_make.py 生成的分镜表格式")
 problems, total = [], 0
 for r in rows:
     cells = [c.strip() for c in r.strip("|").split("|")]

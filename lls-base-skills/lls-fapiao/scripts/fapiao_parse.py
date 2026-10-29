@@ -50,7 +50,16 @@ def main() -> None:
     ap.add_argument("-o", "--output", help="输出 JSON（缺省打印 stdout）")
     args = ap.parse_args()
 
-    text = sys.stdin.read() if args.input == "-" else (open(args.input, encoding="utf-8", errors="ignore").read() if args.input else "")
+    if args.input == "-":
+        # Windows 控制台默认编码常非 UTF-8，显式按 UTF-8 读 stdin，防中文乱码；
+        # 不支持 reconfigure 的环境静默跳过，不影响原有行为。
+        try:
+            sys.stdin.reconfigure(encoding="utf-8", errors="ignore")
+        except Exception:
+            pass
+        text = sys.stdin.read()
+    else:
+        text = open(args.input, encoding="utf-8", errors="ignore").read() if args.input else ""
     if not text.strip():
         die("输入文本为空")
     result = parse_invoice_text(text)

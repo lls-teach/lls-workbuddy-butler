@@ -4,17 +4,20 @@
 用法: python3 koushuo_outline.py --title 主题 --minutes 3 --points "要点1,要点2,要点3" -o 骨架.md
 """
 import argparse
+import re
 
 from lls_koushuo_utils import WPM, die, ensure_parent
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--title", required=True)
 ap.add_argument("--minutes", type=float, required=True)
-ap.add_argument("--points", required=True, help="逗号分隔")
+ap.add_argument("--points", required=True, help="逗号分隔（支持 , ， 、）")
 ap.add_argument("-o", "--output", required=True)
 args = ap.parse_args()
 
-points = [p.strip() for p in args.points.split(",") if p.strip()]
+if args.minutes <= 0:
+    die("目标时长须大于 0（分钟）")
+points = [p.strip() for p in re.split(r"[,，、]", args.points) if p.strip()]
 if not points:
     die("至少一个要点")
 total_chars = int(WPM * args.minutes)
@@ -27,7 +30,7 @@ out = [
     f"# 口播稿骨架：{args.title}（目标 {args.minutes} 分钟 ≈ {total_chars} 字）", "",
     f"## 【开场钩子】预算 {hook_chars} 字（前 3 秒决定完播）",
     "- 问句式 / 数字式 / 反常识式 三选一，例：「你有没有发现……」",
-    "", f"## 【正文】预算 {body_chars} 字（每段 {per} 字左右，单段 ≤150 字）",
+    "", f"## 【正文】预算 {body_chars} 字（每段 {per} 字左右，拆成 ≤150 字的小段口播）",
 ]
 for i, p in enumerate(points, 1):
     out += [f"### 段 {i}：{p}（约 {per} 字）", "- 论点 + 例子/数据 + 一句小结", ""]

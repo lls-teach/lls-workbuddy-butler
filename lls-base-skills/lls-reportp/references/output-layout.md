@@ -38,6 +38,8 @@ For narrative, research, product, technical, or memo pages that do not need repe
 
 Use lowercase, hyphenated or underscore-separated slugs. Prefer concrete names such as `tesla-2026-brief/`, `product-launch-memo/`, `ai-agent-architecture-note/`, or `may-budget-review/`.
 
+Windows 安全 slug 补充：slug 中禁用 `< > : " / \ | ? *`；禁用保留名 `CON`、`PRN`、`AUX`、`NUL`、`COM1`–`COM9`、`LPT1`–`LPT9`（不分大小写）；末尾禁用空格与句点；不要只靠大小写区分两个目录（Windows 同盘不区分大小写，`Report/` 与 `report/` 是同一目录）；中文或含空格的 slug 在浏览器里能打开，但发链接、打包解压时易被转码或截断，优先用小写英文连字符 slug；目录嵌套过深时注意 Windows 传统路径长度限制，保持路径短。
+
 Inside the folder, prefer stable filenames: `index.html`, `assets/doc.css`, `assets/doc.js`, optional `assets/mermaid.min.js`, and optional `assets/echarts.min.js`. The page title belongs inside the HTML, not in every filename.
 
 ## Trae Rendering Contract
@@ -45,11 +47,13 @@ Inside the folder, prefer stable filenames: `index.html`, `assets/doc.css`, `ass
 
 For pages with dependencies, keep every dependency inside the page folder and reference it with relative paths only. Do not use absolute local paths, `file://` URLs, remote CDNs, or workspace-global asset folders in the final HTML.
 
+注意：本包内未给出该渲染注释的具体文本（模板与各 reference 均无此文本），静态检查中“页首有 Trae 渲染注释”一项在拿到平台现行文本前只能记为“无法按字面核对”，不要凭空编造一条注释冒充平台要求。
+
 ## Static Checks
 
 For default static pages, run lightweight checks:
 
-- `index.html` starts with the required Trae rendering comment;
+- `index.html` starts with the required Trae rendering comment（具体文本以平台现行要求为准；本包未规定文本时该项记为无法按字面核对，见 Trae Rendering Contract 一节）；
 - local CSS and JS paths resolve;
 - local image paths resolve;
 - local Mermaid runtime exists and Mermaid blocks remain readable in `index.html` when diagrams are present;

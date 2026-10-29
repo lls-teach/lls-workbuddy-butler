@@ -50,6 +50,7 @@ license: MIT
 | 2 | docx 导出样式丢失 | 用 `export-paper-docx-fallback.py` 降级方案 | 建议用户直接打印 PDF |
 | 3 | Mermaid 图不渲染 | `$PY scripts/render-mermaid-to-svg.mjs` 预渲染成 SVG | 改用静态图片 |
 | 4 | 中文字体打印异常 | 指定中文 serif/sans 回退链 | 提示用户系统字体情况 |
+| 5 | Windows 下找不到 pandoc / pdfinfo / pdftoppm / mmdc | 确认工具已安装并加入 PATH（脚本在 Windows 下用 where 查找），或用 --pandoc / --pdfinfo / --pdftoppm / --mmdc / --chrome 显式传路径 | PDF 导出本身走 Playwright 自带 Chromium，不受系统浏览器影响；校验与 PNG 渲染缺工具时只跳过该步 |
 
 ## 反例黑名单（不要做）
 
@@ -64,9 +65,11 @@ license: MIT
 
 1. **最小冒烟**：
    ```bash
-   node --version && node scripts/export-paper-to-pdf.mjs --help 2>&1 | head -5
+   node --version && node scripts/export-paper-to-pdf.mjs --help
    ```
    （导出脚本需 Node；docx 路线需 Python 的 python-docx）
 2. **定位偏离点**：冒烟通过 → 问题在本次文档内容或样式；冒烟失败 → 先修环境。
 3. **回归验证**：用 `theme-smoke-test.html` 打印预览单元格，确认分页与字体后回原任务。
+
+   **做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过。**
 4. **记录**：反复出现的问题记入上表。

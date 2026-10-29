@@ -6,11 +6,25 @@ JSON: {"who":"姓名","period":"2026 W44","done":["事项（含量化）"],"doin
 """
 import argparse
 import json
+import sys
 
-from docx import Document
-from docx.shared import Pt
+try:
+    from docx import Document
+    from docx.shared import Pt
+except ModuleNotFoundError:
+    print("[lls-zhouba] 错误: 缺少 python-docx，请先执行 "
+          "pip install -r scripts/requirements.txt", file=sys.stderr)
+    sys.exit(1)
 
 from lls_jianli_utils_guard import ensure_parent, guard_overwrite, set_cn_font
+
+# Windows 旧控制台默认编码（如 cp936）无法输出“→”时直接抛
+# UnicodeEncodeError；能重设就重设为 UTF-8，不能则用 replace 兜底。
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 ap = argparse.ArgumentParser()
 ap.add_argument("json")
@@ -18,7 +32,18 @@ ap.add_argument("-o", "--output", required=True)
 ap.add_argument("--force", action="store_true")
 args = ap.parse_args()
 
-data = json.load(open(args.json, encoding="utf-8"))
+try:
+    with open(args.json, encoding="utf-8") as _f:
+        data = json.load(_f)
+except FileNotFoundError:
+    print(f"[lls-zhouba] 错误: 找不到文件: {args.json}", file=sys.stderr)
+    sys.exit(1)
+except json.JSONDecodeError as e:
+    print(f"[lls-zhouba] 错误: JSON 解析失败 {args.json}: {e}", file=sys.stderr)
+    sys.exit(1)
+except OSError as e:
+    print(f"[lls-zhouba] 错误: 无法读取文件 {args.json}: {e}", file=sys.stderr)
+    sys.exit(1)
 doc = Document()
 
 def para(text, size=11, bold=False):

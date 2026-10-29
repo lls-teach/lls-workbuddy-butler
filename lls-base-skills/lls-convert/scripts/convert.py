@@ -33,8 +33,19 @@ def split_ext(path):
             return path[:-len(suf)], path[-len(suf):]
     return os.path.splitext(path)
 
+_WIN_RESERVED = {"CON", "PRN", "AUX", "NUL"} | {f"COM{i}" for i in range(1, 10)} | {f"LPT{i}" for i in range(1, 10)}
+
 def free_path(path):
     """目标已存在就自动加 -1/-2 后缀，绝不静默覆盖用户的同名文件。"""
+    if os.name == "nt":
+        # Windows 保留设备名（CON/PRN/AUX/NUL/COM1…/LPT1…）及以空格/点结尾的文件名
+        # 在 Windows 下根本建不出来，源文件名经网络盘等途径带过来时先改名再落盘。
+        # 该分支只在 Windows 生效，Linux/macOS 行为不变。
+        root, ext = split_ext(path)
+        stem = os.path.basename(root)
+        if stem.upper() in _WIN_RESERVED or stem.endswith((" ", ".")):
+            fixed = stem.rstrip(" .") + "_"
+            path = os.path.join(os.path.dirname(root), fixed + ext)
     if FORCE or not os.path.exists(path):
         return path
     root, ext = split_ext(path)
@@ -44,11 +55,17 @@ def free_path(path):
     return f"{root}-{i}{ext}"
 
 def find_soffice():
-    """soffice 可能在 PATH，也可能是 macOS/Linux 的 App 安装路径。"""
+    """soffice 可能在 PATH，也可能是 macOS/Linux/Windows 的默认安装路径。
+
+    注意：Windows 默认安装通常不在 PATH 里，不补下面两条默认路径，
+    文档类转换在 Windows 上会直接报“未找到 LibreOffice”。"""
     for p in (shutil.which("soffice"),
+              shutil.which("soffice.exe"),
               "/Applications/LibreOffice.app/Contents/MacOS/soffice",
               "/usr/lib/libreoffice/program/soffice",
-              "/opt/homebrew/bin/soffice"):
+              "/opt/homebrew/bin/soffice",
+              r"C:\Program Files\LibreOffice\program\soffice.exe",
+              r"C:\Program Files (x86)\LibreOffice\program\soffice.exe"):
         if p and os.path.exists(p):
             return p
     return None
@@ -57,7 +74,9 @@ def lo_available(): return find_soffice() is not None
 def ff_available(): return shutil.which("ffmpeg") is not None
 
 def run(cmd, **kw):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=300, **kw)
+    # errors="replace"：Windows 控制台编码（如 GBK）下，外部工具输出含无法解码
+    # 的字节时不让解码异常掩盖真正的转换报错，只把坏字节替换掉。
+    return subprocess.run(cmd, capture_output=True, text=True, errors="replace", timeout=300, **kw)
 
 def via_libreoffice(src, tgt, outdir):
     # LibreOffice headless conversion; txt needs a filter hint for docs
@@ -150,7 +169,10 @@ def read_text(p):
     with open(p, encoding="utf-8", errors="replace") as fh: return fh.read()
 
 def write_text(p, s):
-    with open(p, "w", encoding="utf-8") as fh: fh.write(s)
+    # newline=""：文本模式默认会在 Windows 把 \n 写成 \r\n，文本类产物
+    # （txt/md/srt/vtt/ass 等）跨平台换行不一致；固定不翻译，始终写 LF。
+    # Linux/macOS 下本来就是 LF，行为不变。
+    with open(p, "w", encoding="utf-8", newline="") as fh: fh.write(s)
     return p
 
 def dst_path(src, tgt, outdir):

@@ -24,12 +24,24 @@ license: MIT
 
 ## 第 0 步：环境自举
 
+本技能仅用 Python 标准库，`scripts/requirements.txt` 为空说明文件，装不装都不影响运行；转写稿编码自动兼容 UTF-8（含 BOM）与 GBK。
+
 ```bash
+# macOS / Linux
 VENV=~/.lls-venv
 [ -x "$VENV/bin/python" ] || python3 -m venv "$VENV"
 "$VENV/bin/pip" install -q -r <skill目录>/scripts/requirements.txt
 PY="$VENV/bin/python"
 ```
+
+```powershell
+# Windows PowerShell（注意：Windows 下虚拟环境的可执行文件在 Scripts 而非 bin 目录）
+if (-not (Test-Path "$env:USERPROFILE\.lls-venv\Scripts\python.exe")) { py -m venv "$env:USERPROFILE\.lls-venv" }
+& "$env:USERPROFILE\.lls-venv\Scripts\pip.exe" install -q -r <skill目录>\scripts\requirements.txt
+$PY = "$env:USERPROFILE\.lls-venv\Scripts\python.exe"
+```
+
+Windows 下后续命令与上面路由相同（`$PY scripts/huiyi_minutes.py …`，正斜杠路径在 Python 里同样可用）；输出文件统一写 `\n` 换行，不随系统换行符变化。
 
 ## 任务路由
 
@@ -75,6 +87,7 @@ PY="$VENV/bin/python"
 | 2 | 转写稿无说话人前缀 | 未标注句提示补标；按话题分段仍可出纪要 | 建议重新导出带说话人的版本 |
 | 3 | 行动项抽取过多误报 | 逐条与用户确认剔除误报（宁可多抽不可漏抽） | — |
 | 4 | 转写稿错别字多 | 清洗层只处理口头禅；错别字在归纳时由你结合上下文纠正，引用原文时保留原样 | — |
+| 5 | 转写稿乱码、说话人识别不全 | 脚本自动按 UTF-8（含 BOM）/GBK 解码；仍乱码请在编辑器里另存为 UTF-8 再跑 | — |
 
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 
@@ -86,6 +99,7 @@ PY="$VENV/bin/python"
    ```
 2. **定位偏离点**：冒烟通过 → 问题在本次输入或参数，检查输入后重试；冒烟失败 → 先修依赖与脚本，不碰原任务。
 3. **回归验证**：修复后重跑最小冒烟 + 一次真实最小案例，全绿后再回到原任务从失败步骤继续。
+   **做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过。**
 4. **记录**：反复出现的问题记入本技能失败分支表，下次直接命中。
 
 ## 反例黑名单（不要做）

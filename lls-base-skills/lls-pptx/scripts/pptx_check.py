@@ -38,6 +38,7 @@ def main() -> None:
 
     for i, slide in enumerate(prs.slides, 1):
         texts, bullet_count, char_count, fonts = [], 0, 0, set()
+        title_text = None
         empty_frames = 0
         for shape in slide.shapes:
             if not shape.has_text_frame:
@@ -48,6 +49,13 @@ def main() -> None:
                 continue
             if not shape.text_frame.text.strip():
                 continue
+            # 标题候选：首个字号 > 12pt 的文本（跳过 10pt 页眉运行标题，否则
+            # 每页都把页眉误判为标题）；都没有则回退首个文本。
+            if title_text is None:
+                sizes = [r.font.size.pt for p in shape.text_frame.paragraphs
+                         for r in p.runs if r.font.size]
+                if not sizes or max(sizes) > 12:
+                    title_text = shape.text_frame.text.strip().split("\n")[0]
             for para in shape.text_frame.paragraphs:
                 t = "".join(r.text for r in para.runs).strip()
                 if not t:
@@ -66,10 +74,10 @@ def main() -> None:
         if empty_frames:
             warnings.append(f"第 {i} 页有 {empty_frames} 个空文本框（空占位符）")
         if texts:
-            title = texts[0]
+            title = title_text or texts[0]
             topic_markers = ("分析", "介绍", "概述", "关于", "情况", "简介")
             if any(m in title for m in topic_markers) or re.fullmatch(r"[\d]+\.", title.strip()) or len(title.strip()) <= 8 and not any(ch in title for ch in "：:，,"):
-                warnings.append(f"第 {i} 页标题疑似话题式（{title!r}）——建议写结论句（jingmei/anthropic 共同纪律）")
+                warnings.append(f"第 {i} 页标题疑似话题式（{title!r}）——建议写结论句")
         cjk_runs = [f for f in fonts if f and f != CN_FONT and any('\u4e00' <= ch <= '\u9fff' for ch in "".join(texts))]
         if CN_FONT not in fonts and texts:
             warnings.append(f"第 {i} 页未设置 {CN_FONT} 字体（渲染环境可能缺字）")

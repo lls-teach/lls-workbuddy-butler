@@ -80,11 +80,29 @@ def cjk_width(s: str) -> int:
     return sum(2 if ord(ch) > 0x2E7F else 1 for ch in str(s))
 
 
+def normalize_text(s: str) -> str:
+    """全角 ASCII（数字/标点，如 １，１６０．００）→ 半角，便于正则匹配。
+
+    只转换 U+FF01–U+FF5E 与全角空格 U+3000，不动汉字本身；
+    Windows 记事本/扫描文本常出现全角数字，此前这类金额会匹配不到。
+    """
+    out = []
+    for ch in s:
+        o = ord(ch)
+        if o == 0x3000:
+            out.append(" ")
+        elif 0xFF01 <= o <= 0xFF5E:
+            out.append(chr(o - 0xFEE0))
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
 def to_amount(s: str | None) -> float | None:
     """'1,160.00'/'¥580' → float；失败返回 None。"""
     if not s:
         return None
-    s = str(s).replace(",", "").replace("¥", "").replace("￥", "").strip()
+    s = normalize_text(str(s)).replace(",", "").replace("¥", "").replace("￥", "").strip()
     try:
         return round(float(s), 2)
     except ValueError:
@@ -93,6 +111,7 @@ def to_amount(s: str | None) -> float | None:
 
 def first_match(text: str, field: str) -> tuple[str | None, float]:
     """按正则优先级匹配字段，返回 (值, 置信度)。"""
+    text = normalize_text(text)
     pats = PATTERNS.get(field, [])
     for i, pat in enumerate(pats):
         m = re.search(pat, text, re.S if field in ("buyer", "seller_tax_id") else 0)

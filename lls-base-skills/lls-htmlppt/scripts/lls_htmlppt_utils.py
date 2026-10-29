@@ -1,4 +1,4 @@
-"""lls-htmlppt 共享工具：大纲解析（与 lls-pptx 大纲语法兼容）。"""
+"""lls-htmlppt 共享工具：大纲解析（#/##/-/> 语法）。"""
 import re
 
 
@@ -61,6 +61,10 @@ def guard_overwrite(path: str, force: bool = False) -> str:
         return path
     root, ext = os.path.splitext(path)
     alt = f"{root}_new{ext}"
+    n = 2
+    while os.path.exists(alt):
+        alt = f"{root}_new{n}{ext}"
+        n += 1
     import sys
     print(f"[lls-htmlppt] 目标已存在，改写到 {alt}", file=sys.stderr)
     return alt

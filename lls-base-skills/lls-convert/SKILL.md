@@ -58,6 +58,10 @@ author: lhg
 
 必需：LibreOffice（soffice）、ffmpeg/ffprobe、Python 包（Pillow、python-docx、openpyxl、pandas、python-pptx、pypdf、pdfplumber、PyMuPDF、fonttools、**brotli**（woff2 编解码依赖）、py7zr、markdown、markdownify、odfpy、xlrd）。缺哪样先补装再转，补不上就如实报缺哪样，不假装能转。命令：`python3 scripts/check_env.py`。
 
+Windows 说明：LibreOffice 与 ffmpeg 需自行安装并加入 PATH；用 LibreOffice 默认安装路径时引擎会自动探测（`C:\Program Files\LibreOffice\program\soffice.exe` 及 32 位路径），无需手动配路径。自检命令用 `python scripts\check_env.py`（或 `py -3 scripts\check_env.py`）。Python 包均有 Windows 版本，文本类产物统一写 LF 换行。
+
+做冒烟测试直到问题解决：先跑 `python3 scripts/check_env.py` 自检，再抽测支持矩阵内的转换（`python3 scripts/convert.py <输入文件> <目标扩展名> -o <输出目录>`）；抽测未全部通过就定位、修复、重测，循环往复，直到抽测全部通过才算完成。
+
 ## 红线
 
 - 不承诺未测过的转换对；宣传数字只用实测矩阵

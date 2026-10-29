@@ -2,9 +2,9 @@
 name: lls-aiwei
 display_name: "去AI味检测改写"
 display_name_en: "AI-Flavor Detector and Rewriter"
-description: "AI 味检测与改写验收：80+ 词级黑名单（结构套话/动词套话/空洞强化，逐词给改写方向）+ 4 类句级结构特征（排比三连/总结腔/抽象名词堆叠/句长均匀度），量化 AI 味密度（每千字），改写前后对比验收（密度下降≥50%、字数±20% 防改丢内容）。当用户提到去AI味、AI味、降AI味、文案太AI、像机器人写的、改写、润色去味时使用本技能。去 AI 味后做多平台适配，组成内容创作组合。"
-description_zh: "AI 味检测（80+ 词黑名单+4 类句级特征+密度量化）+ 改写前后验收（密度降 50%、防改丢内容）。"
-description_en: "AI-flavor detection (80+ word blacklist, 4 structural patterns, per-1k-chars density) and rewrite acceptance (50% density drop, ±20% length guard)."
+description: "AI 味检测与改写验收：51 词黑名单（结构套话/动词套话/空洞强化，逐词给改写方向）+ 4 类句级结构特征（排比三连/总结腔/抽象名词堆叠/句长均匀度），量化 AI 味密度（每千字），改写前后对比验收（密度下降≥50%、字数±20% 防改丢内容）。当用户提到去AI味、AI味、降AI味、文案太AI、像机器人写的、改写、润色去味时使用本技能。去 AI 味后做多平台适配，组成内容创作组合。"
+description_zh: "AI 味检测（51 词黑名单+4 类句级特征+密度量化）+ 改写前后验收（密度降 50%、防改丢内容）。"
+description_en: "AI-flavor detection (51-word blacklist, 4 structural patterns, per-1k-chars density) and rewrite acceptance (50% density drop, ±20% length guard)."
 examples_zh:
   - 帮我检测这篇文章的 AI 味
   - 这段文字太像 AI 写的了，帮我改
@@ -65,6 +65,8 @@ license: MIT
    ```
 2. **定位偏离点**：冒烟通过 → 问题在本次输入或参数，检查输入后重试；冒烟失败 → 先修依赖与脚本，不碰原任务。
 3. **回归验证**：修复后重跑最小冒烟 + 一次真实最小案例，全绿后再回到原任务从失败步骤继续。
+
+   **做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过。**
 4. **记录**：反复出现的问题记入本技能失败分支表，下次直接命中。
 
 ## 反例黑名单（不要做）

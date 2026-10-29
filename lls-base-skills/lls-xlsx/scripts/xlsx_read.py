@@ -53,7 +53,8 @@ def main() -> None:
         ensure_parent(args.json)
         header = matrix[0] if matrix else []
         data = [dict(zip(header, r)) for r in matrix[1:]] if header else matrix
-        json.dump(data, open(args.json, "w", encoding="utf-8"), ensure_ascii=False, indent=1, default=str)
+        with open(args.json, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=1, default=str)
         print(f"[lls-xlsx] JSON → {args.json}（{len(data)} 条记录）")
     if args.to_csv:
         ensure_parent(os.path.join(args.to_csv, "_"))

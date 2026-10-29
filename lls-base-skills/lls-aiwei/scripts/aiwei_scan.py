@@ -16,7 +16,10 @@ ap.add_argument("input")
 ap.add_argument("-o", "--output")
 args = ap.parse_args()
 
-text = open(args.input, encoding="utf-8", errors="ignore").read()
+try:
+    text = open(args.input, encoding="utf-8", errors="ignore").read()
+except FileNotFoundError:
+    die(f"文件不存在：{args.input}")
 chars = len(re.sub(r"\s", "", text)) if (re := __import__("re")) else 0
 if chars == 0:
     die("文本为空")
@@ -72,7 +75,7 @@ lines.append("4. 改完用 aiwei_verify.py 前后对比，密度应显著下降�
 
 if args.output:
     ensure_parent(args.output)
-    open(args.output, "w", encoding="utf-8").write("\n".join(lines))
+    open(args.output, "w", encoding="utf-8", newline="\n").write("\n".join(lines))
     print(f"[lls-aiwei] 检测报告 → {args.output}（密度 {density:.1f}/千字，{level}）")
 else:
     print("\n".join(lines))

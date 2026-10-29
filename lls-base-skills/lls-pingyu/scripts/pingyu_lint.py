@@ -9,9 +9,20 @@ import sys
 
 from lls_pingyu_utils import GENERIC_OPENERS, NEGATIVE_LABELS, die
 
+if len(sys.argv) > 1 and sys.argv[1] in ("--help", "-h"):
+    print("用法: python3 pingyu_lint.py 评语.md")
+    print("评语格式：每行「姓名：评语正文」；检查：模板化开头 / 负面标签 / 长度 30-150 字 / 批内重复开头。")
+    sys.exit(0)
+
 path = sys.argv[1] if len(sys.argv) > 1 else die("用法: pingyu_lint.py 评语.md")
+try:
+    lines = open(path, encoding="utf-8-sig", errors="ignore").readlines()
+except FileNotFoundError:
+    die(f"文件不存在：{path}")
+except OSError as e:
+    die(f"无法读取文件 {path}：{e}")
 students = []
-for line in open(path, encoding="utf-8", errors="ignore"):
+for line in lines:
     line = line.strip()
     if not line or line.startswith("#"):
         continue
@@ -30,6 +41,11 @@ for s in students:
     name, c = s["name"], s["comment"]
     opener = c[:4]
     openers.setdefault(opener, []).append(name)
+    # 逐条模板化开头：单条以通用开头起手即报（此前仅 ≥2 条重复才报，单条漏网）
+    for generic in sorted(GENERIC_OPENERS, key=len, reverse=True):
+        if c.startswith(generic):
+            problems.append(f"⚠️ {name}：以模板化开头「{generic}…」开头——家长群里一眼穿帮")
+            break
     if len(c) < 30:
         problems.append(f"⚠️ {name}：评语仅 {len(c)} 字（<30）——太短显得敷衍")
     if len(c) > 150:

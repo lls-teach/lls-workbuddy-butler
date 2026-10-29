@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""赛道×人群×平台 → 选题矩阵（48 张选题卡）+ 评分卡模板 → Markdown。
+"""赛道×人群×平台 → 选题矩阵（96 张选题卡）+ 评分卡模板 → Markdown。
 
 用法: python3 xuanti_matrix.py --lane "技能变现" --crowd "平台新手创作者" --platform "抖音+小红书" -o 选题矩阵.md
 """
@@ -13,6 +13,9 @@ ap.add_argument("--crowd", required=True, help="目标人群")
 ap.add_argument("--platform", required=True, help="投放平台")
 ap.add_argument("-o", "--output", required=True)
 args = ap.parse_args()
+for _name, _value in (("--lane", args.lane), ("--crowd", args.crowd), ("--platform", args.platform)):
+    if not _value.strip():
+        ap.error(f"{_name} 不能为空或全空白")
 
 cards = matrix(args.lane, args.crowd, args.platform)
 lines = [

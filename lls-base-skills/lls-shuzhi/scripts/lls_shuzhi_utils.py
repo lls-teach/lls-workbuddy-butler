@@ -20,11 +20,24 @@ def guard_overwrite(path, force=False):
     print(f"[lls-shuzhi] 目标已存在，改写到 {alt}", file=sys.stderr)
     return alt
 
-QUANT_PAT = re.compile(r"(\d+(?:\.\d+)?\s*[%％万亿个条家次人元小时天月年])|(\d{2,})")
+QUANT_PAT = re.compile(r"(\d+(?:\.\d+)?\s*[%％万亿个条家次人元小时天月年项份套件])|(\d{2,})")
 
 def quant_score(text: str) -> tuple[int, int]:
-    """返回 (含量化数字的成果条数, 成果总条数)。"""
-    items = [l[2:].strip() for l in text.split("\n") if l.startswith("- ")]
+    """返回 (含量化数字的成果条数, 成果总条数)。
+
+    只计项目成果条目：大纲中“# 问题与复盘”节后的“- ”行是问题复盘行，
+    不是成果条目，不计入总数，否则一条无数字的问题会误报为成果缺数字。
+    """
+    items = []
+    in_issues = False
+    for line in text.split("\n"):
+        if line.startswith("# "):
+            in_issues = (line.strip() == "# 问题与复盘")
+            continue
+        if in_issues:
+            continue
+        if line.startswith("- "):
+            items.append(line[2:].strip())
     hit = sum(1 for l in items if QUANT_PAT.search(l))
     return hit, len(items)
 

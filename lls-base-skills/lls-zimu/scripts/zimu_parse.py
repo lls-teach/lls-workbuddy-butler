@@ -5,13 +5,20 @@
 """
 import argparse
 
-from lls_zimu_utils import parse_srt
+from lls_zimu_utils import die, parse_srt
 
 ap = argparse.ArgumentParser()
 ap.add_argument("input")
 args = ap.parse_args()
 
-text = open(args.input, encoding="utf-8", errors="ignore").read()
+try:
+    # utf-8-sig：兼容 Windows 记事本保存的带 BOM 文件，无 BOM 时与 utf-8 完全相同。
+    with open(args.input, encoding="utf-8-sig", errors="ignore") as f:
+        text = f.read()
+except FileNotFoundError:
+    die(f"输入文件不存在：{args.input}")
+except OSError as e:
+    die(f"输入文件无法读取：{args.input}（{e}）")
 blocks, bad = parse_srt(text)
 if not blocks:
     print("[lls-zimu] ❌ 未解析出任何字幕块（确认是 SRT 格式）")

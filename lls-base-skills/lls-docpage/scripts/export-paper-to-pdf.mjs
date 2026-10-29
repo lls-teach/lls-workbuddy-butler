@@ -140,7 +140,19 @@ function findChrome() {
     "/usr/bin/chromium-browser",
     "/snap/bin/chromium",
   ];
-  return candidates.find((candidate) => fs.existsSync(candidate)) || "";
+  if (process.platform === "win32") {
+    const programFiles = process.env.ProgramFiles || "C:\\Program Files";
+    const programFilesX86 = process.env["ProgramFiles(x86)"] || "C:\\Program Files (x86)";
+    const localAppData = process.env.LOCALAPPDATA || "";
+    candidates.push(
+      path.join(programFiles, "Google/Chrome/Application/chrome.exe"),
+      path.join(programFilesX86, "Google/Chrome/Application/chrome.exe"),
+      path.join(programFiles, "Microsoft/Edge/Application/msedge.exe"),
+      path.join(programFilesX86, "Microsoft/Edge/Application/msedge.exe"),
+      ...(localAppData ? [path.join(localAppData, "Google/Chrome/Application/chrome.exe")] : []),
+    );
+  }
+  return candidates.filter(Boolean).find((candidate) => fs.existsSync(candidate)) || "";
 }
 
 async function waitForPaperReady(page) {
@@ -216,6 +228,12 @@ function renderPdf(pdfPath, renderDir) {
 function findExecutable(command) {
   const bundled = path.join(os.homedir(), ".cache/codex-runtimes/codex-primary-runtime/dependencies/bin", command);
   if (fs.existsSync(bundled)) return bundled;
+  // Windows 没有 Unix 的 `command -v`，用 where.exe 查找；否则查到的一律为空。
+  if (process.platform === "win32") {
+    const result = spawnSync("where", [command], { encoding: "utf8" });
+    if (result.status === 0) return result.stdout.trim().split(/\r?\n/)[0];
+    return "";
+  }
   const result = spawnSync("command", ["-v", command], {
     encoding: "utf8",
     shell: true,

@@ -19,8 +19,14 @@ def ensure_parent(path):
 def read_table(path: str) -> tuple[list[str], list[list]]:
     """读 CSV/Excel → (表头, 行数据)；数值字符串自动转数字。"""
     if path.lower().endswith((".xlsx", ".xlsm")):
-        from openpyxl import load_workbook
-        wb = load_workbook(path, data_only=True, read_only=True)
+        try:
+            from openpyxl import load_workbook
+        except ModuleNotFoundError:
+            die("缺少 openpyxl：请先按 SKILL.md 第 0 步安装 scripts/requirements.txt")
+        try:
+            wb = load_workbook(path, data_only=True, read_only=True)
+        except OSError as e:
+            die(f"无法读取文件: {path} ({e})")
         ws = wb[wb.sheetnames[0]]
         rows = [[c for c in r] for r in ws.iter_rows(values_only=True)]
         wb.close()
@@ -32,6 +38,8 @@ def read_table(path: str) -> tuple[list[str], list[list]]:
                 break
             except UnicodeDecodeError:
                 continue
+            except OSError as e:
+                die(f"无法读取文件: {path} ({e})")
         else:
             die(f"CSV 编码无法识别: {path}")
     else:

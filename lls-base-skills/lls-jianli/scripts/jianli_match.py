@@ -26,10 +26,20 @@ def main() -> None:
     ap.add_argument("-o", "--output", required=True)
     args = ap.parse_args()
 
-    jd = open(args.jd, encoding="utf-8", errors="ignore").read()
+    try:
+        with open(args.jd, encoding="utf-8", errors="ignore") as f:
+            jd = f.read()
+    except FileNotFoundError:
+        die(f"找不到 JD 文件: {args.jd}")
     if len(jd.strip()) < 50:
         die("JD 文本太短（<50 字），无法做有效匹配——请补全岗位职责与任职要求")
-    data = json.load(open(args.resume, encoding="utf-8"))
+    try:
+        with open(args.resume, encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        die(f"找不到简历 JSON: {args.resume}")
+    except json.JSONDecodeError as e:
+        die(f"简历 JSON 解析失败: {e}（请检查 JSON 格式）")
     rtext = resume_text(data)
 
     keywords = extract_keywords(jd)

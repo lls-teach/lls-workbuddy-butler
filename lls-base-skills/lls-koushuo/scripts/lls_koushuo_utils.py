@@ -1,5 +1,6 @@
 """lls-koushuo 共享工具：口播时长预算、开场钩子检查、分镜结构。"""
 import re
+import sys
 
 # 中文口播语速：240 字/分钟（舒适区 220-260）
 WPM = 240
@@ -9,6 +10,8 @@ def die(msg, code=1):
     sys.exit(code)
 
 def budget_check(text: str, target_minutes: float) -> dict:
+    if target_minutes <= 0:
+        die("目标时长须大于 0（分钟）")
     chars = len(re.sub(r"\s", "", text))
     est_minutes = chars / WPM
     return {"chars": chars, "target_minutes": target_minutes,

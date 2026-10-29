@@ -188,6 +188,13 @@ a:hover {
   scroll-margin-top: 28px;
 }
 
+.chart-fallback {
+  margin: 12px 0 0;
+  color: #b83f58;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 .chart-frame,
 .table-frame,
 .diagram-frame {

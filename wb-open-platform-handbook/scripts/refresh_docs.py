@@ -2,12 +2,14 @@
 """刷新 wb-open-platform-handbook 的官方文档缓存。
 
 用法：python3 scripts/refresh_docs.py
+     Windows：python scripts/refresh_docs.py 或 py -3 scripts/refresh_docs.py
 行为：抓取 WorkBuddy 开放平台 16 个官方文档页，剥离脚本/样式后抽取正文，
      写入 references/cache/{slug}.md 并打上抓取日期戳。
      之后由 AI 对照 cache 与各参考文件，把变化蒸馏回 references/*.md 并更新基准日期。
 
 依赖：python3 标准库（urllib/re/html），无需第三方包。需要网络。
 文档站为服务端渲染，无需执行 JS。
+缓存文件统一写为 LF 换行（newline="\n"），避免 Windows 下默认写出 CRLF。
 """
 import html
 import re
@@ -68,7 +70,9 @@ def main() -> int:
     for slug in PAGES:
         text = fetch(slug)
         if text:
-            (CACHE / f"{slug}.md").write_text(text, encoding="utf-8")
+            # newline="\n"：缓存文件在 Windows 下也不写出 CRLF，保持跨平台一致
+            with (CACHE / f"{slug}.md").open("w", encoding="utf-8", newline="\n") as fh:
+                fh.write(text)
             ok += 1
             print(f"{slug}: {len(text)} chars -> references/cache/{slug}.md")
     print(f"\nDONE {ok}/{len(PAGES)} pages cached on {date.today().isoformat()}")

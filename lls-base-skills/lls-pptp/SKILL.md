@@ -2,7 +2,7 @@
 name: lls-pptp
 display_name: "瀑布流演示页面"
 display_name_en: "Vertical Scroll Deck"
-description: "生成单文件 HTML 瀑布流演示：幻灯片以单栏卡片竖向排列成可滚动页面，每卡下方配讲者注释，支持卡片间距/注释一键隐藏、全屏键盘放映、可导出 PDF 或 pptx。适合发链接阅读与直播讲解两种场景。当用户提到瀑布流 PPT、网页演示、滚动式幻灯、可滚动 deck、单文件演示页时使用本技能。与翻页式演示 skill 互补：瀑布流竖滚、翻页式翻页。"
+description: "生成单文件 HTML 瀑布流演示：幻灯片以单栏卡片竖向排列成可滚动页面，每卡下方配讲者注释，支持卡片间距/注释一键隐藏、全屏键盘放映、可导出 PDF 或 pptx。适合发链接阅读与直播讲解两种场景。当用户提到瀑布流 PPT、网页演示、滚动式幻灯、可滚动 deck、单文件演示页时使用本技能。同一文件覆盖竖滚阅读与全屏放映两种用法。"
 description_zh: "单文件 HTML 瀑布流演示：单栏卡片竖向排列、卡片下注释、间距/注释一键隐藏、全屏放映、可导出 PDF/pptx。"
 description_en: "Single-file scrolling deck: one-column slide cards with captions, toggleable gaps/notes, fullscreen keyboard presentation, PDF/pptx export."
 examples_zh:
@@ -41,6 +41,8 @@ license: MIT
 4. **不加页面级标题/导航**：第一屏就是封面卡片，不要额外的 deck 标题栏（除非用户要求）。
 5. 🔴 CHECKPOINT：卡片数与注释构成确认后再生成。
 6. 交付前跑 validate，并说明"竖滚阅读 + 全屏放映 + 可导出 PDF/pptx"三种用法。
+7. **首行与注释**：`<!doctype html>` 必须保持首行，来源注释 `<!-- deck: 标题 -->` 放在 `<head>` 内前部，不要把注释移到 doctype 之前（会触发 quirks 模式、可能破坏布局）。
+8. **跨平台路径**：脚本一律用 `node scripts/...` 调用（不要直接执行 `.mjs`）；标题作目录/文件名时去掉 Windows 非法字符 `\ / : * ? " < > |`；含空格或中文的路径调用命令时加引号；HTML 内图片路径一律用正斜杠 `images/...`，不要用反斜杠；导出找不到浏览器时可用 `--browser-executable` 指定 Chrome/Edge，或设 `PLAYWRIGHT_CHROMIUM_EXECUTABLE`。
 
 ## 失败分支
 
@@ -61,6 +63,8 @@ license: MIT
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 
 执行中遇到报错/输出偏离/异常结果时，按以下流程处理，**不盲目重试同一失败命令**：
+
+**做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过才算完成——冒烟未通过时不要交付。**
 
 1. **最小冒烟**：
    ```bash

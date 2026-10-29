@@ -15,12 +15,39 @@ if (!file) {
   process.exit(2);
 }
 
-const html = fs.readFileSync(file, "utf8");
+let html;
+try {
+  html = fs.readFileSync(file, "utf8");
+} catch (error) {
+  console.error(`无法读取文件：${file}（${error.code || error.message}）。请确认路径存在且为 HTML 文件，含空格或中文的路径请加引号。`);
+  process.exit(2);
+}
+// Windows 记事本默认保存的 UTF-8 BOM 会破坏首行判断，先去掉；不改文件本身。
+html = html.replace(/^\uFEFF/, "");
+if (!html.trim()) {
+  console.error("Waterfall deck validation failed:");
+  console.error("- 文件为空，未找到任何 deck 内容。");
+  process.exit(1);
+}
 const errors = [];
 const warnings = [];
 
-if (!html.startsWith("<!--")) {
-  errors.push("HTML 首行应为来源注释（如 <!-- deck: 标题 -->）。");
+// 首行规则：doctype 必须保持首行（注释移到 doctype 之前会触发 quirks 模式，
+// 可能破坏演示布局），来源注释改为放在 <head> 前部。注释首行的旧 deck 仍放行，
+// 但给 quirks 警告，不因此失败。
+const trimmedHtml = html.trimStart();
+const bodyIndex = html.search(/<body[\s>]/i);
+const headPart = bodyIndex >= 0 ? html.slice(0, bodyIndex) : html.slice(0, 8192);
+if (trimmedHtml.startsWith("<!--")) {
+  if (/<!--[\s\S]*?-->\s*<!doctype html>/i.test(trimmedHtml)) {
+    warnings.push("来源注释在 <!doctype html> 之前，可能触发 quirks 模式；新 deck 请把注释移到 <head> 内，让 doctype 保持首行。");
+  }
+} else if (/^<!doctype html>/i.test(trimmedHtml)) {
+  if (!/<!--\s*deck:/i.test(headPart)) {
+    errors.push("HTML 首行为 doctype 时，需在 <head> 前部保留来源注释（如 <!-- deck: 标题 -->，置于 <head> 内，不要移到 doctype 之前以免触发 quirks 模式）。");
+  }
+} else {
+  errors.push("HTML 首行应为 <!doctype html>（来源注释 <!-- deck: 标题 --> 置于 <head> 前部）或来源注释。");
 }
 
 function count(pattern) {
@@ -153,7 +180,7 @@ const imageMatches = [...html.matchAll(/<img\b([^>]*)>/gi)];
 const imageSrcs = imageMatches
   .map((match) => getAttribute(match[1], "src"))
   .filter(Boolean);
-const localImageSrcs = imageSrcs.filter((src) => src.startsWith("images/"));
+const localImageSrcs = imageSrcs.filter((src) => src.toLowerCase().startsWith("images/"));
 const countedImages = requireLocalImages ? localImageSrcs : imageSrcs;
 
 if (minImages > 0 && countedImages.length < minImages) {
@@ -162,7 +189,7 @@ if (minImages > 0 && countedImages.length < minImages) {
 }
 
 if (requireLocalImages) {
-  const nonLocal = imageSrcs.filter((src) => !src.startsWith("images/"));
+  const nonLocal = imageSrcs.filter((src) => !src.toLowerCase().startsWith("images/"));
   if (nonLocal.length) {
     errors.push(`All images must use relative images/ paths when --require-local-images is set. Non-local sources: ${nonLocal.join(", ")}.`);
   }

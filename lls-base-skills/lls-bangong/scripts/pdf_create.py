@@ -18,26 +18,120 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
-from lls_pdf_utils import die, ensure_parent, find_cjk_font, guard_overwrite
+from lls_pdf_utils import die, ensure_parent, find_cjk_fonts, guard_overwrite
 
 _FONT_CACHE: str | None = None
 
 
-def register_cjk_font() -> str:
+def register_cjk_font() -> str | None:
+    """逐个尝试回退链，返回首个 reportlab 能注册的字体；全部失败返回 None。
+
+    旧逻辑只试第一个候选、失败即退出：在只有 CFF 轮廓 Noto CJK 的
+    Linux 系统上，第一个候选注册失败就全盘报错，尽管后面并无可用项；
+    更重要的是，调用方拿到 None 后可走 PyMuPDF 回退路径（见下），
+    而不是直接宣判中文 PDF 做不出来。
+    """
     global _FONT_CACHE
     if _FONT_CACHE:
         return _FONT_CACHE
-    found = find_cjk_font()
-    if not found:
+    errors: list[str] = []
+    for path, idx in find_cjk_fonts():
+        try:
+            pdfmetrics.registerFont(TTFont("LLSCJK", path, subfontIndex=idx))
+        except Exception as e:  # noqa: BLE001
+            errors.append(f"{path}: {e}")
+            continue
+        _FONT_CACHE = "LLSCJK"
+        return _FONT_CACHE
+    if errors:
+        print(f"[lls-pdf] reportlab 无法注册回退链字体，走 PyMuPDF 回退路径（{'; '.join(errors)}）",
+              file=sys.stderr)
+    return None
+
+
+def build_with_pymupdf(out: str, title: str, subtitle: str, raw: str) -> str:
+    """PyMuPDF 回退路径：reportlab 注册不到 TrueType 轮廓中文字体时用。
+
+    原理：PyMuPDF 能直接使用 CFF 轮廓的 TTC 字体；先用 fontTools 把
+    字体按实际用字子集化（只留用到的字形），再嵌入，避免整套 CJK
+    字体（十几 MB）原样塞进 PDF。子集文件只写临时目录，用完删除。
+    返回所用字体路径（用于输出提示）。
+    """
+    import tempfile
+
+    import fitz
+    from fontTools import subset
+    from fontTools.ttLib import TTCollection
+
+    fonts = find_cjk_fonts()
+    if not fonts:
         die("未找到任何中文字体（回退链: PingFang/Songti/微软雅黑/Noto CJK/文泉驿）。"
             "请安装一款中文字体后重试，或改用系统「另存为 PDF」。")
-    path, idx = found
+
+    # 收集全部待排版文字，用于子集化
+    lines: list[tuple[str, float, bool]] = []  # (文本, 字号, 是否加粗近似)
+    if title:
+        lines.append((title, 20, True))
+    if subtitle:
+        lines.append((subtitle, 12, False))
+    for block in raw.split("\n\n"):
+        block = block.strip()
+        if not block:
+            continue
+        for line in block.split("\n"):
+            line = line.rstrip()
+            if not line:
+                continue
+            if line.startswith("## "):
+                lines.append((line[3:], 13, True))
+            elif line.startswith("# "):
+                lines.append((line[2:], 15, True))
+            elif line.startswith("- "):
+                lines.append(("• " + line[2:], 11, False))
+            elif line.startswith("> "):
+                lines.append((line[2:], 11, False))
+            else:
+                lines.append((line, 11, False))
+
+    font_path, _idx = fonts[0]
+    subset_path = None
     try:
-        pdfmetrics.registerFont(TTFont("LLSCJK", path, subfontIndex=idx))
+        with tempfile.TemporaryDirectory(prefix="lls_pdf_font_") as tmpdir:
+            subset_path = tmpdir + "/subset.otf"
+            coll = TTCollection(font_path)
+            font = coll.fonts[0]
+            opts = subset.Options()
+            sub = subset.Subsetter(options=opts)
+            sub.populate(text="".join(t for t, _s, _b in lines))
+            sub.subset(font)
+            font.save(subset_path)
+
+            doc = fitz.open()
+            page = doc.new_page(width=595, height=842)  # A4 pt
+            page.insert_font(fontfile=subset_path, fontname="cjk")
+            x, y = 70, 70
+            max_w = 595 - 140
+            for text, size, _bold in lines:
+                if y > 842 - 70:
+                    page = doc.new_page(width=595, height=842)
+                    page.insert_font(fontfile=subset_path, fontname="cjk")
+                    y = 70
+                # 按行宽简单折行：按字符数估算（中文按字号计宽，近似即可）
+                chars_per_line = max(10, int(max_w / (size * 0.95)))
+                rest = text
+                first = True
+                while rest:
+                    chunk, rest = rest[:chars_per_line], rest[chars_per_line:]
+                    page.insert_text((x, y), chunk, fontname="cjk", fontsize=size)
+                    y += size * 1.7
+                    first = False
+                if first:
+                    y += size * 1.7
+                y += 4
+            doc.save(out, garbage=4, deflate=True)
     except Exception as e:  # noqa: BLE001
-        die(f"字体注册失败 {path}: {e}")
-    _FONT_CACHE = "LLSCJK"
-    return _FONT_CACHE
+        die(f"PyMuPDF 回退路径失败 {font_path}: {e}")
+    return font_path + "（PyMuPDF 回退）"
 
 
 def build_styles(font: str) -> dict[str, ParagraphStyle]:
@@ -67,9 +161,13 @@ def main() -> None:
         die("正文为空：从 stdin 或 --stdin-file 提供内容")
 
     font = register_cjk_font()
-    styles = build_styles(font)
     out = guard_overwrite(args.output, args.force)
     ensure_parent(out)
+    if font is None:
+        used = build_with_pymupdf(out, args.title, args.subtitle, raw)
+        print(f"[lls-pdf] 已创建 → {out}（字体: {used}）")
+        return
+    styles = build_styles(font)
 
     story = []
     if args.title:

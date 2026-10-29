@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从大纲生成 PPT v2.2（吸收 jingmei 版式词汇：KPI 行 / 语义状态表 / 进度条 / 斑马表 / 来源行）。
+"""从大纲生成 PPT v2.2（版式词汇：KPI 行 / 语义状态表 / 进度条 / 斑马表 / 来源行）。
 
 用法: python3 pptx_create.py -o 成片.pptx --title 标题 --subtitle 副标题 --outline 大纲.md [--style formal]
 大纲语法:
@@ -41,7 +41,7 @@ STYLES = {
         "title_pt": 28, "body_pt": 20, "cover_title_pt": 44,
     },
 }
-# 语义色（jingmei 吸收）：状态关键词 → 颜色；第 5 列可显式指定 amber/blue/good/muted
+# 语义色：状态关键词 → 颜色；第 5 列可显式指定 amber/blue/good/muted
 SEMANTIC = {
     "amber": RGBColor(0xB7, 0x79, 0x1F), "blue": RGBColor(0x2B, 0x6C, 0xB0),
     "good": RGBColor(0x2F, 0x85, 0x5A), "muted": RGBColor(0x8A, 0x8F, 0x96),
@@ -204,7 +204,10 @@ def main() -> None:
     args = ap.parse_args()
 
     S = STYLES[args.style]
-    outline = parse_outline(open(args.outline, encoding="utf-8").read())
+    # utf-8-sig：兼容 Windows 记事本保存的带 BOM 大纲（否则首行 "# " 会因
+    # BOM 前缀识别失败、被当成要点）；无 BOM 时与 utf-8 完全等价。
+    with open(args.outline, encoding="utf-8-sig") as f:
+        outline = parse_outline(f.read())
     if not outline:
         die("大纲为空或无法解析")
     total = len(outline) + 1
@@ -249,7 +252,9 @@ def main() -> None:
             add_text(slide, "本页结论：" + takeaway, 0.75, tk_y, 11.8, 0.5,
                      S["body_pt"] - 2, S["accent"], bold=True)
         if sd.get("source"):
-            add_text(slide, "来源：" + sd["source"], 0.75, BANDS["footer"] - 0.22, 11.8, 0.3, 10, S["muted"])
+            # 大纲写法本就是 "= 来源：…"，先剥掉自带前缀，避免 "来源：来源："
+            src_text = re.sub(r"^来源[:：]\s*", "", sd["source"])
+            add_text(slide, "来源：" + src_text, 0.75, BANDS["footer"] - 0.22, 11.8, 0.3, 10, S["muted"])
         folio = slide.shapes.add_textbox(Inches(12.3), Inches(BANDS["footer"]), Inches(0.8), Inches(0.35))
         fp = folio.text_frame.paragraphs[0]
         fp.text = f"{i + 1} / {total}"

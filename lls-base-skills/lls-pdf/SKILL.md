@@ -33,9 +33,19 @@ VENV=~/.lls-venv
 PY="$VENV/bin/python"
 ```
 
-之后本技能所有脚本一律用 `$PY` 调用（不是系统 python3）。安装失败 → 见下方「失败分支」第 1 条。
+Windows（PowerShell）下等价写法，虚拟环境解释器在 `Scripts` 而不是 `bin`：
+
+```powershell
+python -m venv $env:USERPROFILE\.lls-venv
+$env:USERPROFILE\.lls-venv\Scripts\python.exe -m pip install -r <skill目录>\scripts\requirements.txt
+$PY = "$env:USERPROFILE\.lls-venv\Scripts\python.exe"
+```
+
+之后本技能所有脚本一律用 `$PY` 调用（不是系统 python3；Windows 下没有 `python3` 命令时用 `python`）。安装失败 → 见下方「失败分支」第 1 条。
 
 ## 任务路由
+
+下表命令中的 `python3` 在 Windows 下一律换成 `python`（或虚拟环境的 `Scripts\python.exe`）；路径分隔符两种写法均可，脚本内部统一用系统无关的路径拼接。
 
 | 用户要做什么 | 执行 |
 | --- | --- |
@@ -53,7 +63,7 @@ PY="$VENV/bin/python"
 
 ## 步骤纪律
 
-1. 先确认输入文件存在且可读（`ls -la`），再选脚本。
+1. 先确认输入文件存在且可读（`ls -la`；Windows 下用 `dir`），再选脚本。
 2. 页码范围一律用 `-p` 参数控制，避免整本大文件一次性进内存。
 3. 提取类任务完成后，**引用实际输出文件路径**汇报，并给出前几行预览让用户确认内容正确。
 4. 🔴 CHECKPOINT：任何会**覆盖已存在文件**或**删除页面**的操作，先向用户复述目标路径并等确认。
@@ -64,10 +74,10 @@ PY="$VENV/bin/python"
 
 | # | 症状 | 一线修复 | 仍失败兜底 |
 | --- | --- | --- | --- |
-| 1 | pip 安装失败（PEP 668 externally-managed） | 按第 0 步用 `python3 -m venv ~/.lls-venv` 建虚拟环境，一切走 `$VENV/bin/pip` | venv 创建失败则退回 `pip install --user`；再不行换 python3.10+ 解释器建 venv |
+| 1 | pip 安装失败（PEP 668 externally-managed） | 按第 0 步用 `python3 -m venv ~/.lls-venv` 建虚拟环境，一切走 `$VENV/bin/pip`（Windows 下是 `Scripts\pip.exe`，见第 0 步 PowerShell 写法） | venv 创建失败则退回 `pip install --user`；再不行换 python3.10+ 解释器建 venv（Windows 下用 `python` 或 `py -3.10`） |
 | 2 | PDF 打开报错（加密） | 用 `pdf_extract_text.py --password <密码>` 传密码 | 询问用户密码；无密码则明确告知无法处理并停止 |
 | 3 | 提取结果为空（扫描件无文字层） | 转 OCR：`pdf_render.py` 出图后接 `pdf_ocr.py` | OCR 依赖未装 → 给出 `pip install paddleocr` 指引，说明首次下载模型较慢，等用户确认再装 |
-| 4 | 创建的 PDF 中文乱码/方块 | 脚本已内置中文字体回退链（PingFang/Songti/微软雅黑/Noto CJK） | 四链全空时提示用户安装任意一款中文字体，或改用系统「另存为 PDF」 |
+| 4 | 创建的 PDF 中文乱码/方块 | 脚本已内置中文字体回退链（PingFang/Songti/微软雅黑/Noto CJK/文泉驿），会逐个尝试注册、跳过不可用的字体；注意 reportlab 只支持 TrueType 轮廓字体，CFF 轮廓的 Noto CJK `.ttc`（部分 Linux 发行版默认）会被自动跳过，不代表没有可用字体 | 回退链全空时提示用户安装一款 TrueType 中文字体（Windows 自带微软雅黑即可；Linux 可装文泉驿或 Noto Sans SC 的 TTF 版），或设环境变量 `LLS_CJK_FONT` 直接指向一个 TrueType 中文字体文件，或改用系统「另存为 PDF」 |
 | 5 | 表格提取错位 | 换 `--mode lattice`（有边框线表格）或 `--mode stream`（无边框）各试一次 | 仍错位则降级为 `pdf_extract_text.py` + 让 AI 按文本结构手工整理，并向用户说明精度限制 |
 | 6 | 脚本路径找不到 | 用 `<skill目录>` 绝对路径拼接，相对路径以当前工作目录为准 | 列出 scripts/ 目录确认文件名 |
 
@@ -80,7 +90,7 @@ PY="$VENV/bin/python"
    $PY -c "import pypdf,reportlab" && $PY scripts/pdf_check.py --help
    ```
 2. **定位偏离点**：冒烟通过 → 问题在本次输入或参数，检查输入后重试；冒烟失败 → 先修依赖与脚本，不碰原任务。
-3. **回归验证**：修复后重跑最小冒烟 + 一次真实最小案例，全绿后再回到原任务从失败步骤继续。
+3. **回归验证**：修复后重跑最小冒烟 + 一次真实最小案例，全绿后再回到原任务从失败步骤继续；做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过才算完成。
 4. **记录**：反复出现的问题记入本技能失败分支表，下次直接命中。
 
 ## 反例黑名单（不要做）

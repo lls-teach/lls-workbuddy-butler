@@ -44,8 +44,14 @@ def main() -> None:
     data = CategoryChartData()
     data.categories = [c.strip() for c in args.categories.split(",")]
     for spec in args.series:
+        if "=" not in spec:
+            die(f"--series 格式应为 名称=v1,v2,…，收到 {spec!r}（缺少 =）")
         name, _, values = spec.partition("=")
-        data.add_series(name.strip(), [float(v) for v in values.split(",")])
+        try:
+            nums = [float(v) for v in values.split(",")]
+        except ValueError:
+            die(f"系列 {name.strip()!r} 的数值 {values!r} 不是数字（应为逗号分隔的数字）")
+        data.add_series(name.strip(), nums)
 
     chart = prs.slides[args.slide - 1].shapes.add_chart(
         TYPES[args.type], Inches(args.x), Inches(args.y), Inches(args.w), Inches(args.h), data).chart

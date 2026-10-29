@@ -39,11 +39,31 @@ def main():
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
 
-    e = json.load(open(args.json, encoding="utf-8"))
+    from lls_jiaoan_utils import die
+    try:
+        with open(args.json, encoding="utf-8") as f:
+            e = json.load(f)
+    except (OSError, ValueError) as exc:
+        die(f"无法读取教学设计 JSON: {exc}")
+    if not isinstance(e, dict):
+        die("教学设计 JSON 顶层须为对象")
     for k in ("topic", "grade", "subject", "goals", "key_points", "difficult_points", "process"):
         if not e.get(k):
-            from lls_jiaoan_utils import die
             die(f"要素缺失: {k}")
+    if not isinstance(e["goals"], dict):
+        die("要素格式错误: goals 须为对象")
+    if not isinstance(e["process"], list) or not all(isinstance(s, dict) for s in e["process"]):
+        die("要素格式错误: process 须为对象数组")
+    for k in ("key_points", "difficult_points"):
+        if not isinstance(e[k], list):
+            die(f"要素格式错误: {k} 须为数组")
+    if e.get("homework") is not None and not isinstance(e["homework"], list):
+        die("要素格式错误: homework 须为数组")
+    if e.get("prep") is not None and not isinstance(e["prep"], dict):
+        die("要素格式错误: prep 须为对象")
+    for key in ("knowledge", "skill", "attitude"):
+        if e["goals"].get(key) is not None and not isinstance(e["goals"][key], list):
+            die(f"要素格式错误: goals.{key} 须为数组")
 
     doc = Document()
     para(doc, e["topic"], size=16, bold=True, align=1)

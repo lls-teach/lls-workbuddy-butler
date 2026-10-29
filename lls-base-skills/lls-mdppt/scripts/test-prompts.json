@@ -1,5 +1,17 @@
 [
-  {"id": 1, "prompt": "把这份 markdown 笔记转成 PPT", "expected": "mdppt_convert.py 出大纲 → 渲染成 PPT"},
-  {"id": 2, "prompt": "这份长文档帮我做成演示", "expected": "长段落标 AI 提炼位，提炼后再渲染"},
-  {"id": 3, "prompt": "md 里的代码块和表格怎么办", "expected": "代码页与表格页原生支持"}
+  {
+    "expected": "mdppt_convert.py 出大纲 → mdppt_render.py 出 .pptx，内容页数与大纲预算一致",
+    "id": 1,
+    "prompt": "把这份 markdown 笔记转成 PPT"
+  },
+  {
+    "expected": "长段落标 AI 提炼位，提炼确认并写回源文档后再渲染",
+    "id": 2,
+    "prompt": "这份长文档帮我做成演示"
+  },
+  {
+    "expected": "代码页与表格页原生支持，超出拆页不截断",
+    "id": 3,
+    "prompt": "md 里的代码块和表格怎么办"
+  }
 ]

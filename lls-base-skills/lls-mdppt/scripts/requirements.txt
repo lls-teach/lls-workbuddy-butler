@@ -1,1 +1,2 @@
-（无第三方依赖）
+# 转换脚本（mdppt_convert.py）本身无第三方依赖；渲染脚本（mdppt_render.py）需要 python-pptx。
+python-pptx>=1.0.2

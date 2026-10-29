@@ -55,7 +55,7 @@ def main() -> None:
     soffice = soffice_or_die()
     tmp = tempfile.mkdtemp(prefix="lls_xlsx_recalc_")
     r = subprocess.run([soffice, "--headless", "--convert-to", "xlsx", "--outdir", tmp, args.input],
-                       capture_output=True, text=True, timeout=args.timeout)
+                       capture_output=True, text=True, errors="replace", timeout=args.timeout)
     converted = glob.glob(os.path.join(tmp, "*.xlsx"))
     if not converted:
         die(f"soffice 重算失败: {r.stderr[:300]}")

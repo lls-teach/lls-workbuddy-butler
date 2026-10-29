@@ -21,7 +21,8 @@ def soffice_or_die() -> str:
     if path:
         return path
     for extra in ["/Applications/LibreOffice.app/Contents/MacOS/soffice",
-                  "C:/Program Files/LibreOffice/program/soffice.exe"]:
+                  "C:/Program Files/LibreOffice/program/soffice.exe",
+                  "C:/Program Files (x86)/LibreOffice/program/soffice.exe"]:
         if os.path.exists(extra):
             return extra
     die("未找到 LibreOffice（soffice）。安装指引:\n"

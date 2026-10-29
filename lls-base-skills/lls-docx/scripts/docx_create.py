@@ -34,7 +34,16 @@ def main() -> None:
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
 
-    raw = open(args.stdin_file, encoding="utf-8").read() if args.stdin_file else sys.stdin.read()
+    raw = None
+    if args.stdin_file:
+        raw = open(args.stdin_file, encoding="utf-8").read()
+    else:
+        # Windows 控制台默认编码未必是 UTF-8，管道输入中文会乱码；显式切到 UTF-8
+        try:
+            sys.stdin.reconfigure(encoding="utf-8")
+        except Exception:  # noqa: BLE001 - 旧解释器/非常驻 stdin 时保持原编码
+            pass
+        raw = sys.stdin.read()
     if not raw.strip():
         die("正文为空：从 stdin 或 --stdin-file 提供内容")
 
@@ -63,7 +72,9 @@ def main() -> None:
                 rows.append(lines[i].split("\t"))
                 i += 1
             if rows:
-                table = doc.add_table(rows=len(rows), cols=len(rows[0]))
+                # 列数取各行最大值：后行比首行多列时不越界，短行留空单元格
+                ncols = max(len(r) for r in rows)
+                table = doc.add_table(rows=len(rows), cols=ncols)
                 table.style = "Table Grid"
                 for r, row in enumerate(rows):
                     for c, cell in enumerate(row):

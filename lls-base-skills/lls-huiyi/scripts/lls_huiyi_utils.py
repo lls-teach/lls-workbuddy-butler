@@ -10,6 +10,10 @@ def clean(text: str) -> str:
     """去口头禅、压缩重复标点、按句重组。"""
     for f in FILLERS:
         text = text.replace(f, "")
+    # 去 BOM 残留；去口头禅后残留的孤标点（如“张三：嗯，大家”→“张三：，大家”）。
+    text = text.replace("\ufeff", "")
+    text = re.sub(r"([:：])\s*[，,、；;]", r"\1", text)
+    text = re.sub(r"(?m)^[，,、；;]+", "", text)
     text = re.sub(r"([。！？，,])\1+", r"\1", text)
     text = re.sub(r"\s{2,}", " ", text)
     return text.strip()

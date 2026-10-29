@@ -48,7 +48,8 @@ def find_soffice():
     for p in (shutil.which("soffice"),
               "/Applications/LibreOffice.app/Contents/MacOS/soffice",
               "/usr/lib/libreoffice/program/soffice",
-              "/opt/homebrew/bin/soffice"):
+              "/opt/homebrew/bin/soffice",
+              "C:/Program Files/LibreOffice/program/soffice.exe"):
         if p and os.path.exists(p):
             return p
     return None
@@ -57,7 +58,9 @@ def lo_available(): return find_soffice() is not None
 def ff_available(): return shutil.which("ffmpeg") is not None
 
 def run(cmd, **kw):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=300, **kw)
+    # errors="replace"：Windows 控制台编码常为 cp936 等，soffice 输出若含
+    # 无法按当前编码解码的字节时不抛 UnicodeDecodeError，只替换字符。
+    return subprocess.run(cmd, capture_output=True, text=True, errors="replace", timeout=300, **kw)
 
 def via_libreoffice(src, tgt, outdir):
     # LibreOffice headless conversion; txt needs a filter hint for docs

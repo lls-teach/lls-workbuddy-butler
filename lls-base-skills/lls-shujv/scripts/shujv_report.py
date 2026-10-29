@@ -4,7 +4,7 @@
 用法: python3 shujv_report.py 数据.csv|xlsx [-o 报告.md] [--group 类别列] [--value 金额列] [--agg sum|mean|count]
 """
 import argparse
-from lls_shujv_utils import die, ensure_parent, group_agg, numeric_cols, read_table, describe
+from lls_shujv_utils import col_index, die, ensure_parent, group_agg, numeric_cols, read_table, describe
 
 ap = argparse.ArgumentParser()
 ap.add_argument("input")
@@ -24,8 +24,10 @@ for i in ncols:
     d = describe(vals)
     lines.append(f"| {header[i]} | {d['count']} | {d['sum']:,} | {d['mean']:,} | {d['min']:,} | {d['max']:,} | {d['outlier_n']} |")
 
+if bool(args.group) != bool(args.value):
+    die("请同时指定 --group 与 --value（只给其一无法聚合）；只看概览时两个都不传")
 if args.group and args.value:
-    gi, vi = header.index(args.group), header.index(args.value)
+    gi, vi = col_index(header, args.group), col_index(header, args.value)
     agg = group_agg(data, gi, vi, args.agg)
     lines += ["", f"## 二、按 {args.group} 的 {args.agg}（Top 10）", "", f"| {args.group} | {args.agg} |", "|---|---|"]
     for k, v in agg[:10]:

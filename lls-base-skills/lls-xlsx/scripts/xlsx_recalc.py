@@ -59,7 +59,13 @@ def main() -> None:
     converted = glob.glob(os.path.join(tmp, "*.xlsx"))
     if not converted:
         die(f"soffice 重算失败: {r.stderr[:300]}")
-    shutil.move(converted[0], args.input)
+    # 回写：先试 os.replace（Windows 上也能覆盖已存在的目标文件）；
+    # 跨设备时 replace 会报 Invalid cross-device link，改走 copyfile 回写
+    # （copyfile 在 Windows 上同样可覆盖目标，且可跨设备）。
+    try:
+        os.replace(converted[0], args.input)
+    except OSError:
+        shutil.copyfile(converted[0], args.input)
     shutil.rmtree(tmp, ignore_errors=True)
 
     # 读回检查错误值

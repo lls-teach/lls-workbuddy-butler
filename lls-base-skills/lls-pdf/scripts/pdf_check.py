@@ -10,7 +10,7 @@ import sys
 
 from pypdf import PdfReader
 
-from lls_pdf_utils import die
+from lls_pdf_utils import die, ensure_utf8_stdio
 
 
 def main() -> None:
@@ -19,6 +19,7 @@ def main() -> None:
     ap.add_argument("--expect-pages", type=int, help="预期页数（不符则警告）")
     args = ap.parse_args()
 
+    ensure_utf8_stdio()
     try:
         reader = PdfReader(args.input)
     except Exception as e:  # noqa: BLE001

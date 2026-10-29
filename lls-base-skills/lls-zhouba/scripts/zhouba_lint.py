@@ -8,14 +8,32 @@ import re
 import sys
 
 FILLER_PHRASES = ["持续推进", "持续优化", "不断加强", "进一步完善", "努力提升", "加强沟通", "持续推进中"]
-QUANT = re.compile(r"(\d+(?:\.\d+)?\s*[%％万亿个条家次人元小时天周月])|(\d{2,})")
+QUANT = re.compile(r"(\d+(?:\.\d+)?\s*[%％万亿个条家次人元小时天周月项件份单篇])|(\d{2,})")
 
 def main() -> None:
-    path = sys.argv[1] if len(sys.argv) > 1 else die("用法: zhouba_lint.py 周报.md") if False else (sys.argv[1] if len(sys.argv) > 1 else "")
-    text = open(path, encoding="utf-8").read() if path else ""
-    if not path:
+    # Windows 旧控制台默认编码（如 cp936）无法输出 ❌/⚠️/✅ 等符号时会直接
+    # 抛 UnicodeEncodeError；能重设就重设为 UTF-8，不能则用 replace 兜底，
+    # Linux/macOS 现代终端上行为不变。
+    for _stream in (sys.stdout, sys.stderr):
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+    if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help"):
+        print("用法: zhouba_lint.py 周报.md")
+        sys.exit(0)
+    if len(sys.argv) < 2:
         print("[lls-zhouba] 用法: zhouba_lint.py 周报.md")
         sys.exit(1)
+    path = sys.argv[1]
+    try:
+        text = open(path, encoding="utf-8").read()
+    except FileNotFoundError:
+        die(f"找不到文件: {path}")
+    except OSError as e:
+        die(f"无法读取文件 {path}: {e}")
+    except UnicodeDecodeError as e:
+        die(f"文件不是 UTF-8 编码: {path} ({e})")
     items = [l.strip() for l in text.split("\n") if l.strip().startswith(("-", "*", "•"))]
     problems, warnings = [], []
     no_quant = [i for i in items if not QUANT.search(i)]

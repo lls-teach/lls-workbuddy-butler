@@ -2,7 +2,7 @@
 name: lls-wenan
 display_name: "文案多平台改写"
 display_name_en: "Multi-Platform Copy Adapter"
-description: "同一内容四平台变体生产线：小红书/公众号/抖音口播/朋友圈 各自的字数上限、标题规范、标签要求、语气模板，配 AI 味黑名单检测（首先其次综上所述/赋能/助力等 40+ 词，逐个给改写方向）。当用户提到文案、改写、多平台、小红书文案、公众号、抖音文案、朋友圈、AI 味、去 AI 味时使用本技能。与口播稿 skill 组成内容创作组合。"
+description: "同一内容四平台变体生产线：小红书/公众号/抖音口播/朋友圈 各自的字数上限、标题规范、标签要求、语气模板，配 AI 味黑名单检测（首先其次综上所述/赋能/助力等 40+ 词，逐个给改写方向）。当用户提到文案、改写、多平台、小红书文案、公众号、抖音文案、朋友圈、AI 味、去 AI 味时使用本技能。"
 description_zh: "一稿四平台：小红书/公众号/抖音/朋友圈 各自规范适配 + AI 味黑名单检测（40+ 词给改写方向）。"
 description_en: "One draft, four platform variants: Xiaohongshu/WeChat/Douyin/Moments specs plus an AI-flavor blacklist with rewrite directions."
 examples_zh:
@@ -57,6 +57,8 @@ license: MIT
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 
 执行中遇到报错/输出偏离/异常结果时，按以下流程处理，**不盲目重试同一失败命令**：
+
+做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过才算完成。
 
 1. **最小冒烟**（区分环境问题 vs 逻辑问题）：
    ```bash

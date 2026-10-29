@@ -1,5 +1,16 @@
-"""lls-baoshui 共享工具：征期日历、三类型资料清单、免责声明。"""
+"""lls-baoshui 共享工具：征期日历、四类型资料清单、免责声明。"""
 import sys
+
+# Windows 兼容：旧版 cmd 控制台默认 GBK，打印 →/✅/❌/⚠️ 会 UnicodeEncodeError；
+# 导入时即把 stdout/stderr 切为 UTF-8（失败则静默保持原编码，Linux 下无影响）。
+# 放在模块顶层是为了覆盖 --help 与 die() 在内的所有后续打印。
+try:
+    if sys.stdout is not None:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if sys.stderr is not None:
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 DISCLAIMER = "> ⚠️ 本清单为通用备稿工具，**不构成税务意见**；征期遇节假日顺延以主管税务机关公告为准，具体政策以当地执行口径为准。"
 

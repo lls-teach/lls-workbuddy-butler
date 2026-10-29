@@ -18,6 +18,18 @@ CATS = [
 ENSURE = [("投标保证金", r"保证金"), ("递交截止时间", r"(递交|截止).{0,20}(时间|前)"),
           ("正副本份数", r"(正本|副本)"), ("签署盖章要求", r"(盖章|签字)"), ("有效期", r"有效期")]
 
+def _ensure_utf8_streams():
+    """Windows 旧控制台默认 GBK 时 emoji 输出会编解码失败，统一改 UTF-8（失败则静默保留原编码）。"""
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
+_ensure_utf8_streams()
+
+
 def die(msg, code=1):
     print(f"[lls-biaoshu] 错误: {msg}", file=sys.stderr)
     sys.exit(code)
@@ -28,15 +40,27 @@ def ensure_parent(path):
     return path
 
 def categorize(sentence: str) -> str:
+    """多类关键词同句时按命中次数取最高分（平局保持原顺序），避免首个匹配误分。
+
+    例如含“盖章/正本/副本/电子版”又含“递交”的格式句，旧首匹配会误判为时间节点；
+    含“项目经理/资格证/人员”又含“职称”的人员句，旧首匹配会误判为资质证书。
+    """
+    best, best_score = "其他要求", 0
     for name, pat in CATS:
-        if re.search(pat, sentence):
-            return name
-    return "其他要求"
+        score = len(re.findall(pat, sentence))
+        if score > best_score:
+            best, best_score = name, score
+    return best
+
+
+def check_missing_elements(text: str) -> list[str]:
+    """五项缺要素独立检查：全文未出现即列入返回列表（SKILL.md 宣称的 ❌ 项）。"""
+    return [name for name, pat in ENSURE if not re.search(pat, text)]
 
 def extract_requirements(text: str) -> list[dict]:
     """按句切分，保留含硬性要求句式的句子 → [{req, cat}]。"""
     out = []
-    for sent in re.split(r"[。\n]", text):
+    for sent in re.split(r"[。\n\r]", text):
         s = sent.strip()
         if len(s) < 6:
             continue

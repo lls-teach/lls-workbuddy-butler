@@ -7,59 +7,53 @@
 <link rel="stylesheet" href="assets/doc.css">
 </head>
 <body>
-<article class="doc">
-  <header class="doc-header">
+<!-- 目录由 assets/doc.js 自动生成：要求 nav.toc-rail 与 article.doc-page 配对，
+     且每个章节为带 id 的 header/section，内含 h1/h2。不要改用其他类名，否则目录不生成。 -->
+<nav class="toc-rail"></nav>
+<article class="doc-page">
+  <header class="doc-title" id="top">
     <h1>报告标题</h1>
-    <p class="doc-meta">作者 · 日期 · 数据截至</p>
+    <p class="doc-subtitle">作者 · 日期 · 数据截至</p>
   </header>
 
-  <nav class="doc-toc" id="toc">
-    <h2>目录</h2>
-    <!-- doc.js 会自动从 h2.doc-h2 生成目录 -->
-  </nav>
-
-  <section>
-    <h2 class="doc-h2" id="s1">一、核心结论</h2>
+  <section class="doc-block" id="s1">
+    <h2>一、核心结论</h2>
     <p>结论先行：一句话说清这份报告要读者记住什么。</p>
     <p class="doc-source">来源：__SOURCE__，数据截至 __DATE__</p>
   </section>
 
-  <section>
-    <h2 class="doc-h2" id="s2">二、证据与图表</h2>
+  <section class="doc-block" id="s2">
+    <h2>二、证据与图表</h2>
     <p>图表前必须先有一句结论句，再放图。</p>
-    <figure>
-      <div id="chart1" style="width:100%;height:360px"></div>
-      <figcaption>图 1：图表标题（数据来源：__SOURCE__）</figcaption>
-    </figure>
+    <!-- 图表契约（与 assets/doc.js 的 setupCharts 对应，缺一不可）：
+         data-chart：图表族（本模板用 market-trend）；
+         data-data：下方 JSON 数据块的 id；data-type：初始图型；
+         .chart-canvas：画布容器。不要改回旧的按 id 直连画布的内联脚本写法，doc.js 不认它。 -->
+    <div class="doc-chart" data-chart="market-trend" data-data="chart-data" data-type="line">
+      <div class="chart-canvas" style="width:100%;height:360px"></div>
+      <div class="chart-menu">
+        <button type="button" data-chart-type="line">折线</button>
+        <button type="button" data-chart-type="bar">柱状</button>
+      </div>
+      <p>图 1：图表标题（单位：销量百万辆；来源：__SOURCE__）</p>
+    </div>
+    <!-- 示例数据，建页时替换为真实数据：year 为年份，sales_m 为销量（百万辆），penetration 为渗透率（%）。 -->
+    <script type="application/json" id="chart-data">[{"year":"2023","sales_m":100,"penetration":20},{"year":"2024","sales_m":130,"penetration":26},{"year":"2025","sales_m":160,"penetration":32}]</script>
   </section>
 
-  <section>
-    <h2 class="doc-h2" id="s3">三、结论与行动</h2>
+  <section class="doc-block" id="s3">
+    <h2>三、结论与行动</h2>
     <ul>
       <li>结论一</li>
       <li>结论二</li>
     </ul>
   </section>
 </article>
+<!-- 有图表的页必须在 doc.js 之前引入 echarts，否则图表区只显示缺资源提示而不出图。 -->
+<script src="assets/echarts.min.js"></script>
 <script src="assets/doc.js"></script>
-<!-- 有图表时取消下一行注释 -->
-<!-- <script src="assets/echarts.min.js"></script> -->
-<!-- 有 Mermaid 图时取消下一行注释 -->
+<!-- 有 Mermaid 图时取消下一行注释，并先自行下载 mermaid.min.js 到 assets/
+     （包体上限原因，本包不自带该文件；也可改用静态 SVG）。Mermaid 脚本须在 doc.js 之前引入。 -->
 <!-- <script src="assets/mermaid.min.js"></script> -->
-<script>
-// 最小 ECharts 用法（仅在有图表时启用）
-if (window.echarts && document.getElementById('chart1')) {
-  const el = document.getElementById('chart1');
-  const chart = echarts.init(el);
-  chart.setOption({
-    tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: ['一月', '二月', '三月'] },
-    yAxis: { type: 'value' },
-    series: [{ type: 'line', data: [120, 200, 150], smooth: true }],
-    grid: { left: 48, right: 24, top: 24, bottom: 40 }
-  });
-  addEventListener('resize', () => chart.resize());
-}
-</script>
 </body>
 </html>

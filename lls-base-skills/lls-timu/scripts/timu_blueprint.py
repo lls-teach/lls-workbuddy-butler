@@ -25,15 +25,22 @@ diff = data.get("difficulty") or {"easy": 0.5, "mid": 0.3, "hard": 0.2}
 if not topics:
     die("topics 为空")
 wsum = sum(t.get("weight", 0) for t in topics)
-if abs(wsum - 1) > 0.01:
+if wsum == 0:
+    # SKILL.md 失败分支 4：只有章名没有权重时平均分配，而非全补到最后一个知识点
+    print("[lls-timu] ⚠️ 权重均缺失或为 0，已平均分配（可再手动调整权重）")
+    weights = [1 / len(topics)] * len(topics)
+elif abs(wsum - 1) > 0.01:
     print(f"[lls-timu] ⚠️ 权重和为 {wsum:.2f}（非 1），已按比例归一")
+    weights = [t.get("weight", 0) / wsum for t in topics]
+else:
+    weights = [t.get("weight", 0) for t in topics]
 
 lines = [f"# 出题蓝图：{data.get('exam', '试卷')}（共 {total} 题）", "",
          "| 知识点 | 权重 | 题数 |", "|---|---|---|"]
 alloc = []
 acc = 0
 for i, t in enumerate(topics):
-    w = t.get("weight", 0) / (wsum or 1)
+    w = weights[i]
     n = round(total * w) if i < len(topics) - 1 else total - acc
     acc += n
     alloc.append((t["name"], w, n))
@@ -42,14 +49,30 @@ if acc != total:
     lines.append(f"| （校正） | | {total - acc} |")
 
 lines += ["", "## 每个知识点的题型 × 难度分配（AI 按此出题）", ""]
+dsum = sum(diff.values())
+if dsum == 0:
+    diff = {k: 1 for k in diff}
+    dsum = sum(diff.values())
 for name, w, n in alloc:
-    per_type = max(1, n // len(types))
-    talloc = []
-    left = n
-    for ti, t in enumerate(types):
-        cnt = per_type if ti < len(types) - 1 else max(0, left - per_type * (len(types) - 1))
-        talloc.append(f"{t}×{cnt}")
-    d = " / ".join(f"{k}×{round(total*w*v)}" for k, v in diff.items())
+    if n <= 0:
+        type_counts = [0] * len(types)
+    elif n < len(types):
+        # 小题量时旧写法 max(1, n // len) 会让题型数之和超过 n（如 1 题变 3 题）
+        type_counts = [1 if ti < n else 0 for ti in range(len(types))]
+    else:
+        per_type = n // len(types)
+        type_counts = [per_type] * len(types)
+        type_counts[-1] += n - per_type * len(types)
+    talloc = [f"{t}×{cnt}" for t, cnt in zip(types, type_counts)]
+    # 难度按本知识点题数 n 分配（旧写法按 total*w 取整，小题量时和为 0 且与 n 脱节）；
+    # 最大余数法保证各难度数之和恰好等于 n，且权重和为 1 时与旧输出一致
+    raw = [n * v / dsum for v in diff.values()]
+    base = [int(x) for x in raw]
+    left = n - sum(base)
+    order = sorted(range(len(raw)), key=lambda i: (-(raw[i] - base[i]), i))
+    for i in order[:left]:
+        base[i] += 1
+    d = " / ".join(f"{k}×{cnt}" for k, cnt in zip(diff.keys(), base))
     lines.append(f"- **{name}**（{n} 题）：{'、'.join(talloc)}｜难度 {d}")
 
 lines += ["", "## 出题纪律", "- 题干自含完整条件，不引用\"如上题\"；选项同质等长；正确答案位置随机分布不连续三项相同。",

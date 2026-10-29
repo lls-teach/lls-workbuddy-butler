@@ -1,5 +1,5 @@
 [
   {"id": 1, "prompt": "把这份大纲做成发链接就能看的演示", "expected": "htmlppt_build.py 单文件 HTML，键盘翻页可用"},
-  {"id": 2, "prompt": "md 笔记既要 pptx 又要网页版", "expected": "mdppt 出大纲 → lls-pptx 出 .pptx + htmlppt 出 HTML，一源两载体"},
+  {"id": 2, "prompt": "md 笔记既要 pptx 又要网页版", "expected": "先把笔记转成大纲 → 再产出可编辑演示文稿与 HTML 网页版，一源两载体"},
   {"id": 3, "prompt": "HTML 演示能在没网的电脑上放吗", "expected": "单文件自包含，离线可用，无 CDN 依赖"}
 ]

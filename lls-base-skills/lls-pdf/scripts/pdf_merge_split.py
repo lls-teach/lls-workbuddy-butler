@@ -11,7 +11,17 @@ import os
 
 from pypdf import PdfReader, PdfWriter
 
-from lls_pdf_utils import die, ensure_parent, guard_overwrite
+from lls_pdf_utils import die, ensure_parent, ensure_utf8_stdio, guard_overwrite
+
+
+def _open_reader(path: str, password: str = ""):
+    try:
+        reader = PdfReader(path)
+    except Exception as e:  # noqa: BLE001
+        die(f"无法打开 PDF {path}: {e}")
+    if reader.is_encrypted and not reader.decrypt(password or ""):
+        die(f"{path} 已加密且密码不正确")
+    return reader
 
 
 def do_merge(args: argparse.Namespace) -> None:
@@ -19,9 +29,7 @@ def do_merge(args: argparse.Namespace) -> None:
         die("merge 至少需要 2 个输入文件")
     writer = PdfWriter()
     for path in args.inputs:
-        reader = PdfReader(path)
-        if reader.is_encrypted and not reader.decrypt(args.password or ""):
-            die(f"{path} 已加密且密码不正确")
+        reader = _open_reader(path, args.password)
         for page in reader.pages:
             writer.add_page(page)
         print(f"[lls-pdf] 已并入 {path}（{len(reader.pages)} 页）")
@@ -33,9 +41,7 @@ def do_merge(args: argparse.Namespace) -> None:
 
 
 def do_split(args: argparse.Namespace) -> None:
-    reader = PdfReader(args.input)
-    if reader.is_encrypted and not reader.decrypt(args.password or ""):
-        die("PDF 已加密且密码不正确")
+    reader = _open_reader(args.input, args.password)
     total = len(reader.pages)
     ensure_parent(os.path.join(args.output_dir, "_"))
     stem = os.path.splitext(os.path.basename(args.input))[0]
@@ -45,11 +51,14 @@ def do_split(args: argparse.Namespace) -> None:
         groups = []
         for part in args.ranges.split(","):
             part = part.strip()
-            if "-" in part:
-                a, b = part.split("-", 1)
-                pages = list(range(int(a) - 1, int(b)))
-            else:
-                pages = [int(part) - 1]
+            try:
+                if "-" in part:
+                    a, b = part.split("-", 1)
+                    pages = list(range(int(a) - 1, int(b)))
+                else:
+                    pages = [int(part) - 1]
+            except ValueError:
+                die(f"拆分范围非法: {part}（应为 1-3,5 这样的页码）")
             for p in pages:
                 if p < 0 or p >= total:
                     die(f"页码越界: {p + 1}（共 {total} 页）")
@@ -92,6 +101,7 @@ def main() -> None:
     s.add_argument("--force", action="store_true")
 
     args = ap.parse_args()
+    ensure_utf8_stdio()
     if args.cmd == "merge":
         do_merge(args)
     else:

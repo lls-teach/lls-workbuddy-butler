@@ -9,7 +9,7 @@ import os
 
 import pypdfium2 as pdfium
 
-from lls_pdf_utils import die, ensure_parent, parse_page_range
+from lls_pdf_utils import die, ensure_parent, ensure_utf8_stdio, parse_page_range
 
 
 def main() -> None:
@@ -21,13 +21,17 @@ def main() -> None:
     ap.add_argument("--password", default="")
     args = ap.parse_args()
 
+    ensure_utf8_stdio()
     ensure_parent(os.path.join(args.output_dir, "_"))
     try:
         pdf = pdfium.PdfDocument(args.input, password=args.password or None)
     except Exception as e:  # noqa: BLE001
         die(f"无法打开 PDF: {e}")
-    total = len(pdf)
-    idx = parse_page_range(args.pages, total)
+    try:
+        total = len(pdf)
+        idx = parse_page_range(args.pages, total)
+    except ValueError as e:
+        die(str(e))
     scale = args.dpi / 72.0
 
     for i in idx:

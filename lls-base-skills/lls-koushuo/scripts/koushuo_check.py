@@ -13,7 +13,12 @@ ap.add_argument("input")
 ap.add_argument("--minutes", type=float, required=True, help="目标时长（分钟）")
 args = ap.parse_args()
 
-text = open(args.input, encoding="utf-8").read()
+try:
+    text = open(args.input, encoding="utf-8").read()
+except FileNotFoundError:
+    die(f"找不到输入文件：{args.input}")
+except OSError as e:
+    die(f"无法读取输入文件 {args.input}：{e}")
 b = budget_check(text, args.minutes)
 print(f"[lls-koushuo] 字数 {b['chars']} | 预计 {b['estimated_minutes']} 分钟（目标 {b['target_minutes']}，偏差 {b['delta_pct']:+d}%）")
 problems = []

@@ -18,26 +18,38 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
-from lls_pdf_utils import die, ensure_parent, find_cjk_font, guard_overwrite
+from lls_pdf_utils import (cjk_font_candidates, die, ensure_parent,
+                           ensure_utf8_stdio, guard_overwrite)
 
 _FONT_CACHE: str | None = None
 
 
 def register_cjk_font() -> str:
+    """逐个尝试候选字体注册，全部失败才报错。
+
+    旧逻辑只取第一个存在的文件，Linux 上常先命中 CFF 轮廓的
+    NotoSansCJK .ttc，随即被 reportlab 以 "postscript outlines are
+    not supported" 拒绝，哪怕后面还有可用的 TrueType 字体也直接失败。
+    """
     global _FONT_CACHE
     if _FONT_CACHE:
         return _FONT_CACHE
-    found = find_cjk_font()
-    if not found:
-        die("未找到任何中文字体（回退链: PingFang/Songti/微软雅黑/Noto CJK/文泉驿）。"
-            "请安装一款中文字体后重试，或改用系统「另存为 PDF」。")
-    path, idx = found
-    try:
-        pdfmetrics.registerFont(TTFont("LLSCJK", path, subfontIndex=idx))
-    except Exception as e:  # noqa: BLE001
-        die(f"字体注册失败 {path}: {e}")
-    _FONT_CACHE = "LLSCJK"
-    return _FONT_CACHE
+    candidates = cjk_font_candidates()
+    failures: list[str] = []
+    for path, idx in candidates:
+        try:
+            pdfmetrics.registerFont(TTFont("LLSCJK", path, subfontIndex=idx))
+        except Exception as e:  # noqa: BLE001
+            failures.append(f"{path}（{e}）")
+            continue
+        _FONT_CACHE = "LLSCJK"
+        return _FONT_CACHE
+    tried = "；".join(failures) if failures else "未找到任何候选中文字体"
+    die("没有可用的中文字体（reportlab 只支持 TrueType 轮廓字体，"
+        "CFF 轮廓的 Noto CJK .ttc 会被自动跳过）。已尝试: " + tried +
+        "。请安装一款 TrueType 中文字体后重试（Windows 自带微软雅黑即可；"
+        "Linux 可装文泉驿或 Noto Sans SC 的 TTF 版），或用环境变量 "
+        "LLS_CJK_FONT 指向一个 TrueType 中文字体文件，或改用系统「另存为 PDF」。")
 
 
 def build_styles(font: str) -> dict[str, ParagraphStyle]:
@@ -62,7 +74,19 @@ def main() -> None:
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
 
-    raw = open(args.stdin_file, encoding="utf-8").read() if args.stdin_file else sys.stdin.read()
+    ensure_utf8_stdio()
+    try:
+        sys.stdin.reconfigure(encoding="utf-8")
+    except Exception:  # noqa: BLE001
+        pass
+    if args.stdin_file:
+        try:
+            with open(args.stdin_file, encoding="utf-8") as f:
+                raw = f.read()
+        except OSError as e:
+            die(f"无法读取正文文件 {args.stdin_file}: {e}")
+    else:
+        raw = sys.stdin.read()
     if not raw.strip():
         die("正文为空：从 stdin 或 --stdin-file 提供内容")
 

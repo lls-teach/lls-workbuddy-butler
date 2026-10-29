@@ -2,14 +2,31 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const file = process.argv[2];
+const arg = process.argv[2];
+
+if (arg === "--help" || arg === "-h") {
+  console.log("Usage: node validate-echarts-dashboard.mjs path/to/dashboard.html");
+  console.log("Checks an offline ECharts dashboard HTML file (KPI tiles, chart panels,");
+  console.log("time controls, freshness indicator, Data Source modal, doctype first line");
+  console.log("with a source comment in the file head). Exits 0 when all checks pass,");
+  console.log("1 when any check fails, 2 when no file argument is given.");
+  process.exit(0);
+}
+
+const file = arg;
 
 if (!file) {
   console.error("Usage: node validate-echarts-dashboard.mjs path/to/dashboard.html");
   process.exit(2);
 }
 
-const html = fs.readFileSync(file, "utf8");
+let html;
+try {
+  html = fs.readFileSync(file, "utf8");
+} catch (error) {
+  console.error(`error - cannot read ${file}: ${error.message}`);
+  process.exit(1);
+}
 const visible = html.split('<div id="modalBackdrop"', 1)[0];
 const checks = [];
 
@@ -55,7 +72,15 @@ check(html.includes("toggleEdit"), "has Edit chart action");
 check(!html.includes("toISOString().slice(0, 10)"), "does not format business dates through UTC");
 check(!html.includes("[TITLE]"), "does not contain [TITLE] placeholder");
 check(!html.includes("TODO"), "does not contain TODO placeholder");
-check(html.startsWith("<!--"), "starts with source comment on line 1");
+// A comment before <!doctype html> would trigger quirks mode and can break
+// layout, so the doctype must stay on line 1 and the source comment follows
+// it in the file head instead. Lines are trimmed so a BOM or CRLF line ending
+// (for example a file written on Windows) does not fail the check.
+const withoutBom = html.replace(/^\uFEFF/, "");
+const firstLine = withoutBom.split(/\r?\n/, 1)[0].trim();
+const fileHead = withoutBom.split(/\r?\n/).slice(0, 20).join("\n");
+check(firstLine.toLowerCase() === "<!doctype html>", "starts with doctype on line 1");
+check(fileHead.includes("<!--") && fileHead.includes("-->"), "has source comment in file head");
 
 const failed = checks.filter((item) => !item.ok);
 

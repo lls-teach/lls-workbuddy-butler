@@ -12,7 +12,7 @@ import sys
 
 from pypdf import PdfReader, PdfWriter
 
-from lls_pdf_utils import die, ensure_parent, guard_overwrite
+from lls_pdf_utils import die, ensure_parent, ensure_utf8_stdio, guard_overwrite
 
 
 def main() -> None:
@@ -25,7 +25,11 @@ def main() -> None:
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
 
-    reader = PdfReader(args.input)
+    ensure_utf8_stdio()
+    try:
+        reader = PdfReader(args.input)
+    except Exception as e:  # noqa: BLE001
+        die(f"无法打开 PDF {args.input}: {e}")
     if reader.is_encrypted and not reader.decrypt(args.password or ""):
         die("PDF 已加密且密码不正确")
 
@@ -40,7 +44,11 @@ def main() -> None:
 
     if not args.data or not args.output:
         die("填写模式需要 --data 与 -o（列出字段用 --list）")
-    data = json.load(open(args.data, encoding="utf-8"))
+    try:
+        with open(args.data, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError) as e:
+        die(f"无法读取字段 JSON {args.data}: {e}")
 
     def match_key(field: str) -> str | None:
         if field in data:

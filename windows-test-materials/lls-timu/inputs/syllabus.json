@@ -1,0 +1,4 @@
+{"exam": "期中测验", "total": 20,
+ "topics": [{"name": "第一章", "weight": 0.3}, {"name": "第二章", "weight": 0.7}],
+ "types": ["单选", "多选", "判断", "简答"],
+ "difficulty": {"easy": 0.5, "mid": 0.3, "hard": 0.2}}

@@ -30,7 +30,7 @@ def guard_overwrite(path: str, force: bool = False) -> str:
 
 
 def parse_outline(text: str) -> list[dict]:
-    """v3 大纲解析（吸收 jingmei 版式词汇）：
+    """v3 大纲解析（版式词汇）：
 
       '# '  页标题（写结论不写话题）
       '[KPI] 31,940|技能总量|仍在高速增长'        KPI 数字行（一页最多 4 个）
@@ -41,6 +41,8 @@ def parse_outline(text: str) -> list[dict]:
       '> '  本页结论（结论带）
       '= '  来源行（页脚上方）
     """
+    # 防御性剥离 BOM：大纲若经其他路径读入而未用 utf-8-sig，首行仍可识别。
+    text = text.removeprefix("\ufeff")
     slides: list[dict] = []
 
     def new_page():

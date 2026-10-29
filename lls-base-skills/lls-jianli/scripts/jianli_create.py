@@ -7,11 +7,14 @@ JSON 结构见 SKILL.md「简历信息清单」。
 import argparse
 import json
 
-from docx import Document
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.shared import Pt, RGBColor
-
 from lls_jianli_utils import die, ensure_parent, guard_overwrite, set_cn_font
+
+try:
+    from docx import Document
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.shared import Pt, RGBColor
+except ImportError:
+    die("缺少 python-docx，请先执行 SKILL.md 第 0 步安装 scripts/requirements.txt")
 
 REQUIRED = ["name", "phone", "email"]
 
@@ -41,7 +44,13 @@ def main() -> None:
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
 
-    data = json.load(open(args.data, encoding="utf-8"))
+    try:
+        with open(args.data, encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        die(f"找不到简历 JSON: {args.data}")
+    except json.JSONDecodeError as e:
+        die(f"简历 JSON 解析失败: {e}（请检查 JSON 格式）")
     missing = [k for k in REQUIRED if not data.get(k)]
     if missing:
         die(f"简历 JSON 缺必填字段: {missing}（name/phone/email 是简历最低配置）")

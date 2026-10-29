@@ -82,6 +82,8 @@ def main() -> None:
             d = ImageDraw.Draw(grid)
             d.text((x + 4, y + 4), f"slide {s * 12 + idx + 1}", fill=(180, 30, 30))
         out = f"{args.prefix}-{s + 1}.jpg"
+        parent = os.path.dirname(os.path.abspath(out))
+        os.makedirs(parent, exist_ok=True)
         grid.save(out, quality=85)
         outs.append(out)
         print(f"[lls-pptx] → {out}（第 {s * 12 + 1}–{min((s + 1) * 12, total)} 页）")

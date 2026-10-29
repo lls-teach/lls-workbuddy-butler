@@ -31,6 +31,16 @@ VENV=~/.lls-venv
 PY="$VENV/bin/python"
 ```
 
+Windows（PowerShell，虚拟环境布局与 Unix 不同，解释器在 `Scripts` 而非 `bin` 下）：
+
+```powershell
+python -m venv "$env:USERPROFILE\.lls-venv"
+& "$env:USERPROFILE\.lls-venv\Scripts\pip.exe" install -q -r <skill目录>\scripts\requirements.txt
+$PY = "$env:USERPROFILE\.lls-venv\Scripts\python.exe"
+```
+
+
+
 ## 文种选择表（先问清行文方向与目的）
 
 | 文种 | 用途 | 关键规则 |
@@ -78,6 +88,8 @@ PY="$VENV/bin/python"
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 
 执行中遇到报错/输出偏离/异常结果时，按以下流程处理，**不盲目重试同一失败命令**：
+
+**做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过才算完成。**
 
 1. **最小冒烟**（区分环境问题 vs 逻辑问题）：
    ```bash

@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 import shutil, importlib, json, os
 def find_soffice():
+    # 与 convert.py 保持一致：补 Windows 默认安装路径，否则 Windows 默认
+    # 安装（不在 PATH 里）会被误判为未安装 LibreOffice。
     for p in (shutil.which("soffice"),
+              shutil.which("soffice.exe"),
               "/Applications/LibreOffice.app/Contents/MacOS/soffice",
               "/usr/lib/libreoffice/program/soffice",
-              "/opt/homebrew/bin/soffice"):
+              "/opt/homebrew/bin/soffice",
+              r"C:\Program Files\LibreOffice\program\soffice.exe",
+              r"C:\Program Files (x86)\LibreOffice\program\soffice.exe"):
         if p and os.path.exists(p):
             return p
     return None

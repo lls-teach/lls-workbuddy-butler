@@ -11,7 +11,12 @@ import os
 
 import pdfplumber
 
-from lls_pdf_utils import die, ensure_parent, parse_page_range
+from lls_pdf_utils import die, ensure_parent, ensure_utf8_stdio, parse_page_range
+
+# pdfplumber 的合法策略名是 lines/text（另有 lines_strict/explicit），
+# 不是 lattice/stream；CLI 保留 lattice/stream 叫法，这里做映射。
+# lattice（有框线表格）→ lines；stream（无边框、按文本对齐）→ text。
+STRATEGY_MAP = {"lattice": "lines", "stream": "text"}
 
 
 def main() -> None:
@@ -23,6 +28,7 @@ def main() -> None:
                     help="lattice=有框线表格 stream=无边框（缺省 auto 先 lattice 后 stream）")
     args = ap.parse_args()
 
+    ensure_utf8_stdio()
     ensure_parent(os.path.join(args.output_dir, "_"))
     modes = ["lattice", "stream"] if args.mode == "auto" else [args.mode]
 
@@ -30,15 +36,23 @@ def main() -> None:
         pdf = pdfplumber.open(args.input)
     except Exception as e:  # noqa: BLE001
         die(f"无法打开 PDF: {e}")
-    total = len(pdf.pages)
-    idx = parse_page_range(args.pages, total)
+    try:
+        total = len(pdf.pages)
+        idx = parse_page_range(args.pages, total)
+    except ValueError as e:
+        die(str(e))
 
     saved = 0
     for i in idx:
         page = pdf.pages[i]
         tables = []
         for mode in modes:
-            tables = page.extract_tables({"vertical_strategy": mode, "horizontal_strategy": mode})
+            strategy = STRATEGY_MAP[mode]
+            try:
+                tables = page.extract_tables({"vertical_strategy": strategy,
+                                              "horizontal_strategy": strategy})
+            except Exception as e:  # noqa: BLE001
+                die(f"第 {i + 1} 页表格提取失败（模式 {mode}）: {e}")
             if tables:
                 break
         for t_no, table in enumerate(tables, 1):

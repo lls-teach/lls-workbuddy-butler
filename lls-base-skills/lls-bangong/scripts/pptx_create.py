@@ -12,6 +12,7 @@
 """
 import argparse
 import math
+import os
 import re
 
 from pptx import Presentation
@@ -198,13 +199,24 @@ def main() -> None:
     ap.add_argument("-o", "--output", required=True)
     ap.add_argument("--title", required=True)
     ap.add_argument("--subtitle", default="")
-    ap.add_argument("--outline", required=True)
+    ap.add_argument("--outline", required=True,
+                    help="大纲文件路径（每页以 '# 标题' 开头）；若不是已存在的文件，"
+                         "则当作多行大纲文本直接解析")
     ap.add_argument("--style", choices=list(STYLES), default="formal")
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
 
     S = STYLES[args.style]
-    outline = parse_outline(open(args.outline, encoding="utf-8").read())
+    if os.path.exists(args.outline):
+        outline_text = open(args.outline, encoding="utf-8").read()
+    elif "\n" in args.outline or args.outline.startswith("# "):
+        # 直传的多行大纲文本（例如 shell 里用 $'...' 传入）
+        outline_text = args.outline
+    else:
+        die("大纲不是已存在的文件，也不是多行大纲文本：请传大纲文件路径"
+            "（每页以 '# 标题' 开头），或直接传多行大纲文本。"
+            f"收到: {args.outline[:80]}")
+    outline = parse_outline(outline_text)
     if not outline:
         die("大纲为空或无法解析")
     total = len(outline) + 1

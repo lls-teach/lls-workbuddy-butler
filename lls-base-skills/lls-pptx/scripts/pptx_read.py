@@ -48,7 +48,9 @@ def main() -> None:
     print(f"[lls-pptx] 共 {len(pages)} 页")
     if args.json:
         ensure_parent(args.json)
-        json.dump(pages, open(args.json, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        # with 块关闭句柄：Windows 下未关闭的文件句柄会锁文件、影响后续读写。
+        with open(args.json, "w", encoding="utf-8") as f:
+            json.dump(pages, f, ensure_ascii=False, indent=1)
         print(f"[lls-pptx] JSON → {args.json}")
 
 

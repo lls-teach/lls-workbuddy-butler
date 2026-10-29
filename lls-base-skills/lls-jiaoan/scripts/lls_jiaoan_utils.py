@@ -20,6 +20,10 @@ def guard_overwrite(path, force=False):
         return path
     root, ext = os.path.splitext(path)
     alt = f"{root}_new{ext}"
+    n = 2
+    while os.path.exists(alt):
+        alt = f"{root}_new{n}{ext}"
+        n += 1
     print(f"[lls-jiaoan] 目标已存在，改写到 {alt}", file=sys.stderr)
     return alt
 

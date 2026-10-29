@@ -23,6 +23,8 @@ For market, stock, legal, regulatory, current-news, or source-freshness-sensitiv
 
 Recurring dashboards should use immutable snapshots.
 
+No-snapshot fallback (loud, never silent): when `data/snapshots/` does not exist or is empty, the generator falls back to built-in demo rows and at the same time prints a WARNING to stderr, stamps DEMO DATA on the visible freshness line, and records `dataMode: "demo"` in `dashboard_data.json`. Demo rows are placeholder only — replace them with real snapshots and regenerate before delivery; never deliver demo figures as real metrics. Unreadable or unsupported snapshot files are skipped with a WARNING each; if no usable rows remain, the generator produces an empty dashboard with `dataMode: "empty"` and a WARNING instead of pretending `$0` is a real result.
+
 Recommended daily JSON snapshot:
 
 ```json

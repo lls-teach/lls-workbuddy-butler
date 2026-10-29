@@ -54,26 +54,36 @@ def write_srt(blocks: list[dict], path: str) -> None:
     out = []
     for i, b in enumerate(blocks, 1):
         def ts(sec):
-            h, rem = divmod(sec, 3600)
-            mnt, s = divmod(rem, 60)
-            return f"{int(h):02d}:{int(mnt):02d}:{int(s):02d},{int(round((s % 1) * 1000)):03d}"
+            # 先换算成总毫秒再拆分，避免 59.9999 秒四舍五入出 “,1000” 这种非法时间码。
+            total_ms = int(round(sec * 1000))
+            h, rem = divmod(total_ms, 3600000)
+            mnt, rem = divmod(rem, 60000)
+            s, ms = divmod(rem, 1000)
+            return f"{h:02d}:{mnt:02d}:{s:02d},{ms:03d}"
         out.append(str(i))
         out.append(f"{ts(b['start'])} --> {ts(b['end'])}")
         out.append(b["text"])
         out.append("")
-    open(path, "w", encoding="utf-8").write("\n".join(out))
+    # newline="\n"：钉死 LF，Windows 文本模式不再把换行写成 CRLF，跨平台输出字节一致。
+    open(path, "w", encoding="utf-8", newline="\n").write("\n".join(out))
 
 
-def clean_text(text: str, replacements: dict[str, str] | None = None, dedupe: bool = True) -> tuple[str, int, int]:
-    """清洗单条字幕：口头禅删除 + 替换表 + 连续重复行去重。返回 (新文本, 口头禅数, 替换数)。"""
+def clean_text(text: str, replacements: dict[str, str] | None = None, dedupe: bool = True,
+               do_fillers: bool = True, do_typos: bool = True) -> tuple[str, int, int]:
+    """清洗单条字幕：口头禅删除 + 替换表。返回 (新文本, 口头禅数, 替换数)。
+
+    注：dedupe 参数仅为兼容旧调用保留，块级去重（真删块）由调用方做，
+    本函数只改单条文本、不删块。do_fillers/do_typos 为各单项的开关。
+    """
     filler_n = 0
-    for f in FILLERS:
-        n = text.count(f)
-        if n:
-            filler_n += n
-            text = text.replace(f, "")
+    if do_fillers:
+        for f in FILLERS:
+            n = text.count(f)
+            if n:
+                filler_n += n
+                text = text.replace(f, "")
     rep_n = 0
-    if replacements:
+    if do_typos and replacements:
         for old, new in replacements.items():
             n = text.count(old)
             if n:

@@ -53,7 +53,7 @@ def collect_inputs(inputs: list[str]) -> list[str]:
     for p in inputs:
         if os.path.isdir(p):
             for name in sorted(os.listdir(p)):
-                if name.lower().endswith((".pdf", ".png", ".jpg", ".jpeg")):
+                if name.lower().endswith((".pdf", ".png", ".jpg", ".jpeg", ".txt")):
                     files.append(os.path.join(p, name))
         elif os.path.exists(p):
             files.append(p)

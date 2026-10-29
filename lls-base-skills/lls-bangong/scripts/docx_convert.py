@@ -44,7 +44,7 @@ def main() -> None:
     outdir = os.path.dirname(os.path.abspath(args.input))
     r = subprocess.run([soffice_or_die(), "--headless", "--convert-to", args.to,
                         "--outdir", outdir, args.input],
-                       capture_output=True, text=True, timeout=args.timeout)
+                       capture_output=True, text=True, errors="replace", timeout=args.timeout)
     stem = os.path.splitext(os.path.basename(args.input))[0]
     out = os.path.join(outdir, f"{stem}.{args.to}")
     produced = out if os.path.exists(out) else (glob.glob(os.path.join(outdir, f"{stem}*.pdf")) or [None])[0]

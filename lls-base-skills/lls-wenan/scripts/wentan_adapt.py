@@ -6,14 +6,17 @@
 """
 import argparse
 
-from lls_wenan_utils import PLATFORMS, ensure_parent
+from lls_wenan_utils import PLATFORMS, die, ensure_parent
 
 ap = argparse.ArgumentParser()
 ap.add_argument("input")
 ap.add_argument("-o", "--output", required=True)
 args = ap.parse_args()
 
-src = open(args.input, encoding="utf-8").read()
+try:
+    src = open(args.input, encoding="utf-8").read()
+except FileNotFoundError:
+    die(f"找不到输入文件：{args.input}")
 src_len = len(src.strip())
 
 out = [f"# 文案多平台适配骨架（原文 {src_len} 字）", "",

@@ -30,6 +30,17 @@ VENV=~/.lls-venv
 PY="$VENV/bin/python"
 ```
 
+Windows（PowerShell，命令与上面等价，不要用 bash 写法）：
+
+```powershell
+py -m venv $env:USERPROFILE\.lls-venv
+$env:USERPROFILE\.lls-venv\Scripts\pip.exe install -q -r <skill目录>\scripts\requirements.txt
+$PY = "$env:USERPROFILE\.lls-venv\Scripts\python.exe"
+```
+
+Windows 上 LibreOffice 若未加入 PATH，转换类脚本会按默认安装路径
+`C:\Program Files\LibreOffice\program\soffice.exe` 查找；未安装则如实报缺，不假装能转。
+
 转换类操作另需系统工具：LibreOffice（soffice）、ffmpeg/ffprobe。先跑一次环境自检，缺哪样先补装再转，补不上就如实报缺哪样，不假装能转：
 
 ```bash
@@ -50,7 +61,7 @@ $PY scripts/check_env.py
 | Excel 读取 / 转 CSV / 转 JSON | `$PY scripts/xlsx_read.py 输入.xlsx [--sheet 表名] [--to-csv 输出.csv] [--json 输出.json]` |
 | Excel 批量改单元格 / 追加行 | `$PY scripts/xlsx_edit.py 输入.xlsx --set 表!单元格=值（可多次） [--append-sheet 表名 --row-json 行] -o 输出.xlsx` |
 | Excel 公式重算 | `$PY scripts/xlsx_recalc.py 输入.xlsx` |
-| PPT 生成（三套设计系统：正式汇报/咨询研报/教学课件） | `$PY scripts/pptx_create.py -o 输出.pptx --title 标题 --outline 大纲 [--style formal]`，设计系统见 `references/design-system.md` |
+| PPT 生成（三套设计系统：正式汇报/咨询研报/教学课件） | `$PY scripts/pptx_create.py -o 输出.pptx --title 标题 --outline 大纲文件 [--style formal]`（`--outline` 传大纲文件路径，每页以 `# 标题` 开头；也可直接传多行大纲文本），设计系统见 `references/design-system.md` |
 | PPT 读取每页内容 | `$PY scripts/pptx_read.py 输入.pptx [--json]` |
 | PPT 批量替换 / 改标题 | `$PY scripts/pptx_edit.py 输入.pptx --replace 旧=新（可多次） [--slide 页码 --set-title 标题]` |
 | PPT 加图表 / 复制页 / 质量检查 / 缩略图 | `$PY scripts/pptx_add_chart.py` / `pptx_duplicate_slide.py` / `pptx_check.py` / `pptx_thumbs.py` |
@@ -90,6 +101,7 @@ $PY scripts/check_env.py
 - 最小冒烟：Word 创建一页通知 → Excel 读一张表 → PPT 生成 2 页 → PDF 合并 2 份 → 转换 1 个文件，四组 + 中枢各跑通一条最小链路。
 - 定位：冒烟通过 → 问题在本次输入或参数，检查输入后重试；冒烟失败 → 先修依赖与脚本，不碰原任务。
 - 回归解决：修脚本后用 test-prompts.json 6 条全跑一遍，产出路径与校验结果须与 expected 一致。
+- 做冒烟测试直到问题解决：冒烟未通过就定位、修复、重跑冒烟，循环往复，直到冒烟全部通过。
 
 ## 反例黑名单（不要做）
 

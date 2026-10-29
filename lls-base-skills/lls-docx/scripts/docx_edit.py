@@ -19,6 +19,18 @@ def replace_in_paragraph(para, pairs: dict[str, str]) -> int:
             if old in run.text:
                 count += run.text.count(old)
                 run.text = run.text.replace(old, new)
+    # 跨 run 分隔的词（如 Word 里“甲”加粗、“方”常规）单 run 扫不到：
+    # 段落级兜底合并到首个 run，其余 run 清空（此前是静默 0 命中）
+    if para.runs:
+        joined = "".join(r.text for r in para.runs)
+        remaining = {o: n for o, n in pairs.items() if o in joined}
+        if remaining:
+            for old, new in remaining.items():
+                count += joined.count(old)
+                joined = joined.replace(old, new)
+            para.runs[0].text = joined
+            for r in para.runs[1:]:
+                r.text = ""
     return count
 
 
@@ -38,7 +50,12 @@ def main() -> None:
 
     total = 0
     if args.replacements:
-        pairs = dict(r.split("=", 1) for r in args.replacements)
+        pairs = {}
+        for r in args.replacements:
+            if "=" not in r or not r.split("=", 1)[0]:
+                die(f"替换格式错误: {r!r}，应为 旧=新，例如 --replace \"甲方=委托方\"")
+            old, new = r.split("=", 1)
+            pairs[old] = new
         for para in doc.paragraphs:
             total += replace_in_paragraph(para, pairs)
         for table in doc.tables:
