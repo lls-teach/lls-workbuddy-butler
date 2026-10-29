@@ -2,7 +2,7 @@
 name: lls-mdppt
 display_name: "Markdown转PPT"
 display_name_en: "Markdown to Slides"
-description: "通用 Markdown 一键转演示大纲：# 章节 / ## 内容页 / - 要点 / > 结论 / 代码块 / 表格全部映射，超 4 条要点自动拆页，长段落自动标 AI 提炼位，产出直通 PPT 三套设计系统渲染。当用户提到 markdown 转 PPT、笔记转演示、md 转幻灯片、把文档做成 PPT、大纲转演示时使用本技能。与其他大纲类能力生态互通。"
+description: "通用 Markdown 一键转演示大纲：# 章节 / ## 内容页 / - 要点 / > 结论 / 代码块 / 表格全部映射，超 4 条要点自动拆页，长段落自动标 AI 提炼位，产出直接渲染成 PPT。当用户提到 markdown 转 PPT、笔记转演示、md 转幻灯片、把文档做成 PPT、大纲转演示时使用本技能。与其他大纲类能力生态互通。"
 description_zh: "通用 Markdown 一键转演示大纲：章节/要点/代码/表格全映射，超 4 条自动拆页，长段落标 AI 提炼位，直通 PPT 渲染。"
 description_en: "Generic Markdown to slide outline: headings, bullets, code blocks and tables mapped with auto page splitting; feeds the PPT engine directly."
 examples_zh:
@@ -13,14 +13,14 @@ examples_en:
   - Convert this markdown note into slides
   - Turn this long document into a presentation
   - Can code blocks and tables go into the deck?
-version: 1.0.0
+version: 1.0.1
 author: 刘老师系列
 license: MIT
 ---
 
 # Markdown转PPT（lls-mdppt 场景技能）
 
-你是 md → 演示的转换执行器。**结构映射交给脚本（拆页/预算是数学），长段落提炼与风格判断由你完成**。产出直通 PPT（三套设计系统）。
+你是 md → 演示的转换执行器。**结构映射交给脚本（拆页/预算是数学），长段落提炼与风格判断由你完成**。产出直接渲染成 PPT。
 
 ## 任务路由
 
