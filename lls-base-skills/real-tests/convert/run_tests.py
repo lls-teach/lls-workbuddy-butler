@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """lls-convert test suite: every case runs a real conversion via the engine
 and validates the artifact by reading it back. Results stream to
-tests/results.jsonl; summary to tests/last_run.txt."""
-import os, sys, json, subprocess, shutil, zipfile, tarfile
+results.jsonl; summary to last_run.txt."""
+import os, sys, json, subprocess, shutil, zipfile, tarfile, tempfile, io
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FIX = os.path.join(ROOT, "tests", "fixtures")
-OUT = os.path.join(ROOT, "tests", "out")
-ENGINE = os.path.join(ROOT, "scripts", "convert.py")
+ROOT = os.path.dirname(os.path.abspath(__file__))   # real-tests/convert
+FIX = os.path.join(ROOT, "fixtures")
+OUT = os.path.join(ROOT, "out")
+ENGINE = os.path.join(os.path.dirname(os.path.dirname(ROOT)), "lls-convert", "scripts", "convert.py")
 TOKEN = "LHGCONVERT"
-sys.path.insert(0, os.path.join(ROOT, "scripts"))
+sys.path.insert(0, os.path.dirname(ENGINE))
 
 def read_txt(p):
     with open(p, encoding="utf-8", errors="replace") as fh: return fh.read()
@@ -142,9 +142,130 @@ C("sample.woff", "ttf", v_font); C("sample.woff2", "ttf", v_font)
 NEGATIVES = [("sample.ttf","mp4"), ("sample.mp3","docx"), ("sample.pages","docx"),
              ("sample.pdf","xlsx"), ("sample.svg","mp3"), ("sample.zip","pdf"), ("sample.docx","mp4")]
 
+# ---------- 安全性用例 ----------
+# 这三类不是「格式对不对」，而是「会不会毁用户文件」，单独跑、单独断言。
+def _mk_tar_with_member(path, member, payload):
+    import io
+    with tarfile.open(path, "w:gz") as t:
+        ti = tarfile.TarInfo(member); ti.size = len(payload)
+        t.addfile(ti, io.BytesIO(payload))
+
+def _mk_tar_with_symlink(path, linkname, member, payload):
+    import io
+    with tarfile.open(path, "w:gz") as t:
+        li = tarfile.TarInfo("link"); li.type = tarfile.SYMTYPE; li.linkname = linkname
+        t.addfile(li)
+        fi = tarfile.TarInfo(member); fi.size = len(payload)
+        t.addfile(fi, io.BytesIO(payload))
+
+def security_cases():
+    """返回 [(名称, 执行函数)]，每个函数返回 (ok, detail)。"""
+    def traversal():
+        d = tempfile.mkdtemp(prefix="sec-trav-")
+        try:
+            victim = os.path.join(d, "victim.txt")
+            open(victim, "w").write("ORIGINAL")
+            work = os.path.join(d, "work"); os.makedirs(work)
+            evil = os.path.join(d, "evil.tar.gz")
+            _mk_tar_with_member(evil, "../victim.txt", b"PWNED")
+            r = subprocess.run([sys.executable, ENGINE, evil, "zip", "-o", work],
+                               capture_output=True, text=True, timeout=120)
+            got = open(victim).read()
+            ok = got == "ORIGINAL"
+            return ok, "" if ok else f"tar 穿越覆盖了外部文件: victim={got!r} rc={r.returncode}"
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
+    def symlink_escape():
+        d = tempfile.mkdtemp(prefix="sec-sym-")
+        try:
+            victim = os.path.join(d, "victim.txt")
+            open(victim, "w").write("ORIGINAL")
+            work = os.path.join(d, "work"); os.makedirs(work)
+            evil = os.path.join(d, "evil.tar.gz")
+            _mk_tar_with_symlink(evil, victim, "link", b"PWNED VIA SYMLINK")
+            subprocess.run([sys.executable, ENGINE, evil, "zip", "-o", work],
+                           capture_output=True, text=True, timeout=120)
+            got = open(victim).read()
+            ok = got == "ORIGINAL"
+            return ok, "" if ok else f"tar symlink 逃逸覆盖了外部文件: victim={got!r}"
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
+    def no_overwrite():
+        d = tempfile.mkdtemp(prefix="sec-ow-")
+        try:
+            from PIL import Image
+            Image.new("RGB", (600, 600), (0, 0, 255)).save(os.path.join(d, "pic.jpg"), "JPEG")
+            Image.new("RGB", (50, 50), (255, 0, 0)).save(os.path.join(d, "pic.png"))
+            r = subprocess.run([sys.executable, ENGINE, os.path.join(d, "pic.png"), "jpg", "-o", d],
+                               capture_output=True, text=True, timeout=120)
+            payload = json.loads(r.stdout.strip().splitlines()[-1])
+            old_size = Image.open(os.path.join(d, "pic.jpg")).size
+            new_exists = os.path.exists(os.path.join(d, "pic-1.jpg"))
+            ok = old_size == (600, 600) and new_exists and payload.get("ok")
+            return ok, "" if ok else f"同名文件被覆盖: pic.jpg={old_size}, pic-1.jpg存在={new_exists}"
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
+    def force_overwrites():
+        d = tempfile.mkdtemp(prefix="sec-force-")
+        try:
+            from PIL import Image
+            Image.new("RGB", (600, 600), (0, 0, 255)).save(os.path.join(d, "pic.jpg"), "JPEG")
+            Image.new("RGB", (50, 50), (255, 0, 0)).save(os.path.join(d, "pic.png"))
+            subprocess.run([sys.executable, ENGINE, os.path.join(d, "pic.png"), "jpg", "-o", d, "--force"],
+                           capture_output=True, text=True, timeout=120)
+            ok = Image.open(os.path.join(d, "pic.jpg")).size == (50, 50)
+            return ok, "" if ok else "--force 未按预期覆盖"
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
+    def archive_roundtrip():
+        """7z 产出必须能被自己读回来（曾经因 '.' 条目必然失败）。"""
+        d = tempfile.mkdtemp(prefix="sec-arc-")
+        try:
+            z = os.path.join(d, "pack.zip")
+            with zipfile.ZipFile(z, "w") as zf:
+                zf.writestr("a/b.txt", "hello")
+            r1 = subprocess.run([sys.executable, ENGINE, z, "7z", "-o", d],
+                                capture_output=True, text=True, timeout=120)
+            p1 = json.loads(r1.stdout.strip().splitlines()[-1])
+            if not p1.get("ok"): return False, f"zip->7z 失败: {p1.get('error')}"
+            r2 = subprocess.run([sys.executable, ENGINE, p1["output"], "zip", "-o", os.path.join(d, "rt")],
+                                capture_output=True, text=True, timeout=120)
+            p2 = json.loads(r2.stdout.strip().splitlines()[-1])
+            if not p2.get("ok"): return False, f"7z->zip 回环失败: {p2.get('error')}"
+            with zipfile.ZipFile(p2["output"]) as zf:
+                ok = "a/b.txt" in zf.namelist()
+            return ok, "" if ok else f"回环后内容缺失: {zf.namelist()}"
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
+    def archive_name():
+        d = tempfile.mkdtemp(prefix="sec-name-")
+        try:
+            src = "/tmp/nonexistent"
+            z = os.path.join(d, "pack.tar.gz")
+            with tarfile.open(z, "w:gz") as t:
+                import io
+                ti = tarfile.TarInfo("x.txt"); data = b"hi"; ti.size = len(data)
+                t.addfile(ti, io.BytesIO(data))
+            r = subprocess.run([sys.executable, ENGINE, z, "zip", "-o", os.path.join(d, "out")],
+                               capture_output=True, text=True, timeout=120)
+            p = json.loads(r.stdout.strip().splitlines()[-1])
+            ok = p.get("ok") and os.path.basename(p["output"]) == "pack.zip"
+            return ok, "" if ok else f"命名错误: {os.path.basename(p.get('output') or '')}"
+        finally:
+            shutil.rmtree(d, ignore_errors=True)
+
+    return [("tar 路径穿越", traversal), ("tar symlink 逃逸", symlink_escape),
+            ("同名不覆盖", no_overwrite), ("--force 覆盖", force_overwrites),
+            ("7z 回环", archive_roundtrip), ("tar.gz 命名", archive_name)]
+
 def main():
     shutil.rmtree(OUT, ignore_errors=True); os.makedirs(OUT)
-    results_path = os.path.join(ROOT, "tests", "results.jsonl")
+    results_path = os.path.join(ROOT, "results.jsonl")
     passed, failed = 0, []
     with open(results_path, "w") as rf:
         for i, (fixture, tgt, validator) in enumerate(CASES):
@@ -178,10 +299,24 @@ def main():
             if ok: passed += 1
             else: failed.append(rec)
             print(f"[neg{j+1}/{len(NEGATIVES)}] {fixture} -> {tgt}: {'PASS' if ok else 'FAIL'} {rec['detail']}", flush=True)
-    total = len(CASES) + len(NEGATIVES)
+
+        sec = security_cases()
+        for k, (name, fn) in enumerate(sec):
+            cid = f"sec{k}_{name}"
+            try:
+                ok, detail = fn()
+            except Exception as e:
+                ok, detail = False, f"{type(e).__name__}: {e}"
+            rec = {"case": cid, "src": name, "tgt": "-", "status": "PASS" if ok else "FAIL", "detail": detail}
+            rf.write(json.dumps(rec, ensure_ascii=False) + "\n"); rf.flush()
+            if ok: passed += 1
+            else: failed.append(rec)
+            print(f"[sec{k+1}/{len(sec)}] {name}: {'PASS' if ok else 'FAIL'} {detail}", flush=True)
+
+    total = len(CASES) + len(NEGATIVES) + len(sec)
     summary = f"TOTAL {total} | PASS {passed} | FAIL {len(failed)}\n"
     for f in failed: summary += f"FAILED: {f['src']} -> {f['tgt']} :: {f['detail']}\n"
-    with open(os.path.join(ROOT, "tests", "last_run.txt"), "w") as fh: fh.write(summary)
+    with open(os.path.join(ROOT, "last_run.txt"), "w") as fh: fh.write(summary)
     print(summary, flush=True)
 
 if __name__ == "__main__":

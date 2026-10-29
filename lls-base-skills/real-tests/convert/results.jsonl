@@ -128,3 +128,9 @@
 {"case": "neg4_sample_mp3", "src": "sample.svg", "tgt": "mp3", "status": "PASS", "detail": ""}
 {"case": "neg5_sample_pdf", "src": "sample.zip", "tgt": "pdf", "status": "PASS", "detail": ""}
 {"case": "neg6_sample_mp4", "src": "sample.docx", "tgt": "mp4", "status": "PASS", "detail": ""}
+{"case": "sec0_tar 路径穿越", "src": "tar 路径穿越", "tgt": "-", "status": "PASS", "detail": ""}
+{"case": "sec1_tar symlink 逃逸", "src": "tar symlink 逃逸", "tgt": "-", "status": "PASS", "detail": ""}
+{"case": "sec2_同名不覆盖", "src": "同名不覆盖", "tgt": "-", "status": "PASS", "detail": ""}
+{"case": "sec3_--force 覆盖", "src": "--force 覆盖", "tgt": "-", "status": "PASS", "detail": ""}
+{"case": "sec4_7z 回环", "src": "7z 回环", "tgt": "-", "status": "PASS", "detail": ""}
+{"case": "sec5_tar.gz 命名", "src": "tar.gz 命名", "tgt": "-", "status": "PASS", "detail": ""}

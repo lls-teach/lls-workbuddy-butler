@@ -5,7 +5,7 @@ display_name_en: Format Converter Butler
 description: 本地格式转换：文档/表格/演示/图片/音视频/字幕/数据/字体/压缩包互转，PDF 与 Markdown 双中枢
 description_zh: 本地格式转换大全：78 种主力格式互转，文件不离开设备；文档、表格、演示、图片、音视频、字幕、数据、字体、压缩包，一句话说清要什么格式直接转
 description_en: "Local format conversion encyclopedia: documents, sheets, slides, images, audio/video, subtitles, data, fonts and archives converted locally. Files never leave the device."
-version: 1.0.1
+version: 1.0.2
 author: lhg
 ---
 
@@ -48,7 +48,7 @@ author: lhg
 - 音频：mp3/wav/flac/aac/ogg/m4a/wma/aiff/opus 互转
 - 视频：mp4/mov/avi/mkv/webm/flv/wmv/m4v/3gp/mpeg 互转 + 提音频/抽帧/转 gif
 - 字幕：srt/vtt/ass/ssa 互转（ssa 只作源）
-- 字体：ttf/otf/woff/woff2 互转
+- 字体：ttf/woff/woff2 与 otf(仅 CFF 源) 互转；**ttf↔otf 不支持**（换轮廓类型需 cu2qu 重画字形，引擎不做，会返回 unsupported 而不是产出改名的假文件）
 - 压缩：zip/7z/tar.gz 互转（打包解包）
 - 不支持：pages/key/numbers 转入（苹果专有，无本地引擎）、RAW 转入、带 DRM 的电子书转出、一切跨界无意义组合（如字体→视频）——遇到直接说明
 
@@ -56,10 +56,10 @@ author: lhg
 
 ## 环境依赖（首次运行自检）
 
-必需：LibreOffice（soffice）、ffmpeg/ffprobe、Python 包（Pillow、python-docx、openpyxl、pandas、python-pptx、pypdf、pdfplumber、PyMuPDF、fonttools、py7zr、markdown、markdownify、odfpy、xlrd）。缺哪样先补装再转，补不上就如实报缺哪样，不假装能转。命令：`python3 scripts/check_env.py`。
+必需：LibreOffice（soffice）、ffmpeg/ffprobe、Python 包（Pillow、python-docx、openpyxl、pandas、python-pptx、pypdf、pdfplumber、PyMuPDF、fonttools、**brotli**（woff2 编解码依赖）、py7zr、markdown、markdownify、odfpy、xlrd）。缺哪样先补装再转，补不上就如实报缺哪样，不假装能转。命令：`python3 scripts/check_env.py`。
 
 ## 红线
 
 - 不承诺未测过的转换对；宣传数字只用实测矩阵
 - 不处理 DRM 绕过；azw3 等受保护格式只做合法说明
-- 批量覆盖同名文件前先确认
+- 同名文件不覆盖：目标已存在时自动改名为 `名字-1.ext`，确认要覆盖才加 `--force`

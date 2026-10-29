@@ -13,7 +13,7 @@ examples_en:
   - Write a Word notice with title and signature block
   - Convert this CSV to Excel with styled headers and a SUM formula
   - Build an 8-slide deck from this outline in formal report style
-version: 1.0.0
+version: 1.0.1
 author: lhg
 ---
 
@@ -60,8 +60,8 @@ $PY scripts/check_env.py
 | PDF 填表单 / 列字段 | `$PY scripts/pdf_fill_form.py 输入.pdf [--list] [--data 字段.json -o 输出.pdf]` |
 | PDF 扫描件 OCR（中英混合） | `$PY scripts/pdf_ocr.py 输入.pdf -o 输出.txt [--lang ch]` |
 | PDF 渲染成图片 / 页数校验 | `$PY scripts/pdf_render.py 输入.pdf -o 输出目录 [--dpi 200]` / `pdf_check.py 输入.pdf [--expect-pages N]` |
-| 格式转换（78 种，PDF 与 Markdown 双中枢） | `$PY scripts/convert.py 输入 目标扩展名 [-o 输出目录]`，支持矩阵见 `references/supported-matrix.md` |
-| 批量模式（同一操作对文件夹内全部文件） | shell 循环：`for f in 文件夹/*.docx; do $PY scripts/convert.py "$f" pdf -o 输出目录; done`；批量覆盖同名文件前先确认 |
+| 格式转换（78 种，PDF 与 Markdown 双中枢） | `$PY scripts/convert.py 输入 目标扩展名 [-o 输出目录]`；同名目标会自动改名为 `名字-1.ext`，要覆盖加 `--force`。支持矩阵见 `references/supported-matrix.md` |
+| 批量模式（同一操作对文件夹内全部文件） | shell 循环：`for f in 文件夹/*.docx; do $PY scripts/convert.py "$f" pdf -o 输出目录; done`（默认不覆盖，重名自动加序号） |
 
 ## 步骤纪律
 

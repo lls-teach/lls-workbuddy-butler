@@ -4,13 +4,56 @@ Usage: python3 convert.py <input_file> <target_ext> [-o outdir]
 Exit codes: 0 ok, 2 unsupported pair, 3 conversion failed, 4 bad input.
 Prints one JSON line: {"ok":bool, "output":path|null, "route":str, "error":str|null}
 """
-import sys, os, json, subprocess, shutil, zipfile, tarfile, io, re
+import sys, os, json, subprocess, shutil, zipfile, tarfile, io, re, tempfile, contextlib
+
+class Unsupported(Exception):
+    """目标格式在语义上做不到，宁可拒绝也不产出名不副实的文件。"""
 
 def out(ok, output=None, route="", error=None, code=0):
     print(json.dumps({"ok": ok, "output": output, "route": route, "error": error}, ensure_ascii=False))
     sys.exit(code)
 
-def lo_available(): return shutil.which("soffice") is not None
+@contextlib.contextmanager
+def scratch():
+    """中间产物放独立临时目录，避免与用户已有的同名文件互相覆盖/误删。"""
+    d = tempfile.mkdtemp(prefix="llsconv-")
+    try:
+        yield d
+    finally:
+        shutil.rmtree(d, ignore_errors=True)
+
+# ---------- 安全落盘 ----------
+FORCE = False  # 只有 --force 才允许覆盖已存在的同名文件
+
+def split_ext(path):
+    """把 .tar.gz 当整体扩展名，避免算出 x.tar-1.gz 这种名字。"""
+    b = os.path.basename(path)
+    for suf in (".tar.gz", ".tgz"):
+        if b.lower().endswith(suf):
+            return path[:-len(suf)], path[-len(suf):]
+    return os.path.splitext(path)
+
+def free_path(path):
+    """目标已存在就自动加 -1/-2 后缀，绝不静默覆盖用户的同名文件。"""
+    if FORCE or not os.path.exists(path):
+        return path
+    root, ext = split_ext(path)
+    i = 1
+    while os.path.exists(f"{root}-{i}{ext}"):
+        i += 1
+    return f"{root}-{i}{ext}"
+
+def find_soffice():
+    """soffice 可能在 PATH，也可能是 macOS/Linux 的 App 安装路径。"""
+    for p in (shutil.which("soffice"),
+              "/Applications/LibreOffice.app/Contents/MacOS/soffice",
+              "/usr/lib/libreoffice/program/soffice",
+              "/opt/homebrew/bin/soffice"):
+        if p and os.path.exists(p):
+            return p
+    return None
+
+def lo_available(): return find_soffice() is not None
 def ff_available(): return shutil.which("ffmpeg") is not None
 
 def run(cmd, **kw):
@@ -23,16 +66,24 @@ def via_libreoffice(src, tgt, outdir):
         conv = "txt:Text (encoded):UTF8"
     if tgt == "csv":
         conv = "csv:Text - txt - csv (StarCalc)"
-    r = run(["soffice", "--headless", "--norestore", "--convert-to", conv, "--outdir", outdir, src])
+    soffice = find_soffice()
+    if not soffice:
+        raise RuntimeError("未找到 LibreOffice(soffice)，文档类转换需要先安装")
     base = os.path.splitext(os.path.basename(src))[0]
-    cand = os.path.join(outdir, base + "." + tgt)
-    if os.path.exists(cand) and os.path.getsize(cand) > 0:
-        return cand
-    raise RuntimeError("libreoffice produced no output: " + (r.stderr or r.stdout)[-300:])
+    # 先转到独立临时目录，再搬到目标名——soffice 不认输出文件名，直接写 outdir
+    # 会把目录里同名的既有文件（比如用户刚转好的 pdf）覆盖掉。
+    with scratch() as tmpd:
+        r = run([soffice, "--headless", "--norestore", "--convert-to", conv, "--outdir", tmpd, src])
+        cand = os.path.join(tmpd, base + "." + tgt)
+        if not (os.path.exists(cand) and os.path.getsize(cand) > 0):
+            raise RuntimeError("libreoffice produced no output: " + (r.stderr or r.stdout)[-300:])
+        final = free_path(os.path.join(outdir, base + "." + tgt))
+        shutil.move(cand, final)
+    return final
 
 def via_ffmpeg(src, tgt, outdir, extra=None):
     base = os.path.splitext(os.path.basename(src))[0]
-    dst = os.path.join(outdir, base + "." + tgt)
+    dst = free_path(os.path.join(outdir, base + "." + tgt))
     cmd = ["ffmpeg", "-y", "-v", "error", "-i", src]
     if extra: cmd += extra
     cmd += [dst]
@@ -44,7 +95,7 @@ def via_ffmpeg(src, tgt, outdir, extra=None):
 def via_pillow(src, tgt, outdir):
     from PIL import Image
     base = os.path.splitext(os.path.basename(src))[0]
-    dst = os.path.join(outdir, base + "." + tgt)
+    dst = free_path(os.path.join(outdir, base + "." + tgt))
     im = Image.open(src)
     if tgt in ("jpg", "jpeg", "bmp") and im.mode in ("RGBA", "LA", "P"):
         im = im.convert("RGB")
@@ -61,7 +112,7 @@ def images_to_pdf(srcs, outdir, name="merged"):
     for s in srcs:
         im = Image.open(s)
         ims.append(im.convert("RGB") if im.mode != "RGB" else im)
-    dst = os.path.join(outdir, name + ".pdf")
+    dst = free_path(os.path.join(outdir, name + ".pdf"))
     ims[0].save(dst, save_all=True, append_images=ims[1:])
     return dst
 
@@ -82,7 +133,7 @@ def pdf_to_images(src, tgt, outdir):
     doc = fitz.open(src)
     page = doc[0]
     pix = page.get_pixmap(dpi=150)
-    dst = os.path.join(outdir, base + "." + tgt)
+    dst = free_path(os.path.join(outdir, base + "." + tgt))
     fmt = "jpeg" if tgt in ("jpg", "jpeg") else "png"
     with open(dst, "wb") as fh: fh.write(pix.tobytes(fmt))
     return dst
@@ -91,7 +142,7 @@ def pdf_merge(srcs, outdir, name="merged"):
     from pypdf import PdfWriter
     w = PdfWriter()
     for s in srcs: w.append(s)
-    dst = os.path.join(outdir, name + ".pdf")
+    dst = free_path(os.path.join(outdir, name + ".pdf"))
     with open(dst, "wb") as fh: w.write(fh)
     return dst
 
@@ -103,7 +154,8 @@ def write_text(p, s):
     return p
 
 def dst_path(src, tgt, outdir):
-    return os.path.join(outdir, os.path.splitext(os.path.basename(src))[0] + "." + tgt)
+    """所有转换的目标路径都要过这里，重名自动改名而不是覆盖。"""
+    return free_path(os.path.join(outdir, os.path.splitext(os.path.basename(src))[0] + "." + tgt))
 
 # ---------- data (pandas) ----------
 DATA_EXTS = {"xlsx","xls","ods","csv","tsv","json","xml","yaml","yml"}
@@ -205,39 +257,115 @@ def parse_ass(text):
     return cues
 
 # ---------- archives ----------
-def archive_convert(src, sext, tgt, outdir):
-    dst = dst_path(src, tgt if not tgt.startswith("tar") else "tar.gz", outdir)
-    if tgt == "tar.gz": dst = os.path.join(outdir, os.path.splitext(os.path.basename(src))[0] + ".tar.gz")
-    tmp = dst + ".tmpdir"; os.makedirs(tmp, exist_ok=True)
+def archive_base(p):
+    """去掉 .tar.gz / .tgz / 普通单扩展名，避免产出 素材包.tar.zip 这种名字。"""
+    b = os.path.basename(p)
+    for suf in (".tar.gz", ".tgz"):
+        if b.lower().endswith(suf): return b[:-len(suf)]
+    return os.path.splitext(b)[0]
+
+def _safe_target(root, name):
+    """把归档成员名解析成 root 内的绝对路径；越界直接拒绝。
+
+    Python 3.12+ 的 extractall(filter="data") 能挡这个，但 3.9/3.10/3.11 没有，
+    而 tar 的 extractall 默认会把 ../../xxx 写到 root 外面，覆盖用户任意文件。
+    这里自己算一遍，不依赖解释器版本。
+    """
+    root = os.path.realpath(root)
+    dest = os.path.realpath(os.path.join(root, name))
+    if dest != root and not dest.startswith(root + os.sep):
+        raise RuntimeError(f"归档成员越界（可能导致覆盖外部文件），已拒绝: {name!r}")
+    return dest
+
+def safe_extract(src, sext, root):
+    """解包到 root，逐个成员校验路径，且不落盘符号链接。"""
     if sext == "zip":
-        with zipfile.ZipFile(src) as z: z.extractall(tmp)
+        with zipfile.ZipFile(src) as z:
+            for info in z.infolist():
+                dest = _safe_target(root, info.filename)
+                if info.is_dir():
+                    os.makedirs(dest, exist_ok=True); continue
+                os.makedirs(os.path.dirname(dest), exist_ok=True)
+                with z.open(info) as fsrc, open(dest, "wb") as fdst:
+                    shutil.copyfileobj(fsrc, fdst)
     elif sext in ("tar", "tar.gz", "tgz"):
-        with tarfile.open(src) as t: t.extractall(tmp)
+        with tarfile.open(src) as t:
+            for m in t.getmembers():
+                dest = _safe_target(root, m.name)
+                # 链接、设备、FIFO 一律跳过：它们能把后续写入引到 root 之外
+                if m.issym() or m.islnk():
+                    continue
+                if not (m.isfile() or m.isdir()):
+                    continue
+                if m.isdir():
+                    os.makedirs(dest, exist_ok=True); continue
+                os.makedirs(os.path.dirname(dest), exist_ok=True)
+                fsrc = t.extractfile(m)
+                if fsrc is None: continue
+                with fsrc, open(dest, "wb") as fdst:
+                    shutil.copyfileobj(fsrc, fdst)
     elif sext == "7z":
         import py7zr
-        with py7zr.SevenZipFile(src) as z: z.extractall(tmp)
-    else: raise RuntimeError("cannot unpack " + sext)
-    if tgt == "zip":
-        with zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED) as z:
-            for root, _, files in os.walk(tmp):
-                for f in files:
-                    fp = os.path.join(root, f); z.write(fp, os.path.relpath(fp, tmp))
-    elif tgt == "tar.gz":
-        with tarfile.open(dst, "w:gz") as t: t.add(tmp, arcname=".")
-    elif tgt == "7z":
-        import py7zr
-        with py7zr.SevenZipFile(dst, "w") as z: z.writeall(tmp, ".")
-    else: raise RuntimeError("cannot pack " + tgt)
-    import shutil as sh; sh.rmtree(tmp, ignore_errors=True)
+        with py7zr.SevenZipFile(src) as z:
+            for name in z.getnames():
+                _safe_target(root, name)   # 只校验，py7zr 自己拒绝 ../，这里兜底
+            z.extractall(root)
+    else:
+        raise RuntimeError("cannot unpack " + sext)
+
+def archive_convert(src, sext, tgt, outdir):
+    ext = "tar.gz" if tgt.startswith("tar") else tgt
+    dst = free_path(os.path.join(outdir, archive_base(src) + "." + ext))
+    with scratch() as tmp:
+        safe_extract(src, sext, tmp)
+        if tgt == "zip":
+            with zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED) as z:
+                for root, _, files in os.walk(tmp):
+                    for f in files:
+                        fp = os.path.join(root, f); z.write(fp, os.path.relpath(fp, tmp))
+        elif tgt == "tar.gz":
+            with tarfile.open(dst, "w:gz") as t:
+                for root, _, files in os.walk(tmp):
+                    for f in files:
+                        fp = os.path.join(root, f); t.add(fp, arcname=os.path.relpath(fp, tmp))
+        elif tgt == "7z":
+            import py7zr
+            with py7zr.SevenZipFile(dst, "w") as z:
+                for root, _, files in os.walk(tmp):
+                    for f in files:
+                        fp = os.path.join(root, f); z.write(fp, os.path.relpath(fp, tmp))
+        else: raise RuntimeError("cannot pack " + tgt)
     return dst
 
 # ---------- fonts ----------
+# .ttf = TrueType(glyf) 轮廓，.otf = CFF 轮廓。fontTools 只在容器间搬运，
+# 不会改轮廓类型，所以 ttf<->otf 必须走 cu2qu 重画轮廓，未实现前直接拒绝。
+FONT_OUTLINE = {"ttf": "glyf", "otf": "cff"}
+FONT_MAGIC = {"ttf": (b"\x00\x01\x00\x00", b"true", b"ttcf"),
+              "otf": (b"OTTO",), "woff": (b"wOFF",), "woff2": (b"wOF2",)}
+
+def font_outline(f):
+    if "CFF " in f or "CFF2" in f: return "cff"
+    if "glyf" in f: return "glyf"
+    return "unknown"
+
 def via_fonttools(src, tgt, outdir):
     from fontTools.ttLib import TTFont
     dst = dst_path(src, tgt, outdir)
     f = TTFont(src)
-    if tgt in ("woff", "woff2"): f.flavor = tgt
+    src_kind = font_outline(f)
+    need = FONT_OUTLINE.get(tgt)
+    if need and src_kind != need:
+        raise Unsupported(
+            f"{tgt} 需要 {need} 轮廓，源字体是 {src_kind}；改轮廓类型需 cu2qu 重画字形，"
+            f"当前引擎不做，{os.path.splitext(os.path.basename(src))[1][1:]}->{tgt} 暂不支持")
+    f.flavor = tgt if tgt in ("woff", "woff2") else None
     f.save(dst)
+    # 落盘后再验一次容器头，杜绝「扩展名对、内容不对」的假文件
+    with open(dst, "rb") as fh: head = fh.read(4)
+    if head not in FONT_MAGIC[tgt]:
+        os.remove(dst)
+        raise RuntimeError(f"字体写入后容器头不符：期望 {tgt}，实际 {head!r}")
     return dst
 
 # ---------- extra handlers ----------
@@ -271,11 +399,14 @@ SUB_SRC = {"srt","vtt","ass","ssa"}; SUB_TGT = {"srt","vtt","ass"}
 ARC_EXTS = {"zip","7z"}  # plus tar.gz handled specially
 
 def main():
+    global FORCE
+    FORCE = "--force" in sys.argv
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
     outdir = "."
     if "-o" in sys.argv:
         outdir = sys.argv[sys.argv.index("-o") + 1]
-    if len(args) < 2: out(False, error="usage: convert.py <input> <target_ext> [-o outdir]", code=4)
+        if outdir in args: args.remove(outdir)
+    if len(args) < 2: out(False, error="usage: convert.py <input> <target_ext> [-o outdir] [--force]", code=4)
     src, tgt = args[0], args[1].lower().lstrip(".")
     if not os.path.exists(src): out(False, error="input not found", code=4)
     os.makedirs(outdir, exist_ok=True)
@@ -341,8 +472,9 @@ def main():
         if sext == "html" and tgt == "txt":
             return out(True, write_text(dst_path(src, tgt, outdir), strip_tags(read_text(src))), "html-strip")
         if sext == "docx" and tgt == "md":
-            tmp = via_libreoffice(src, "html", outdir)
-            md = html_to_md(read_text(tmp)); os.remove(tmp)
+            with scratch() as tmpd:
+                tmp = via_libreoffice(src, "html", tmpd)
+                md = html_to_md(read_text(tmp))
             return out(True, write_text(dst_path(src, tgt, outdir), md), "docx-html-md")
         if sext == "md" and tgt == "epub":
             paras = read_text(src).split("\n")
@@ -355,8 +487,9 @@ def main():
             if tgt == "docx": return out(True, text_to_docx(paras, dst_path(src, tgt, outdir)), "epub-docx")
         # slides to image via pdf chain
         if sext in ("ppt","pptx","odp") and tgt in ("png","jpg"):
-            tmp_pdf = via_libreoffice(src, "pdf", outdir)
-            dst = pdf_to_images(tmp_pdf, tgt, outdir); os.remove(tmp_pdf)
+            with scratch() as tmpd:
+                tmp_pdf = via_libreoffice(src, "pdf", tmpd)
+                dst = pdf_to_images(tmp_pdf, tgt, outdir)
             return out(True, dst, "slides-pdf-render")
         if sext in ("html", "htm") and tgt == "docx":
             md = html_to_md(read_text(src))
@@ -380,22 +513,22 @@ def main():
             return out(True, dst, "md-docx-direct")
         # md -> pdf/odt via html chain through libreoffice
         if sext == "md" and tgt in ("pdf","odt"):
-            tmp = write_text(os.path.join(outdir, "tmp_chain.html"), md_to_html(read_text(src)))
-            dst = via_libreoffice(tmp, tgt, outdir)
-            os.remove(tmp)
             final = dst_path(src, tgt, outdir)
-            if dst != final: os.rename(dst, final)
+            with scratch() as tmpd:
+                tmp = write_text(os.path.join(tmpd, "tmp_chain.html"), md_to_html(read_text(src)))
+                shutil.move(via_libreoffice(tmp, tgt, tmpd), final)
             return out(True, final, "md-html-lo")
         if sext == "epub" and tgt == "pdf":
-            tmp = text_to_docx(epub_to_paragraphs(src), os.path.join(outdir, "tmp_chain.docx"))
-            dst = via_libreoffice(tmp, "pdf", outdir)
-            os.remove(tmp)
             final = dst_path(src, tgt, outdir)
-            if dst != final: os.rename(dst, final)
+            with scratch() as tmpd:
+                tmp = text_to_docx(epub_to_paragraphs(src), os.path.join(tmpd, "tmp_chain.docx"))
+                shutil.move(via_libreoffice(tmp, "pdf", tmpd), final)
             return out(True, final, "epub-docx-lo")
         out(False, error=f"unsupported: {sext} -> {tgt}", code=2)
     except SystemExit:
         raise
+    except Unsupported as e:
+        out(False, error=str(e), route=route, code=2)
     except Exception as e:
         out(False, error=str(e)[:400], route=route, code=3)
 
