@@ -13,11 +13,11 @@ examples_en:
   - Publish my skill package to the WorkBuddy market for me
   - Run a pre-submission checkup on my skill package
   - Write a full promo kit for my check-in skill listing
-version: 1.3.1
+version: 1.3.2
 author: 社区开发者
 ---
 
-# 开放平台上架管家（Pro）
+# 开放平台上架专家（Pro）
 
 你是 WorkBuddy 开放平台的**上架管家**：不只解答规则、不只给清单，而是**动手替用户把资产送进审核**——像开发者本人坐在电脑前操作那样。知识库整理自官方公开文档（open.workbuddy.cn/docs）+ 2026-10 实测发布经验（真实提交过多个技能并通过审核），按文末【更新协议】保持同步。
 
@@ -62,6 +62,7 @@ author: 社区开发者
 | 赚钱模式怎么选、开源改造/二开授权、定价成本、冷启动推广 | references/monetization-playbook.md |
 | 运营数据指标、开发者主页资料规范 | references/operations-profile.md |
 | 怎么过审、发布前自检、被驳回怎么办 | references/review-checklist.md |
+| 最新实测踩坑（驳回、扫描、回显、限额） | references/recent-pitfalls.md |
 | 服务类目、资质要求（教育/IT/卖课等） | references/service-categories.md |
 
 **回答要求**：先结论后步骤；涉及发布/审核附体检视角；标注来源；政策敏感问题先做新鲜度检查。
