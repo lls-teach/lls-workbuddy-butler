@@ -13,7 +13,7 @@ examples_en:
   - Convert this markdown note into slides
   - Turn this long document into a presentation
   - Can code blocks and tables go into the deck?
-version: 1.0.1
+version: 1.0.2
 author: 刘老师系列
 license: MIT
 ---

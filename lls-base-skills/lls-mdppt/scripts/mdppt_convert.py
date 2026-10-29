@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""通用 Markdown → lls-pptx 大纲（拆页 + 结构映射 + 页数预算）。
+"""通用 Markdown → 演示大纲（拆页 + 结构映射 + 页数预算）。
 
 用法: python3 mdppt_convert.py 笔记.md -o 大纲.md [--max-bullets 4]
 映射: # 首个=封面 / 其余#=章节分隔页 / ##=内容页标题 / - 要点(≤4/页)
       > =结论带 / ```=代码页 / |=表格页 / 长段落=AI 提炼位（标 🔶）
-输出可直接喂给底座 lls-pptx 的 pptx_create.py。
+输出可直接用于渲染成 PPT 文件。
 """
 import argparse
 
@@ -29,7 +29,7 @@ ai_spots = []
 for sl in slides:
     kind = sl["kind"]
     if kind == "cover":
-        continue  # 封面由 lls-pptx --title 生成
+        continue  # 封面由渲染步骤生成
     if kind == "section":
         out.append(f"# {sl['title']}")
         page_est += 1
