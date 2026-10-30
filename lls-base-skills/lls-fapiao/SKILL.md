@@ -13,7 +13,7 @@ examples_en:
   - Turn this batch of invoices into a reimbursement sheet
   - Check whether any of these invoices are duplicates
   - Summarize this month's taxi and train tickets
-version: 1.0.2
+version: 1.0.3
 author: 刘老师系列
 license: MIT
 ---

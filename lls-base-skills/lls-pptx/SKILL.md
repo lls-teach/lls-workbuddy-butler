@@ -13,7 +13,7 @@ examples_en:
   - Build an 8-slide deck in the formal report style from this outline
   - List every slide's content and check for over-dense pages
   - Replace all "2025" with "2026" in this deck
-version: 2.2.0
+version: 2.2.1
 author: 刘老师系列
 license: MIT
 ---

@@ -13,7 +13,7 @@ examples_en:
   - Build a lesson plan from this knowledge outline
   - Check whether the teaching goals are measurable
   - Does the process timing add up to the class period?
-version: 1.0.0
+version: 1.0.1
 author: 刘老师系列
 license: MIT
 ---

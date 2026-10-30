@@ -13,7 +13,7 @@ examples_en:
   - Turn this outline into a scrolling web deck
   - I need a shareable-link presentation page
   - The deck should export to PDF
-version: 1.0.0
+version: 1.0.1
 author: 刘老师系列
 license: MIT
 ---

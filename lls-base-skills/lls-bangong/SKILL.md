@@ -13,7 +13,7 @@ examples_en:
   - Write a Word notice with title and signature block
   - Convert this CSV to Excel with styled headers and a SUM formula
   - Build an 8-slide deck from this outline in formal report style
-version: 1.0.1
+version: 1.0.2
 author: lhg
 ---
 

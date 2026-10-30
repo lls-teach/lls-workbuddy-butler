@@ -13,7 +13,7 @@ examples_en:
   - Extract the text from this PDF
   - Merge these five PDFs into one file
   - Turn these scanned invoices into a table
-version: 2.0.2
+version: 2.0.3
 author: 刘老师系列
 license: MIT
 ---
