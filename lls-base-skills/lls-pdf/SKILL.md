@@ -1,6 +1,8 @@
 ---
 name: lls-pdf
+slug: lls-pdf
 display_name: PDF文档处理
+displayName: "PDF文档处理"
 display_name_en: "PDF Document Toolkit"
 description: "处理 PDF 文件的全能工具箱：提取文字与表格、创建新 PDF、合并拆分、填写表单、渲染成图片、中文 OCR 识别、发票扫描件批量处理。当用户提到 PDF、发票、扫描件、提取文字、合并、拆分、转图片、填表单、报销时使用本技能。。"
 description_zh: "PDF 全能处理：文字与表格提取、创建、合并拆分、表单填写、转图片、中文 OCR、发票批量整理。原生支持中文字体与中文扫描件。"

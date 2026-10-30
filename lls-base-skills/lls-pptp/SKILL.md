@@ -1,6 +1,8 @@
 ---
 name: lls-pptp
+slug: lls-pptp
 display_name: "瀑布流演示页面"
+displayName: "瀑布流演示页面"
 display_name_en: "Vertical Scroll Deck"
 description: "生成单文件 HTML 瀑布流演示：幻灯片以单栏卡片竖向排列成可滚动页面，每卡下方配讲者注释，支持卡片间距/注释一键隐藏、全屏键盘放映、可导出 PDF 或 pptx。适合发链接阅读与直播讲解两种场景。当用户提到瀑布流 PPT、网页演示、滚动式幻灯、可滚动 deck、单文件演示页时使用本技能。同一文件覆盖竖滚阅读与全屏放映两种用法。"
 description_zh: "单文件 HTML 瀑布流演示：单栏卡片竖向排列、卡片下注释、间距/注释一键隐藏、全屏放映、可导出 PDF/pptx。"

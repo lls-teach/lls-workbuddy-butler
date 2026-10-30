@@ -1,6 +1,8 @@
 ---
 name: lls-bangong
+slug: lls-bangong
 display_name: 打工人四件套
+displayName: "打工人四件套"
 display_name_en: "Office Suite for Workers"
 description: "办公四件套：Word、Excel、PPT、PDF 一个下载全搞定，格式转换与批量处理一站式。处理 Word 文档创建/读取/批量替换、Excel 表格创建/读取/公式重算、PPT 演示文稿三套设计系统一键成片、PDF 文字表格提取/合并拆分/表单填写/中文 OCR，78 种格式互转（PDF 与 Markdown 双中枢），同一操作可对文件夹内全部文件批量执行。当用户提到办公、文档、表格、幻灯片、Word、Excel、PPT、PDF、格式转换、批量处理、打工人、四件套、公文、报告、报表、汇报、课件、发票、报销时使用本技能。"
 description_zh: "办公四件套：Word、Excel、PPT、PDF 一个下载全搞定。文档创建读取批量替换、表格公式图表、PPT 三套设计系统成片、PDF 提取合并拆分 OCR，78 种格式互转，文件夹级批量处理。中文字体原生。"

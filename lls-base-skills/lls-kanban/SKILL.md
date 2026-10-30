@@ -1,6 +1,8 @@
 ---
 name: lls-kanban
+slug: lls-kanban
 display_name: "数据看板生成"
+displayName: "数据看板生成"
 display_name_en: "Offline Data Dashboard"
 description: "生成单文件夹离线 ECharts 数据看板：KPI 指标块、时间范围控件、数据新鲜度指示、来源追溯弹窗、可追加的每日数据快照目录，index.html 双击即看无需服务器。当用户提到数据看板、dashboard、监控面板、KPI 面板、经营数据大屏、离线看板时使用本技能。与结论型报告互补：报告出结论，看板盯变化。"
 description_zh: "离线 ECharts 数据看板：KPI 块/时间控件/数据新鲜度/来源追溯/每日快照，双击即看无需服务器。"

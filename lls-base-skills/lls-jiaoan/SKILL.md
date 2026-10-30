@@ -1,6 +1,8 @@
 ---
 name: lls-jiaoan
+slug: lls-jiaoan
 display_name: "写教案"
+displayName: "写教案"
 display_name_en: "Lesson Plan Generator"
 description: "教学设计 JSON → 要素齐全的教案 docx：教学目标（三维）/重难点/教学准备/教学过程（环节+时间+师生活动+设计意图）/板书设计/作业布置/教学反思，附要素检查（目标可测量性弱动词点名、过程时间合计核对）。当用户提到教案、教学设计、备课、授课计划、课时安排时使用本技能。教案、课件、出题组成教学三件套。"
 description_zh: "教学设计 JSON → 要素齐全教案 docx：三维目标/重难点/过程环节/板书/作业，附可测量性弱动词点名与时间核对。"

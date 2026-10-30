@@ -1,6 +1,8 @@
 ---
 name: lls-reportp
+slug: lls-reportp
 display_name: "图文报告页面"
+displayName: "图文报告页面"
 display_name_en: "Source-Backed Report Page"
 description: "生成证据型静态 HTML 报告页：叙事章节 + 侧边动态目录 + ECharts 图表 + 表格与图示 + 来源标注，单文件交付可直接编辑。适合研究报告、战略备忘、市场简报、运营更新、技术说明。当用户提到报告页、图文报告、研究报告、市场简报、运营周报页面、带图表的长文时使用本技能。"
 description_zh: "证据型 HTML 报告页：叙事章节+动态目录+ECharts 图表+来源标注，单文件可直接编辑。"
