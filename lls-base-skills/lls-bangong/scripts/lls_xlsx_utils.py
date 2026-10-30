@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
 
 
@@ -17,6 +18,13 @@ def ensure_parent(path: str) -> str:
 
 
 def guard_overwrite(path: str, force: bool = False) -> str:
+    # Windows 保留字符/设备名要到保存阶段才报裸 OSError，这里提前给出可读错误
+    name = os.path.basename(path)
+    if os.name == "nt" and (
+        re.search(r'[<>:"|?*]', name)
+        or re.fullmatch(r"(?i)(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\..*)?", name)
+    ):
+        die(f"输出文件名含 Windows 保留字符或设备名，请改名后重试：{name}")
     if not os.path.exists(path) or force:
         return path
     root, ext = os.path.splitext(path)

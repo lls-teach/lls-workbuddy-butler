@@ -41,10 +41,21 @@ def ocr_text(path: str, lang: str = "ch") -> str:
     except ImportError:
         die("扫描件需要 OCR：pip install paddleocr paddlepaddle（首次运行会下载模型）。"
             "若无需 OCR，请只提交带文字层的 PDF。")
-    ocr = PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)
-    lines = []
-    for block in (ocr.ocr(path, cls=True)[0] or []):
-        lines.append(block[1][0])
+    # Windows 上 paddlepaddle 3.x 的 onednn/PIR 推理会报 NotImplementedError，OCR 须关 mkldnn
+    kwargs = {"use_angle_cls": True, "lang": lang}
+    if sys.platform == "win32":
+        kwargs["enable_mkldnn"] = False
+    try:
+        ocr = PaddleOCR(show_log=False, **kwargs)  # paddleocr 2.x 参数
+    except (TypeError, ValueError):
+        ocr = PaddleOCR(**kwargs)  # paddleocr 3.x 已移除 show_log
+    try:
+        result = ocr.ocr(path, cls=True)  # paddleocr 2.x
+        lines = [b[1][0] for b in (result[0] or [])]
+    except TypeError:  # paddleocr 3.x：.ocr() 不再收 cls，改走 predict
+        lines = []
+        for res in ocr.predict(path):
+            lines.extend(res["rec_texts"])
     return "\n".join(lines)
 
 

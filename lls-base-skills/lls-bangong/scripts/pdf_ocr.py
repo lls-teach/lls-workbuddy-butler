@@ -9,7 +9,7 @@ import os
 import sys
 import tempfile
 
-from lls_pdf_utils import die, ensure_parent, parse_page_range
+from lls_pdf_utils import die, ensure_parent, ocr_lines, parse_page_range
 
 requirements_hint = "python3 -m pip install paddleocr paddlepaddle"
 
@@ -20,7 +20,14 @@ def load_engine(lang: str):
     except ImportError:
         die("PaddleOCR 未安装。安装命令:\n  " + requirements_hint +
             "\n首次使用会下载模型，耗时取决于网络。装好后再运行本命令。")
-    return PaddleOCR(use_angle_cls=True, lang=lang, show_log=False)
+    # Windows 上 paddlepaddle 3.x 的 onednn/PIR 推理会报 NotImplementedError，OCR 须关 mkldnn
+    kwargs = {"use_angle_cls": True, "lang": lang}
+    if sys.platform == "win32":
+        kwargs["enable_mkldnn"] = False
+    try:
+        return PaddleOCR(show_log=False, **kwargs)  # paddleocr 2.x 参数
+    except (TypeError, ValueError):
+        return PaddleOCR(**kwargs)  # paddleocr 3.x 已移除 show_log
 
 
 def pdf_to_images(pdf_path: str, pages_spec: str | None) -> list[tuple[int, str]]:
@@ -63,10 +70,9 @@ def main() -> None:
     ensure_parent(args.output)
     parts, low_conf = [], []
     for page_no, img_path in images:
-        result = engine.ocr(img_path, cls=True)
+        result = ocr_lines(engine, img_path)
         lines = []
-        for block in (result[0] or []):
-            text, conf = block[1][0], float(block[1][1])
+        for text, conf in result:
             if conf < 0.85:
                 low_conf.append((page_no, text))
             lines.append(text)

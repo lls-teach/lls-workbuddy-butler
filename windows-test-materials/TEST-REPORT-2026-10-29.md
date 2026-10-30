@@ -549,3 +549,57 @@
 - **各支测试证据**：`~/workspace/skillhub-test/runs/<slug>/`（第二阶段用 `runs/<slug>/phase2/`，循环句用 `runs/<slug>/smokeloop/`，不覆盖前期证据）。其中 `runs/lls-jianli/resume.docx` 与 `runs/lls-naotu/out3/basic.mm` 为“需用户协助”清单中点名的复验产物。
 - **修复状态声明**：全部修复改动仍在 `~/workspace/butler-scan/` 工作区，**未 commit、未 push、未向 SkillHub/WorkBuddy/GitHub 做任何提交、上传、推送，未碰任何账号凭证**，等用户定夺再推。各节“修复清单”均以该支任务开始时快照为基线，工作区接手前已是脏状态（多支并行任务的既有改动），不得把接手前改动算成本次改动。
 - **结论边界重申**：Windows 结论全部为代码级审计（非真机实测）；htmlppt 未做真机浏览器点击验证、kanban 未做真实浏览器渲染验证；wb 两支问答效果未验证；fapiao/pdf 的 OCR 模型未下载；pptp 的 pptx 导出依赖私有 `@oai/artifact-tool`（npm 404，工具不可用）；pdf_create 沙盒缺 TrueType 中文字体属环境事项；convert 结论仅覆盖抽测 51 对（不对矩阵宣称的 123 对背书）。
+
+---
+
+# Windows 真机验证进展（2026-10-29/30 实测，持续更新）
+
+> 本章记录 Windows 真机（本机，`F:\CODE\skill_windows`，win32 10.0.19045）按 `windows-handoff.md` 第三节清单逐项验证的结果。测试目录：`F:\CODE\skill_windows\real-test\runs\`，共用 venv：`F:\CODE\skill_windows\venv-main`（Python 3.14）+ Paddle 专用 `real-test\paddle312`（Python 3.12）。
+> **判定口径**：只写有产物/日志证据的结论；上一会话中断未落盘的逐项判定，标注"产物已产出、待复核"，不虚标通过。
+
+## 已验证项（有证据）
+
+### A9 lls-kanban 数据看板生成 — 核心 3/4 通过，长路径 cmd 待补
+
+- **中文+空格路径生成**：✅ 通过。在 `real-test\runs\lls-kanban\中文 看 板\销售看板\` 按技能工作流拷三件套（dashboard_template.py→dashboard.py、echarts.min.js、dashboard_runtime.js）+ 真实 CSV 快照（含中文 segment「企业客户/中小企业」），`python dashboard.py` 生成 `index.html`（1,072,296 字节）与 `dashboard_data.json`，无报错。
+- **Node 校验**：✅ 通过。`node scripts/validate-echarts-dashboard.mjs 销售看板/index.html` 全绿（时间预设、日期输入、KPI、图表面板、chartFactories 等逐项 ok），exit=0。
+- **浏览器渲染**：✅ 通过。本地 HTTP 服务 + 内置浏览器实测：KPI 卡（$674,700 / $1,555,500 / 220）与 CSV 数据逐项吻合（非 demo 回退）；趋势折线图、中文柱状图（企业客户/中小企业）、排行榜表格渲染正常；截图存档 `real-test\runs\lls-kanban\看板渲染-截图.png`（渲染会话产物）。
+- **超长中文路径 + cmd**：⏸ 待补。312 字符 11 层中文深路径已建好（`real-test\runs\lls-kanban\长路径测试目录\`），测试协议见交接文件《真机验证-进度与交接-2026-10-30.md》。⚠️ 教训：**任何 shell（含 ZCode 自身的 Bash 工具）都不要 cd 进该深路径**——cwd 超过 260 字符会导致进程无法启动（本次事故原因，见文末）。
+
+### A2 lls-bangong PaddleOCR 链路 — 发现真机 bug 并已修复闭环
+
+- **安装**：✅ paddlepaddle 3.3.1（cp312 win_amd64）+ paddleocr 在 Python 3.12 venv 安装成功（`real-test\paddle_pp_install.log`）。
+- **模型下载**：✅ PP-OCRv6_medium_det/rec 自动下载并缓存至 `C:\Users\14320\.paddlex\official_models\`（`real-test\paddle_ocr_run.log`）。
+- **真机 bug**：❌→✅ PP-OCRv6 推理在 paddlepaddle 3.3.1 上崩溃：`NotImplementedError: (Unimplemented) ConvertPirAttribute2RuntimeAttribute not support [pir::ArrayAttribute<pir::DoubleAttribute>]`（onednn/PIR 路径）。**修复**：`pdf_ocr.py`（lls-bangong 与 lls-pdf 两支同改）在 win32 下 `enable_mkldnn=False`。修复后真机复跑，OCR 产物正确（`runs\lls-bangong\OCR 输出.txt`、`pdf_skill_ocr.txt` 均正确识别"真机测试123"）。
+- **其余 A2 项**（venv+requirements 全流程、LibreOffice 默认路径命中、微软雅黑/宋体注册、保留字符文件名）：探针产物已在 `runs\lls-bangong\`（中文 测试.pdf、tiny.pdf、t.csv 等），LibreOffice 渲染链路经 A6/A8/A10/A12/A13 的渲染图间接证实命中；逐项判定待复核。
+
+### 其余 A 项 — 产物已产出（上一会话判定"主体完成"，逐项判定待复核）
+
+| A 项 | skill | 产物证据（real-test\runs\ 下） | 渲染核对 |
+|---|---|---|---|
+| A3 超长路径/中文目录/音视频转换 | lls-convert | `中文 目录 测试\`（演 示.pdf/pptx、音 频.mp3/wav 转换产物） | — |
+| A5 中文字幕路径 + 双击 | lls-zimu | `中文 路径 测试\`（输入→输出清洗 .srt）、dclick_test.py | — |
+| A6 教案 check/create + 渲染 | lls-jiaoan | 教案 中文 产物.docx、预检报告 中文.md、教学设计.json | jiaoan_p1/p2.png |
+| A8 Markdown 转 PPT + 渲染 | lls-mdppt | 渲染 产物.pptx、演示 产物.pptx、演示 复验.pptx | mdppt_p1/p2.png、mdppt_fixed_p2.png |
+| A10 简历 docx 字体渲染 | lls-jianli | 张三 简历.docx、简历数据.json | jianli_p1.png |
+| A12 论文排版渲染 | lls-lunwen | 论文 排版产物.docx、预检报告 中文.md | lunwen_p1.png |
+| A13 docx 修订流程渲染 | lls-docx | 合同 修订版.docx | docx_rev_p1.png |
+| A14 xlsx 公式重算 | lls-xlsx | 公式表.xlsx | — |
+| A3 长路径产物 | lls-convert | 18 层中文深路径下生成 长路径测试.pdf/txt（python 直写成功） | — |
+
+渲染 PNG 由 LibreOffice（soffice）headless 转 PDF 再出图——**间接证实 Windows 下 LibreOffice 默认路径探测命中、中文名 docx/pptx 渲染正常**。
+
+## 未完成项（下一会话按序补）
+
+1. **A9 长路径 cmd 测试**（深路径已就绪，协议见交接文件——严禁 shell cd 进深路径，用 `cmd /c "cd /d <深路径> && python dashboard.py"` 子进程方式）。
+2. **A4 reportp**：PowerShell 含中文+空格路径跑报告生成 + 浏览器渲染。
+3. **A7 pptp**：Playwright 启动与回退候选、PowerShell/cmd 引号与中文编码、超长路径。
+4. **A1 Pro 上架专家**：按 `references/windows-smoke-test.md` 跑 E-0 环境自举。
+5. **A11 naotu**：生成 .mm 并核对 XML 结构/层级（可先 Read 复核，装 XMind/FreeMind 的导入核对属用户侧）。
+6. **B**：其余 27 支抽查关键链路（PowerShell venv、中文路径、产物生成）。
+7. **C**：修复项汇总 → commit + push（当前工作区有 9 个已修改文件未提交：bangong×5、fapiao×1、mdppt×1、pdf×2）。
+8. **D**：真机全过后，把各支 Windows 结论从"代码级"升级为"真机已验证"。
+
+## 工具事故记录（本次真机验证自身的踩坑，2026-10-30）
+
+测试中 ZCode 的 Bash 工具会话把工作目录切进了 312 字符的中文深路径，之后**所有 shell 通道**（主会话、子代理、定时任务的 Bash）全部 `spawn bash.exe ENOENT`——Windows CreateProcess 无法以超 260 字符的 cwd 启动进程。文件工具（Read/Write/Edit/Browser）不受影响。这本身就是一个高价值的 Windows 长路径实证案例：**在 Windows 上做超长路径测试时，测试工具自身必须用"子进程 cd /d"方式进入深路径，绝不能让外层 shell 的 cwd 进入**。恢复方式：新开会话（shell 状态随会话重建）；深路径测试目录保留勿删，供补测使用。

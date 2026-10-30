@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import glob
 import os
+import re
 import sys
 
 # 中文字体回退链：macOS → Windows → Linux 常见 CJK 字体
@@ -71,8 +72,27 @@ def ensure_parent(path: str) -> str:
     return path
 
 
+def ocr_lines(engine, image_path: str) -> list[tuple[str, float]]:
+    """兼容 paddleocr 2.x（.ocr(cls=True) 旧格式）与 3.x（predict 新格式），返回 (文本, 置信度) 列表。"""
+    try:
+        result = engine.ocr(image_path, cls=True)
+        return [(b[1][0], float(b[1][1])) for b in (result[0] or [])]
+    except TypeError:  # paddleocr 3.x：.ocr() 不再收 cls，改走 predict
+        lines: list[tuple[str, float]] = []
+        for res in engine.predict(image_path):
+            lines.extend(zip(res["rec_texts"], (float(s) for s in res["rec_scores"])))
+        return lines
+
+
 def guard_overwrite(path: str, force: bool = False) -> str:
     """覆盖保护：目标已存在且未加 --force 时，自动改名为 _new 后缀并提示。"""
+    # Windows 保留字符/设备名要到保存阶段才报裸 OSError，这里提前给出可读错误
+    name = os.path.basename(path)
+    if os.name == "nt" and (
+        re.search(r'[<>:"|?*]', name)
+        or re.fullmatch(r"(?i)(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\..*)?", name)
+    ):
+        die(f"输出文件名含 Windows 保留字符或设备名，请改名后重试：{name}")
     if not os.path.exists(path) or force:
         return path
     root, ext = os.path.splitext(path)

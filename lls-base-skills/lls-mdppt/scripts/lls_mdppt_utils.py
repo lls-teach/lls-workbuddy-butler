@@ -102,6 +102,10 @@ def parse_md(md_text: str) -> dict:
             flush_table()
             continue
         sline = line.strip()
+        if sline.startswith("<!--") and sline.endswith("-->"):
+            # 转换脚本写入大纲的 AI 标注注释，属元信息，不渲染成幻灯片内容
+            flush_table()
+            continue
         if sline.startswith("|") and sline.endswith("|"):
             cells = [c.strip() for c in sline.strip("|").split("|")]
             if not _is_separator_row(cells):

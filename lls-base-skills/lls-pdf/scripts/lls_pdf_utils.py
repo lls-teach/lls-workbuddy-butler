@@ -109,6 +109,18 @@ def ensure_parent(path: str) -> str:
     return path
 
 
+def ocr_lines(engine, image_path: str) -> list[tuple[str, float]]:
+    """兼容 paddleocr 2.x（.ocr(cls=True) 旧格式）与 3.x（predict 新格式），返回 (文本, 置信度) 列表。"""
+    try:
+        result = engine.ocr(image_path, cls=True)
+        return [(b[1][0], float(b[1][1])) for b in (result[0] or [])]
+    except TypeError:  # paddleocr 3.x：.ocr() 不再收 cls，改走 predict
+        lines: list[tuple[str, float]] = []
+        for res in engine.predict(image_path):
+            lines.extend(zip(res["rec_texts"], (float(s) for s in res["rec_scores"])))
+        return lines
+
+
 def guard_overwrite(path: str, force: bool = False) -> str:
     """覆盖保护：目标已存在且未加 --force 时，自动改名并提示。
 
