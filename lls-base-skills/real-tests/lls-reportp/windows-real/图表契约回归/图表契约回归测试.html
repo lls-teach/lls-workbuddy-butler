@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>图表契约回归测试</title>
+<link rel="stylesheet" href="assets/doc.css">
+</head>
+<body>
+<nav class="toc-rail"></nav>
+<article class="doc-page">
+  <header class="doc-title" id="top">
+    <h1>图表契约回归测试</h1>
+    <p class="doc-subtitle">旧契约不回归 · 新契约可渲染 · 未知族降级不空白</p>
+  </header>
+
+  <section class="doc-block" id="s1">
+    <h2>一、旧契约（market-trend + 纯数组 year/sales_m/penetration）</h2>
+    <p>这一段与 report-template.html 的写法完全一致，用于确认既有页面外观不回归。</p>
+    <div class="doc-chart" data-chart="market-trend" data-data="c1" data-type="line">
+      <div class="chart-canvas" style="width:100%;height:320px"></div>
+      <div class="chart-menu">
+        <button type="button" data-chart-type="line">折线</button>
+        <button type="button" data-chart-type="bar">柱状</button>
+      </div>
+      <p>图 1：旧契约示例（单位：销量百万辆；来源：测试夹具）</p>
+    </div>
+    <script type="application/json" id="c1">[{"year":"2023","sales_m":100,"penetration":20},{"year":"2024","sales_m":130,"penetration":26},{"year":"2025","sales_m":160,"penetration":32}]</script>
+  </section>
+
+  <section class="doc-block" id="s2">
+    <h2>二、新契约：显式 series，非汽车主题的营收数据</h2>
+    <p>字段名完全自定义（date/enterprise/sme），单位由 series.unit 声明。</p>
+    <div class="doc-chart" data-chart="trend" data-data="c2" data-type="line">
+      <div class="chart-canvas" style="width:100%;height:320px"></div>
+      <div class="chart-menu">
+        <button type="button" data-chart-type="line">折线</button>
+        <button type="button" data-chart-type="bar">柱状</button>
+      </div>
+      <p>图 2：分客群日营收（单位：元；来源：销售快照 revenue.csv，截至 2026-10-30）</p>
+    </div>
+    <script type="application/json" id="c2">{
+      "x": "date",
+      "xName": "日期",
+      "series": [
+        {"field": "enterprise", "name": "企业客户", "unit": "元"},
+        {"field": "sme", "name": "中小企业", "unit": "元"}
+      ],
+      "data": [
+        {"date": "10-28", "enterprise": 128000, "sme": 86000},
+        {"date": "10-29", "enterprise": 134500, "sme": 91000},
+        {"date": "10-30", "enterprise": 139800, "sme": 95400}
+      ]
+    }</script>
+  </section>
+
+  <section class="doc-block" id="s3">
+    <h2>三、新契约：双轴（营收与客户数量级差百倍）</h2>
+    <p>营收挂主轴、客户数挂副轴，轴名由 series 的名称与单位自动生成。</p>
+    <div class="doc-chart" data-chart="trend" data-data="c3" data-type="line">
+      <div class="chart-canvas" style="width:100%;height:320px"></div>
+      <p>图 3：日营收与成交客户数（左轴单位：元；右轴单位：家）</p>
+    </div>
+    <script type="application/json" id="c3">{
+      "x": "date",
+      "xName": "日期",
+      "series": [
+        {"field": "revenue", "name": "日营收", "unit": "元"},
+        {"field": "customers", "name": "成交客户数", "unit": "家", "axis": 1}
+      ],
+      "data": [
+        {"date": "10-28", "revenue": 214000, "customers": 69},
+        {"date": "10-29", "revenue": 225500, "customers": 73},
+        {"date": "10-30", "revenue": 235200, "customers": 78}
+      ]
+    }</script>
+  </section>
+
+  <section class="doc-block" id="s4">
+    <h2>四、占比族（旧字段 brand/share）</h2>
+    <p>合计约等于 100，轴按百分比呈现，与旧版观感一致。</p>
+    <div class="doc-chart" data-chart="share-ranking" data-data="c4" data-type="bar">
+      <div class="chart-canvas" style="width:100%;height:260px"></div>
+      <div class="chart-menu">
+        <button type="button" data-chart-type="bar">排行</button>
+        <button type="button" data-chart-type="pie">环图</button>
+      </div>
+      <p>图 4：客群营收占比（合计 100%；来源：销售快照）</p>
+    </div>
+    <script type="application/json" id="c4">[{"brand":"企业客户","share":59.4},{"brand":"中小企业","share":40.6}]</script>
+  </section>
+
+  <section class="doc-block" id="s5">
+    <h2>五、占比族（自定义字段 + 显式 total）</h2>
+    <p>字段名自定义为 segment/amount，占比按 total 计算，不靠值本身是百分数。</p>
+    <div class="doc-chart" data-chart="share" data-data="c5" data-type="pie">
+      <div class="chart-canvas" style="width:100%;height:300px"></div>
+      <p>图 5：营收构成（来源：销售快照，营收合计 235,200 元）</p>
+    </div>
+    <script type="application/json" id="c5">{
+      "name": "segment",
+      "value": "amount",
+      "total": 235200,
+      "data": [
+        {"segment": "企业客户", "amount": 139800},
+        {"segment": "中小企业", "amount": 95400}
+      ]
+    }</script>
+  </section>
+
+  <section class="doc-block" id="s6">
+    <h2>六、未登记族（waterfall）降级</h2>
+    <p>这里故意写一个未登记的族名，预期按 data-type=bar 降级渲染并提示一次，而不是空白画布。</p>
+    <div class="doc-chart" data-chart="waterfall" data-data="c6" data-type="bar">
+      <div class="chart-canvas" style="width:100%;height:280px"></div>
+      <p>图 6：未登记族的降级渲染</p>
+    </div>
+    <script type="application/json" id="c6">[{"date":"10-28","revenue":214000},{"date":"10-29","revenue":225500},{"date":"10-30","revenue":235200}]</script>
+  </section>
+</article>
+<script src="assets/echarts.min.js"></script>
+<script src="assets/doc.js"></script>
+</body>
+</html>

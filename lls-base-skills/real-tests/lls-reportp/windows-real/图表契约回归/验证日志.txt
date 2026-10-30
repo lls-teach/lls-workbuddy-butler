@@ -1,0 +1,287 @@
+reportp 图表契约通用化——回归验证日志
+Windows 真机 win32 10.0.19045 / node v22.22.2 / Playwright 1.64.1 + 系统 Chrome
+验证方式：Playwright 读取每个图表的 ECharts 实例 option（非看截图），核对轴名、series 名、数据、颜色、副轴归属
+执行日期：2026-10-30
+
+[
+  {
+    "kind": "market-trend",
+    "initialType": "line",
+    "hasFallback": false,
+    "rendered": true,
+    "error": null,
+    "xAxis": [
+      {
+        "type": "category",
+        "data": [
+          "2023",
+          "2024",
+          "2025"
+        ]
+      }
+    ],
+    "yAxis": [
+      {
+        "name": "销量 百万辆"
+      },
+      {
+        "name": "渗透率"
+      }
+    ],
+    "series": [
+      {
+        "name": "销量",
+        "type": "line",
+        "yAxisIndex": 0,
+        "data": [
+          100,
+          130,
+          160
+        ],
+        "color": "#2563eb",
+        "lineStyle": {
+          "width": 3,
+          "type": "solid"
+        }
+      },
+      {
+        "name": "渗透率",
+        "type": "line",
+        "yAxisIndex": 1,
+        "data": [
+          20,
+          26,
+          32
+        ],
+        "color": "#b7791f",
+        "lineStyle": {
+          "width": 3,
+          "type": "dashed"
+        }
+      }
+    ],
+    "canvasPainted": true
+  },
+  {
+    "kind": "trend",
+    "initialType": "line",
+    "hasFallback": false,
+    "rendered": true,
+    "error": null,
+    "xAxis": [
+      {
+        "type": "category",
+        "data": [
+          "10-28",
+          "10-29",
+          "10-30"
+        ],
+        "name": "日期"
+      }
+    ],
+    "yAxis": [
+      {
+        "name": "企业客户 元"
+      }
+    ],
+    "series": [
+      {
+        "name": "企业客户",
+        "type": "line",
+        "yAxisIndex": 0,
+        "data": [
+          128000,
+          134500,
+          139800
+        ],
+        "color": "#2563eb",
+        "lineStyle": {
+          "width": 3,
+          "type": "solid"
+        }
+      },
+      {
+        "name": "中小企业",
+        "type": "line",
+        "yAxisIndex": 0,
+        "data": [
+          86000,
+          91000,
+          95400
+        ],
+        "color": "#b7791f",
+        "lineStyle": {
+          "width": 3,
+          "type": "solid"
+        }
+      }
+    ],
+    "canvasPainted": true
+  },
+  {
+    "kind": "trend",
+    "initialType": "line",
+    "hasFallback": false,
+    "rendered": true,
+    "error": null,
+    "xAxis": [
+      {
+        "type": "category",
+        "data": [
+          "10-28",
+          "10-29",
+          "10-30"
+        ],
+        "name": "日期"
+      }
+    ],
+    "yAxis": [
+      {
+        "name": "日营收 元"
+      },
+      {
+        "name": "成交客户数 家"
+      }
+    ],
+    "series": [
+      {
+        "name": "日营收",
+        "type": "line",
+        "yAxisIndex": 0,
+        "data": [
+          214000,
+          225500,
+          235200
+        ],
+        "color": "#2563eb",
+        "lineStyle": {
+          "width": 3,
+          "type": "solid"
+        }
+      },
+      {
+        "name": "成交客户数",
+        "type": "line",
+        "yAxisIndex": 1,
+        "data": [
+          69,
+          73,
+          78
+        ],
+        "color": "#b7791f",
+        "lineStyle": {
+          "width": 3,
+          "type": "dashed"
+        }
+      }
+    ],
+    "canvasPainted": true
+  },
+  {
+    "kind": "share-ranking",
+    "initialType": "bar",
+    "hasFallback": false,
+    "rendered": true,
+    "error": null,
+    "xAxis": [
+      {
+        "type": "value",
+        "name": ""
+      }
+    ],
+    "yAxis": [
+      {
+        "name": ""
+      }
+    ],
+    "series": [
+      {
+        "name": "数值",
+        "type": "bar",
+        "yAxisIndex": 0,
+        "data": [
+          {
+            "value": 40.6,
+            "itemStyle": {
+              "color": "#0f766e"
+            }
+          },
+          {
+            "value": 59.4,
+            "itemStyle": {
+              "color": "#2563eb"
+            }
+          }
+        ],
+        "lineStyle": null
+      }
+    ],
+    "canvasPainted": true
+  },
+  {
+    "kind": "share",
+    "initialType": "pie",
+    "hasFallback": false,
+    "rendered": true,
+    "error": null,
+    "xAxis": [],
+    "yAxis": [],
+    "series": [
+      {
+        "type": "pie",
+        "yAxisIndex": 0,
+        "data": [
+          {
+            "name": "企业客户",
+            "value": 139800
+          },
+          {
+            "name": "中小企业",
+            "value": 95400
+          }
+        ],
+        "lineStyle": null
+      }
+    ],
+    "canvasPainted": true
+  },
+  {
+    "kind": "waterfall",
+    "initialType": "bar",
+    "hasFallback": false,
+    "rendered": true,
+    "error": null,
+    "xAxis": [
+      {
+        "type": "category",
+        "data": [
+          "10-28",
+          "10-29",
+          "10-30"
+        ]
+      }
+    ],
+    "yAxis": [
+      {
+        "name": "revenue"
+      }
+    ],
+    "series": [
+      {
+        "name": "revenue",
+        "type": "bar",
+        "yAxisIndex": 0,
+        "data": [
+          214000,
+          225500,
+          235200
+        ],
+        "color": "#2563eb",
+        "lineStyle": null
+      }
+    ],
+    "canvasPainted": true
+  }
+]
+--- CONSOLE (warning/error) ---
+warning: doc.js: 未登记的 data-chart 族，已按 data-type 降级渲染：waterfall；可用族见 assets/doc.js 顶部注释

@@ -41,7 +41,7 @@
 | lls-lunwen 论文排版 | 通过（本地可验证部分，修后） | 真机已验证（排版产物渲染核对） | 补 |
 | lls-naotu 思维导图生成 | 通过（本地可验证部分，修后） | 真机已验证（.mm XML 良构 + 层级/文字逐字核对） | 补 |
 | lls-pdf PDF文档处理 | 通过（修后；沙盒默认环境 pdf_create 与 OCR 真实识别除外，见备注） | 真机已验证（创建 + 文本提取回读；OCR 见 A2） | 补 |
-| lls-pptx PPT演示文稿 | 通过（本地可验证部分，修后） | 真机已验证（生成 + check；封面标题 1 条误报待决策） | 补 |
+| lls-pptx PPT演示文稿 | 通过（本地可验证部分，修后） | 真机已验证（生成 + check；封面标题误报已修，见补充修复） | 补 |
 | lls-shujv 数据报表分析 | 通过（修后） | 真机已验证（分组汇总产物正确） | 补 |
 | lls-shuzhi 述职报告 | 通过（本地可验证核心脚本，修后） | 真机已验证（大纲 + 量化体检提示正确） | 补 |
 | lls-timu 出题组卷 | 通过（本地可验证部分，修后） | 真机已验证（蓝图 20 题分配正确） | 补 |
@@ -606,7 +606,7 @@
 - 手写 `index.html`（真数据来自 `revenue.csv`：分客群日营收、客单价拆解表、来源标注），本地 HTTP 服务 + 无头 Chromium 截图核对：标题/章节/双线折线图（企业客户 vs 中小企业）/中文表头表格/结论 callout 全部正常。
 - `--dump-dom` 确认 `nav.toc-rail` 由 doc.js 生成 6 个锚点（竖线轨 + 悬浮弹出，属设计形态）。
 - **`file://` 双击打开同样正常**（样式、目录轨、图表齐全）——这是报告页最真实的使用场景。
-- 待决策（非 Windows 问题）：`assets/doc.js` 的图表契约写死了汽车市场字段（`year`/`sales_m`/`penetration`，轴名「销量 百万辆」「渗透率」），非汽车主题的报告套不进去。本轮改用页面内联 `echarts.init` 画真实数据图，未改 doc.js。
+- 非 Windows 问题（已修，见「补充修复」）：`assets/doc.js` 的图表契约原写死汽车市场字段（`year`/`sales_m`/`penetration`，轴名「销量 百万辆」「渗透率」），非汽车主题的报告套不进去。验证时先用页面内联 `echarts.init` 绕过，之后已把 doc.js 改为字段无关的通用构建器并回归通过。
 - 证据：`real-tests/lls-reportp/windows-real/中文 报告 页面/`（index.html + HTTP/file 两张渲染图）。
 
 ### A7 lls-pptp 瀑布流演示页面 — ✅ 通过（含两项前置条件）
@@ -642,7 +642,7 @@
 
 1. **lls-docpage docx 导出静默失败（已修代码）**。`export-paper-to-docx.mjs` 的 `findPython()` 优先取 `python3`，本机 `where python3` 首条是 `python3.cmd`；Node 的 `spawnSync` 不能直接执行 `.cmd`，失败时既无 stderr 也无提示，用户只看到「python-docx fallback was unavailable or failed」，无法区分「缺模块」还是「找不到解释器」。
    修复：Windows 下 `findExecutable()` 只取真正的 `.exe`（跳过 .cmd/.bat 垫片）；`findPython()` 改为优先 `python`；回退失败时打印 `result.error` 与「可用 --python 指定解释器」。验证：修复后同样命令明确报 `ModuleNotFoundError: No module named 'lxml'`；把已装依赖的 venv 放到 PATH 前，导出成功 36,674 字节。SKILL.md 失败分支补 6、7 两行（playwright 依赖与 python-docx/lxml 前置）。
-2. **lls-pptx `pptx_check.py` 对封面页 1 条误报（仅记录，未改）**：4 页 deck 的第 1 页封面标题「数据看板入门」被判为「话题式标题，建议写结论句」——封面本就是 deck 名称，该规则应跳过封面。
+2. **lls-pptx `pptx_check.py` 对封面页 1 条误报（已修，见「补充修复」）**：4 页 deck 的第 1 页封面标题「数据看板入门」被判为「话题式标题，建议写结论句」——封面本就是 deck 名称，该规则应跳过封面。
 
 **非 Windows 问题但值得后续优化（仅记录）**：lls-huiyi 的说话人识别不认 `[时间] 姓名：` 这种常见转写格式（报「未标注」）；lls-fenjing 对无空行整段口播稿只出 1 个镜头；lls-fapiao 的价税合计必须带 `¥` 才会提取。
 
@@ -650,7 +650,40 @@
 
 1. **A1 Pro 上架专家第 2/3 步**：需用户安装 ego lite 并扫码登录后，才能跑 E 代上架全流程。
 2. **杀毒拦截项**：本机未启用实时防护，无法实测。
-3. **待决策**：reportp 图表契约域锁定、pptx 封面误报、以及交接文件列出的 13 条既有待决策事项。
+3. **既有待决策**：交接文件列出的 13 条事项。reportp 图表契约与 pptx 封面误报已在本轮修完并验证，见下节。
+
+## 补充修复（2026-10-30 下午，两处「待决策」已闭环）
+
+### 一、lls-reportp 图表契约通用化
+
+**原问题**：`assets/doc.js` 的图表构建器写死了汽车市场字段（`year`/`sales_m`/`penetration`，轴名「销量 百万辆」「渗透率」；占比图写死 `brand`/`share` 与「比亚迪/特斯拉中国」专用配色），非汽车主题的报告套不进去。这同时违反了技能自己的规则——`references/data-and-charts.md` 要求「通用构建器放 `assets/doc.js`，专用图表放页面内联脚本」，而专用实现却占着通用层。
+
+**改法**：
+- 数据块支持两种形态：显式 `{x, xName, series:[{field,name,unit,type,axis,percent,color}], data}`；或纯数组自动推断（首个非数值键作类目，其余数值键作序列，图例名回退字段名）。
+- 图表族开放为 `trend`（别名 `line`/`bar`/`market-trend`）与 `share`（别名 `ranking`/`composition`/`share-ranking`）。未登记的族按 `data-type` 降级（`pie` 走占比、其余走趋势）并只提示一次——原实现对未知族直接返回 `{}`，是静默白板缺陷。
+- 旧数据零改动兼容：`year/sales_m/penetration` 走内置映射，还原「销量 百万辆 / 渗透率」轴名、蓝金配色、副轴虚线。
+- 顺带修一处可用性缺陷：占比横条配色原按反转后顺序分配，导致「企业客户」在趋势图是蓝色、在排行图变青色；改为按传入顺序取色，同一实体跨图同色。
+- 文档同步：`page-structure.md` 的 Chart Blocks 补族名表与两种 payload 契约，`data-and-charts.md` 指明构建器字段无关，`report-template.html` 注释更新。
+
+**验证**（`real-tests/lls-reportp/windows-real/图表契约回归/`）：用 Playwright 读取每个图表的 ECharts 实例 `option`（不看截图判定），6 个块全部 `rendered=true`、`canvasPainted=true`、无 fallback：
+- 旧契约块：轴名「销量 百万辆」「渗透率」、series 名、`#2563eb`/`#b7791f` 配色、副轴虚线逐项还原；
+- 新契约块（中文营收）：轴名自动生成为「企业客户 元」，类目为日期；
+- 双轴块：「日营收 元」+「成交客户数 家」；
+- 占比块：企业客户 `#2563eb`，与趋势块一致；
+- 未登记族 `waterfall`：降级为柱状图，console 仅 1 条提示，画布非空。
+`report-template.html` 按真实用法（拷到带 `assets/` 的目录）复查，图表正常且 console 无报错。
+
+### 二、lls-pptx `pptx_check.py` 封面误报
+
+**原问题**：4 页 deck 的封面标题「数据看板入门」被判「话题式标题，建议写结论句」。封面标题本就是 deck 名称，不该按内容页要求改写成结论句。
+
+**改法**：封面与内容页分开判定。封面判据为「第 1 页 + 文本块 ≤3 + 总字数 <60」，命中则跳过话题式判定；内容页规则保留并补强（纯编号正则由 `[\d]+.` 扩到中文数字配 `.`/`、`，短标题排除集补上句号与分号）。用文本块数与字数而非只看页码，是为了避免把「开门就上内容」的首屏当封面放过。
+
+**验证**（`real-tests/lls-pptx/windows-real/检查器用例/`）：
+- 真实 deck：修复前 1 条误报（exit=1）→ 修复后全绿（exit=0）。
+- 用例A（封面 + 4 个内容页）：封面放行；「市场分析」「1.」「背景介绍」「三个关键动作」照报；结论句标题「三日营收增长 9.9%，增量来自客户数」不报。
+- 用例B（首屏即满版内容）：短标题「市场分析」仍报，未被封面豁免。
+- 退出码契约未变（有警告 1、无警告 0），`--help` 与 `py_compile` 正常。
 
 ## 工具事故记录（本次真机验证自身的踩坑，2026-10-30）
 
