@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>三日营收观察：企业客户稳增，中小企业增速更快</title>
+<link rel="stylesheet" href="assets/doc.css">
+</head>
+<body>
+<nav class="toc-rail"></nav>
+<article class="doc-page">
+  <header class="doc-title" id="top">
+    <h1>三日营收观察：企业客户稳增，中小企业增速更快</h1>
+    <p class="doc-subtitle">数据截至 2026-10-30 · 涵盖 2026-10-28 至 2026-10-30 三个自然日 · 来源：销售快照 revenue.csv</p>
+  </header>
+
+  <section class="doc-block" id="s1">
+    <h2>一、核心结论</h2>
+    <p>三天日营收从 21.40 万元升至 23.52 万元，累计增长 9.9%。增量几乎全部来自成交客户数增加，客单价反而小幅回落，说明当前增长是"多签单"而不是"签大单"。</p>
+    <p>分客群看，中小企业客户增长更快：日营收三天增长 10.9%，高于企业客户的 9.2%。两个客群都保持了逐日递增，没有出现单日回撤。</p>
+    <p class="doc-source">来源：销售快照 <code>revenue.csv</code>（3 天 × 2 个客群 × 6 个字段），数据截至 2026-10-30</p>
+  </section>
+
+  <section class="doc-block" id="s2">
+    <h2>二、分客群日营收走势</h2>
+    <p>两条曲线都单调向上，且中小企业客户的斜率更陡——它从 8.60 万元追到 9.54 万元，把与企业客户的日营收差距从 4.20 万元缩小到 4.44 万元的绝对值并未缩小，但相对增速更快。</p>
+    <div class="doc-chart">
+      <div id="revenueChart" class="chart-canvas" style="width:100%;height:360px"></div>
+      <p>图 1：分客群日营收走势（单位：元；来源：<code>revenue.csv</code>，2026-10-28 至 2026-10-30）</p>
+    </div>
+  </section>
+
+  <section class="doc-block" id="s3">
+    <h2>三、客单价与客户数拆解</h2>
+    <p>把营收拆成"客户数 × 客单价"后可以看清：客户数三天增加 9 家（企业客户 +5，中小企业 +4），而两个客群的客单价都在下滑，企业客户从 3,048 元降到 2,974 元。</p>
+    <section class="doc-table">
+      <table>
+        <caption>表 1：分客群营收、客户数与客单价（金额单位：元）</caption>
+        <thead>
+          <tr>
+            <th scope="col">日期</th>
+            <th scope="col">企业客户<br>营收</th>
+            <th scope="col">企业客户<br>客户数</th>
+            <th scope="col">企业客户<br>客单价</th>
+            <th scope="col">中小企业<br>营收</th>
+            <th scope="col">中小企业<br>客户数</th>
+            <th scope="col">中小企业<br>客单价</th>
+            <th scope="col">合计营收</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2026-10-28</td><td>128,000</td><td>42</td><td>3,048</td><td>86,000</td><td>27</td><td>3,185</td><td>214,000</td></tr>
+          <tr><td>2026-10-29</td><td>134,500</td><td>44</td><td>3,057</td><td>91,000</td><td>29</td><td>3,138</td><td>225,500</td></tr>
+          <tr><td>2026-10-30</td><td>139,800</td><td>47</td><td>2,974</td><td>95,400</td><td>31</td><td>3,077</td><td>235,200</td></tr>
+        </tbody>
+      </table>
+      <p class="doc-source">客单价 = 当日该客群营收 ÷ 当日成交客户数，由快照字段直接计算；来源：<code>revenue.csv</code></p>
+    </section>
+  </section>
+
+  <section class="doc-block" id="s4">
+    <h2>四、判断与下一步</h2>
+    <div class="doc-callout">
+      <p>增长引擎已经从"客单价"切换到"客户数"。如果客单价继续下滑，靠多签单维持增速会在获客成本上升时先失灵。</p>
+    </div>
+    <ul>
+      <li>先查企业客户客单价三天连降 2.4% 的原因：是折扣放开，还是新签客户规模偏小。</li>
+      <li>中小企业的增速来自客户数（27→31），但客单价同步走低，需要确认是否为引流款的低价套餐占比上升。</li>
+      <li>三天样本太短，只够看方向，不足以判断趋势；建议补足两周快照后再做归因。</li>
+    </ul>
+    <p class="doc-note">口径说明：营收为快照记录值，未做退款与坏账调整；客户数为当日成交数，非累计客户数；漏斗金额（pipeline）本次未纳入分析。</p>
+  </section>
+
+  <section class="doc-block" id="s5">
+    <h2>五、数据来源</h2>
+    <section class="doc-sources">
+      <ol>
+        <li>销售快照 <code>data/snapshots/revenue.csv</code>，字段：date、metric、segment、value、pipeline、customers；覆盖 2026-10-28 至 2026-10-30，共 6 行。</li>
+        <li>客单价、合计营收、增速均由上述字段现场计算，未引入外部数据。</li>
+      </ol>
+    </section>
+  </section>
+</article>
+<script src="assets/echarts.min.js"></script>
+<script>
+(function () {
+  var el = document.getElementById("revenueChart");
+  if (!el || !window.echarts) return;
+  var chart = echarts.init(el);
+  chart.setOption({
+    animation: false,
+    color: ["#2563eb", "#0f766e"],
+    tooltip: {
+      trigger: "axis",
+      valueFormatter: function (v) { return Number(v).toLocaleString("zh-CN") + " 元"; }
+    },
+    legend: { top: 8, data: ["企业客户", "中小企业"] },
+    grid: { left: 64, right: 32, top: 52, bottom: 44, containLabel: true },
+    xAxis: { type: "category", boundaryGap: false, data: ["2026-10-28", "2026-10-29", "2026-10-30"] },
+    yAxis: {
+      type: "value",
+      name: "日营收 元",
+      axisLabel: { formatter: function (v) { return (v / 10000) + "万"; } },
+      splitLine: { lineStyle: { color: "#e6ebf0" } }
+    },
+    series: [
+      { name: "企业客户", type: "line", smooth: true, lineStyle: { width: 3 }, data: [128000, 134500, 139800] },
+      { name: "中小企业", type: "line", smooth: true, lineStyle: { width: 3 }, data: [86000, 91000, 95400] }
+    ]
+  });
+  window.addEventListener("resize", function () { chart.resize(); });
+})();
+</script>
+<script src="assets/doc.js"></script>
+</body>
+</html>

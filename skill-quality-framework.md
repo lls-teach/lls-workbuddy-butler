@@ -40,3 +40,13 @@
 ```
 
 存量 skill 回归同样走本框架：先全量模拟测试，再修、再冒烟、再交。
+
+## 六、Windows 兼容性交付记录（2026-10-30 真机）
+
+> 明细见 `windows-test-materials/TEST-REPORT-2026-10-29.md` 文末「Windows 真机验证进展」章；逐支命令见 `lls-base-skills/real-tests/windows-real-b-抽查日志.txt`。
+
+- **覆盖**：37 支全部有 Windows 结论。真机实测 35 支（其中 33 支按最小链路跑通并核对产物、2 支为部分/不适用），2 支文本型技能无脚本链路记「不适用」。
+- **验证方式**：Windows 真机（win32 10.0.19045）上按各支 SKILL.md 最小链路跑通，产物落盘并做结构/渲染核对（Office 产物经 LibreOffice 转 PDF 出图人眼核对，网页经无头 Chromium 截图与 DOM 核对），路径一律含中文与空格。
+- **真机暴露并已修复**：PaddleOCR 的 paddlepaddle 3.x oneDNN 崩溃、paddleocr 2.x/3.x 接口差异、保留字符设备名裸 OSError、注释被渲染成幻灯片内容（上轮）；docx 导出静默失败（`python3.cmd` 不可执行，本轮）。共 5 类，均已修复并复验。
+- **系统限制（非技能缺陷，已写入各支失败分支）**：>260 字符路径在 `LongPathsEnabled=0` 下 cmd 无法进入、Python 普通路径报 WinError 206、Chrome 打不开超长 file:// 地址；Node 因自动加 `\\?\` 前缀不受此限。
+- **仍待用户动作**：Pro 上架专家 E-0 的安装与扫码；杀毒拦截项需在有实时防护的机器上补测。

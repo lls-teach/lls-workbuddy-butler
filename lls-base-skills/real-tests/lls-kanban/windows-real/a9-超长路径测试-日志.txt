@@ -1,0 +1,114 @@
+A9 超长中文路径真机测试日志
+Windows 真机 win32 10.0.19045 / Python 3.14 (venv-main) / node v22.22.2
+深路径基座: real-testuns\lls-kanban\长路径测试目录 (11 层同名中文目录, 308 字符)
+生成时间: 2026-10-30
+
+========================================================================
+A9 超长中文路径测试 — Windows 真机探针 v2
+3.14.4 (tags/v3.14.4:23116f9, Apr  7 2026, 14:10:54) [MSC v.1944 64 bit (AMD64)]
+========================================================================
+
+[0] 控制组：cmd 自身可用 + 短中文路径可进
+  len=55 exit=0 out=F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录
+
+[1] LongPathsEnabled
+  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem
+      LongPathsEnabled    REG_DWORD    0x0
+
+[2] cmd /c cd /d 逐层二分
+  层  长度    exit  判定    输出
+  1  78    0     OK    F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试
+  2  101   0     OK    F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试
+  3  124   0     OK    F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试
+  4  147   0     OK    F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试
+  5  170   0     OK    F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试
+  6  193   0     OK    F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试
+  7  216   0     OK    F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试
+  8  239   0     OK    F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试
+  9  262   1     FAIL  系统找不到指定的路径。
+  10 285   1     FAIL  系统找不到指定的路径。
+  11 308   1     FAIL  系统找不到指定的路径。
+
+  最深成功: (8, 239)  首个失败: (9, 262)
+
+[3] 子进程 cwd=深路径（CreateProcess 直接以超长 cwd 启动，复现事故）
+  len=170 exit=0 OK
+  len=262 OSError WinError=267 目录名称无效。
+  len=308 OSError WinError=267 目录名称无效。
+
+[4] python 直连读目录：plain 路径
+  exit=1 out= err_tail=\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为'
+
+[5] python 直连读目录：\\?\ 扩展前缀
+  exit=0 out=4 err_tail=
+
+[6] 技能原链路 A：cmd cd 进深路径后跑 dashboard.py（真实用户姿势）
+  exit=1
+  stdout=
+  stderr=系统找不到指定的路径。
+
+[7] 技能原链路 B：python os.chdir(\\?\ 前缀) 后 runpy 执行 dashboard.py（绕道方案）
+  exit=1
+  stdout=
+  stderr=, in <module>
+    import os,runpy,sys;os.chdir(sys.argv[1]);print('cwd_ok=',os.getcwd()[:40]);sys.argv=['dashboard.py'];runpy.run_path('dashboard.py',run_name='__main__')
+                        ~~~~~~~~^^^^^^^^^^^^^
+FileNotFoundError: [WinError 206] 文件名或扩展名太长。: '\\\\?\\F:\\CODE\\skill_windows\\real-test\\runs\\lls-kanban\\长路径测试目录\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为\\这是很长的中文目录名用于测试超长路径限制行为'
+
+[8] 产物检查
+  index.html: OSError 2 系统找不到指定的文件。
+  dashboard_data.json: OSError 2 系统找不到指定的文件。
+
+
+========================================================================
+[W] 普通路径写文件 / 建目录的边界扫描
+  层  目录长度    写文件           建子目录          
+  1  78      OK            OK            
+  2  101     OK            OK            
+  3  124     OK            OK            
+  4  147     OK            OK            
+  5  170     OK            OK            
+  6  193     OK            OK            
+  7  216     OK            OK            
+  8  239     OK            FAIL 206      
+  9  262     FAIL None     FAIL 3        
+  10 285     FAIL None     FAIL 3        
+  11 308     FAIL None     FAIL 3        
+
+  最深可写层: 7（216 字符）
+
+[P1] 在 216 字符目录跑真实生成
+  三件套 + CSV 已拷入
+  exit=0
+  stdout=Wrote F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\index.html
+Wrote F:\CODE\skill_windows\real-test\runs\lls-kanban\长路径测试目录\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\这是很长的中文目录名用于测试超长路径限制行为\dashboard_data.json
+  stderr=
+
+[P2] index.html = 1072296 bytes（路径 227 字符）
+     dashboard_data.json = 3938 bytes
+
+[P3] node validate
+  exit=0
+ok - has segmented time presets
+ok - has explicit date range inputs
+ok - has active range label
+ok - has data freshness indicator
+ok - has Data Source modal
+ok - calls setupDashboardRuntime
+ok - declares chartFactories
+ok - has one dashboard shell
+ok - has at least one KPI tile
+ok - has at least one chart panel
+ok - chart panels have chart containers
+ok - table panel count is valid
+ok - does not use report TOC rail
+ok - does not use report-card feed markup
+ok - does not use document report title header
+ok - has View Data Source action
+ok - has Edit chart action
+ok - does not format business dates through UTC
+ok - does not contain [TITLE] placeholder
+ok - does not contain TODO placeholder
+ok - starts with doctype on line 1
+ok - has source comment in file head
+summary - index.html: 3 KPI tiles, 3 chart panels, 1 table panels

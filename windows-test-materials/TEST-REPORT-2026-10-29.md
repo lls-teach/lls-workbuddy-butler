@@ -12,47 +12,47 @@
 
 ## 总览表（37 支 × 功能结论 × Windows 结论 × 冒烟循环句）
 
-| skill | 功能结论（修后） | Windows 结论（代码级审计） | 冒烟循环句 |
+| skill | 功能结论（修后） | Windows 结论（真机，2026-10-30） | 冒烟循环句 |
 |---|---|---|---|
-| lls-bangong 打工人四件套 | 通过（修后复验通过） | 需适配（代码级不兼容项已修，真机未验证） | 补 |
-| lls-aizhijian AI交付前自检 | 通过（范围限定） | 兼容 | 补 |
-| lls-convert 格式转换大全 | 通过（抽测范围，非全矩阵） | 需适配（已修主要已知项，真机未验证） | 补（新建句） |
-| lls-kanban 数据看板生成 | 通过（修后全链路复验通过） | 基本兼容（长路径/旧 cmd 代码页无法判断） | 补 |
-| lls-docpage 文档页生成 | 通过（修后复验全绿） | 需适配（代码级不兼容已修完，真机未验证） | 补 |
-| lls-pptp 瀑布流演示页面 | 通过（本地可验证部分；pptx 导出沙盒无法验证） | 兼容（代码级；真机项无法判断） | 补 |
-| lls-reportp 图文报告页面 | 通过 | 需适配（已修；真机表现无法判断） | 补 |
-| lls-htmlppt HTML交互演示 | 通过 | 兼容（代码级；真机项无法判断） | 补 |
-| lls-mdppt Markdown转PPT | 通过（修后；渲染缺口已闭合） | 兼容（代码级；真机未验证） | 补 |
-| lls-zimu 字幕清洗与对齐 | 通过（修后） | 兼容（代码级；真机抽查项无法判断） | 补 |
-| lls-jiaoan 写教案 | 通过（本地可验证部分） | 基本兼容（代码级） | 补 |
-| lls-pingyu 教师评语生成 | 通过（修后） | 兼容（代码级；$PY 替换约定无法判断） | 补 |
-| lls-aiwei 去AI味检测改写 | 通过（本地可验证部分） | 兼容 | 补 |
-| lls-baoshui 报税资料清单 | 通过（修后） | 兼容（修后；原需适配已修） | 补 |
-| lls-biaoshu 标书检查 | 通过（本地脚本部分） | 兼容（修后） | 补 |
-| lls-docx Word文档处理 | 通过（经修复） | 兼容（代码级；真机未验证） | 补 |
-| lls-fapiao 发票识别报销 | 通过（本地可验证核心全链路） | 需适配（代码级已修；非真机实测） | 补 |
-| lls-fenjing 视频分镜脚本 | 通过（修后） | 兼容 | 补 |
-| lls-gongwen 公文写作格式 | 通过 | 兼容 | 补 |
-| lls-hetong 合同审查 | 通过（修后） | 兼容 | 补 |
-| lls-huiyi 录音转会议纪要 | 通过（本地可验证核心脚本，修后） | 兼容（修后；PowerShell 自举与 GBK 启发式无法判断） | 补 |
-| lls-jianli 简历生成与面试准备 | 通过（本地可验证核心脚本） | 兼容（修后；真机未验证） | 补 |
-| lls-kejian 课件制作 | 通过（本地脚本部分，修后） | 兼容（修后） | 补 |
-| lls-koushuo 口播稿写作 | 通过（修后） | 兼容 | 补 |
-| lls-lunwen 论文排版 | 通过（本地可验证部分，修后） | 需适配（已修；字体回退与 Word 渲染无法判断） | 补 |
-| lls-naotu 思维导图生成 | 通过（本地可验证部分，修后） | 兼容 | 补 |
-| lls-pdf PDF文档处理 | 通过（修后；沙盒默认环境 pdf_create 与 OCR 真实识别除外，见备注） | 需适配（代码与文档层面已适配，真机未验证） | 补 |
-| lls-pptx PPT演示文稿 | 通过（本地可验证部分，修后） | 需适配（已修；真机未验证） | 补 |
-| lls-shujv 数据报表分析 | 通过（修后） | 兼容（修后） | 补 |
-| lls-shuzhi 述职报告 | 通过（本地可验证核心脚本，修后） | 兼容 | 补 |
-| lls-timu 出题组卷 | 通过（本地可验证部分，修后） | 兼容（代码级；冒烟命令 && 已拆行修复） | 补 |
-| lls-wenan 文案多平台改写 | 通过（本地可验证部分，修后） | 兼容 | 补 |
-| lls-xlsx Excel 表 | 通过（修后） | 兼容（修后；真机无法判断） | 补 |
-| lls-xuanti 爆款选题生成 | 通过（修后） | 兼容 | 补 |
-| lls-zhouba 周报日报生成 | 通过（修后） | 兼容（修后；编码模拟验证，真机未跑） | 补 |
-| wb-open-platform-handbook 上架规范问答 | 通过（结构与引用层面） | 需适配（已适配） | 补（等效循环句：直到一致） |
-| wb-open-platform-handbook-pro Workbuddy技能上架专家 | 通过（结构与引用层面，修后） | 需适配（文本层面已修复；实机效果无法判断） | 补（等效循环句：直到一致） |
+| lls-bangong 打工人四件套 | 通过（修后复验通过） | 真机已验证（中文路径 + PaddleOCR 真实识别；venv/保留字符/字体项见 A2 备注） | 补 |
+| lls-aizhijian AI交付前自检 | 通过（范围限定） | 不适用（纯文本闸门型，无脚本链路） | 补 |
+| lls-convert 格式转换大全 | 通过（抽测范围，非全矩阵） | 真机已验证（中文目录/空格文件名多格式转换） | 补（新建句） |
+| lls-kanban 数据看板生成 | 通过（修后全链路复验通过） | 真机已验证（生成 + node 校验 + 浏览器渲染；>260 字符路径受系统限制，见 A9） | 补 |
+| lls-docpage 文档页生成 | 通过（修后复验全绿） | 真机已验证（PDF/docx 双路线；docx 静默失败已修） | 补 |
+| lls-pptp 瀑布流演示页面 | 通过（本地可验证部分；pptx 导出沙盒无法验证） | 真机已验证（校验 + PDF 导出；Playwright 自动回退系统 Chrome/Edge） | 补 |
+| lls-reportp 图文报告页面 | 通过 | 真机已验证（中文+空格路径，HTTP 与 file:// 双渲染核对） | 补 |
+| lls-htmlppt HTML交互演示 | 通过 | 真机已验证（中文路径生成 3 页） | 补 |
+| lls-mdppt Markdown转PPT | 通过（修后；渲染缺口已闭合） | 真机已验证（渲染核对 + 注释不渲染已修） | 补 |
+| lls-zimu 字幕清洗与对齐 | 通过（修后） | 真机已验证（中文路径清洗产物正确） | 补 |
+| lls-jiaoan 写教案 | 通过（本地可验证部分） | 真机已验证（check/create + Word 渲染核对） | 补 |
+| lls-pingyu 教师评语生成 | 通过（修后） | 真机已验证（lint 精确命中预埋缺陷） | 补 |
+| lls-aiwei 去AI味检测改写 | 通过（本地可验证部分） | 真机已验证（密度报告产物正确） | 补 |
+| lls-baoshui 报税资料清单 | 通过（修后） | 真机已验证（清单产物正确） | 补 |
+| lls-biaoshu 标书检查 | 通过（本地脚本部分） | 真机已验证（JSON 良构、分类分布正确） | 补 |
+| lls-docx Word文档处理 | 通过（经修复） | 真机已验证（修订流程 + 渲染核对） | 补 |
+| lls-fapiao 发票识别报销 | 通过（本地可验证核心全链路） | 真机已验证（解析 + 报销单合计正确；OCR 见 A2） | 补 |
+| lls-fenjing 视频分镜脚本 | 通过（修后） | 真机已验证（分镜表 + xlsx 结构有效） | 补 |
+| lls-gongwen 公文写作格式 | 通过 | 真机已验证（GB/T 版式渲染核对） | 补 |
+| lls-hetong 合同审查 | 通过（修后） | 真机已验证（风险扫描产物正确） | 补 |
+| lls-huiyi 录音转会议纪要 | 通过（本地可验证核心脚本，修后） | 真机已验证（骨架/行动项/决策抽取正确；说话人标注格式偏差见备注） | 补 |
+| lls-jianli 简历生成与面试准备 | 通过（本地可验证核心脚本） | 真机已验证（docx 字体渲染核对） | 补 |
+| lls-kejian 课件制作 | 通过（本地脚本部分，修后） | 真机已验证（知识点页/练习页拆分正确） | 补 |
+| lls-koushuo 口播稿写作 | 通过（修后） | 真机已验证（字数配比产物正确） | 补 |
+| lls-lunwen 论文排版 | 通过（本地可验证部分，修后） | 真机已验证（排版产物渲染核对） | 补 |
+| lls-naotu 思维导图生成 | 通过（本地可验证部分，修后） | 真机已验证（.mm XML 良构 + 层级/文字逐字核对） | 补 |
+| lls-pdf PDF文档处理 | 通过（修后；沙盒默认环境 pdf_create 与 OCR 真实识别除外，见备注） | 真机已验证（创建 + 文本提取回读；OCR 见 A2） | 补 |
+| lls-pptx PPT演示文稿 | 通过（本地可验证部分，修后） | 真机已验证（生成 + check；封面标题 1 条误报待决策） | 补 |
+| lls-shujv 数据报表分析 | 通过（修后） | 真机已验证（分组汇总产物正确） | 补 |
+| lls-shuzhi 述职报告 | 通过（本地可验证核心脚本，修后） | 真机已验证（大纲 + 量化体检提示正确） | 补 |
+| lls-timu 出题组卷 | 通过（本地可验证部分，修后） | 真机已验证（蓝图 20 题分配正确） | 补 |
+| lls-wenan 文案多平台改写 | 通过（本地可验证部分，修后） | 真机已验证（四平台改写骨架正确） | 补 |
+| lls-xlsx Excel 表 | 通过（修后） | 真机已验证（公式重算产物正确） | 补 |
+| lls-xuanti 爆款选题生成 | 通过（修后） | 真机已验证（96 卡矩阵产物正确） | 补 |
+| lls-zhouba 周报日报生成 | 通过（修后） | 真机已验证（周报产物正确） | 补 |
+| wb-open-platform-handbook 上架规范问答 | 通过（结构与引用层面） | 不适用（知识问答型，无脚本链路） | 补（等效循环句：直到一致） |
+| wb-open-platform-handbook-pro Workbuddy技能上架专家 | 通过（结构与引用层面，修后） | 部分真机（E-0 第 1 步检测通过；安装与扫码需用户动作） | 补（等效循环句：直到一致） |
 
-**总览小结**：37 支修后功能结论全部为通过（含 13 支“本地可验证部分”与 2 支“结构与引用层面”的范围限定结论）；修前存在真实失败项的支均已修掉并重跑复验通过（修前失败项见各节）；Windows 结论中“兼容/基本兼容”27 支、“需适配（已修）”10 支，全部为代码级审计，无一支声称真机实测通过；冒烟循环句 37 支全部补齐（补前基线：0 支含“直到问题解决”原文；34 支 lls 仅有“回归解决”一步；lls-convert 与两支 wb 手册连“回归解决”都没有）。
+**总览小结**：37 支修后功能结论全部为通过（含 13 支“本地可验证部分”与 2 支“结构与引用层面”的范围限定结论）；修前存在真实失败项的支均已修掉并重跑复验通过（修前失败项见各节）；**Windows 结论已于 2026-10-30 升级为真机实测**：35 支真机已验证（其中 2 支为部分真机/不适用，见下），2 支文本型技能（aizhijian 与上架规范问答）无脚本链路、记为不适用，Pro 上架专家第 1 步真机通过、安装与扫码待用户动作；冒烟循环句 37 支全部补齐（补前基线：0 支含“直到问题解决”原文；34 支 lls 仅有“回归解决”一步；lls-convert 与两支 wb 手册连“回归解决”都没有）。
 
 ---
 
@@ -548,7 +548,7 @@
 - **过程记录**：[~/workspace/skillhub-test/progress.md](sandbox://workspace/skillhub-test/progress.md)（协调员工作文件，含全部 37 支的详细结果、修复清单、探针结果、循环句原文与复验证据路径）。
 - **各支测试证据**：`~/workspace/skillhub-test/runs/<slug>/`（第二阶段用 `runs/<slug>/phase2/`，循环句用 `runs/<slug>/smokeloop/`，不覆盖前期证据）。其中 `runs/lls-jianli/resume.docx` 与 `runs/lls-naotu/out3/basic.mm` 为“需用户协助”清单中点名的复验产物。
 - **修复状态声明**：全部修复改动仍在 `~/workspace/butler-scan/` 工作区，**未 commit、未 push、未向 SkillHub/WorkBuddy/GitHub 做任何提交、上传、推送，未碰任何账号凭证**，等用户定夺再推。各节“修复清单”均以该支任务开始时快照为基线，工作区接手前已是脏状态（多支并行任务的既有改动），不得把接手前改动算成本次改动。
-- **结论边界重申**：Windows 结论全部为代码级审计（非真机实测）；htmlppt 未做真机浏览器点击验证、kanban 未做真实浏览器渲染验证；wb 两支问答效果未验证；fapiao/pdf 的 OCR 模型未下载；pptp 的 pptx 导出依赖私有 `@oai/artifact-tool`（npm 404，工具不可用）；pdf_create 沙盒缺 TrueType 中文字体属环境事项；convert 结论仅覆盖抽测 51 对（不对矩阵宣称的 123 对背书）。
+- **结论边界重申**：Windows 结论已于 2026-10-30 由「代码级审计」升级为「真机验证」——验证方式为在本机（win32 10.0.19045）按各支 SKILL.md 最小链路跑通并核对产物，**不等于全功能矩阵实测**：htmlppt 仅验证生成与体量、未做逐页点击交互；kanban 的 >260 字符路径受系统限制（见 A9）；wb 两支问答效果未逐条抽查；fapiao/pdf 的 OCR 模型在 bangong 支验证真实识别，其余支复用同一条链路；pptp 的 pptx 导出依赖私有 `@oai/artifact-tool`（npm 404，工具不可用）；convert 结论仍仅覆盖抽测 51 对（不对矩阵宣称的 123 对背书）。
 
 ---
 
@@ -559,12 +559,19 @@
 
 ## 已验证项（有证据）
 
-### A9 lls-kanban 数据看板生成 — 核心 3/4 通过，长路径 cmd 待补
+### A9 lls-kanban 数据看板生成 — 核心 4/4 通过（长路径 cmd 已补测）
 
 - **中文+空格路径生成**：✅ 通过。在 `real-test\runs\lls-kanban\中文 看 板\销售看板\` 按技能工作流拷三件套（dashboard_template.py→dashboard.py、echarts.min.js、dashboard_runtime.js）+ 真实 CSV 快照（含中文 segment「企业客户/中小企业」），`python dashboard.py` 生成 `index.html`（1,072,296 字节）与 `dashboard_data.json`，无报错。
 - **Node 校验**：✅ 通过。`node scripts/validate-echarts-dashboard.mjs 销售看板/index.html` 全绿（时间预设、日期输入、KPI、图表面板、chartFactories 等逐项 ok），exit=0。
 - **浏览器渲染**：✅ 通过。本地 HTTP 服务 + 内置浏览器实测：KPI 卡（$674,700 / $1,555,500 / 220）与 CSV 数据逐项吻合（非 demo 回退）；趋势折线图、中文柱状图（企业客户/中小企业）、排行榜表格渲染正常；截图存档 `real-test\runs\lls-kanban\看板渲染-截图.png`（渲染会话产物）。
-- **超长中文路径 + cmd**：⏸ 待补。312 字符 11 层中文深路径已建好（`real-test\runs\lls-kanban\长路径测试目录\`），测试协议见交接文件《真机验证-进度与交接-2026-10-30.md》。⚠️ 教训：**任何 shell（含 ZCode 自身的 Bash 工具）都不要 cd 进该深路径**——cwd 超过 260 字符会导致进程无法启动（本次事故原因，见文末）。
+- **超长中文路径 + cmd**：✅ 已补测（结论：技能本身无问题，>260 字符受 Windows 系统限制）。深路径基座 308 字符（11 层同名中文目录），完整日志归档 `real-tests/lls-kanban/windows-real/a9-超长路径测试-日志.txt`。实测数据：
+  - `LongPathsEnabled = 0x0`（本机未启用长路径）。
+  - `cmd /c cd /d`：≤239 字符通过，≥262 字符报「系统找不到指定的路径。」（边界落在 260）→ 用户按文档姿势 `cd 进目录再跑 python` 在超限路径下必然失败。
+  - 子进程 `CreateProcess` 以超长 cwd 启动：262/308 字符报 `OSError WinError=267 目录名称无效。`——这正是上一会话 shell 全灭（`spawn bash.exe ENOENT`）的同一根因。
+  - Python 直连读目录：普通路径报 `WinError 206 文件名或扩展名太长`，加 `\\?\` 前缀后可正常读到 4 个条目。
+  - **正向对照**：在 216 字符目录（cmd 可进、可写）跑完整链路，`dashboard.py` 生成 index.html 1,072,296 字节，node 校验 22 项全绿 exit=0 → 证明技能链路在长而合法的路径下完全正常。
+  - 附带发现：目录/文件创建的实际可用上限比 260 更低——239 字符目录下 `mkdir data/snapshots` 即报 WinError 206（本机可写层最深 216 字符）。已把边界写进 SKILL.md 失败分支第 5 行。
+  - 测完已删除该深路径目录（防后续会话误入）。
 
 ### A2 lls-bangong PaddleOCR 链路 — 发现真机 bug 并已修复闭环
 
@@ -589,16 +596,61 @@
 
 渲染 PNG 由 LibreOffice（soffice）headless 转 PDF 再出图——**间接证实 Windows 下 LibreOffice 默认路径探测命中、中文名 docx/pptx 渲染正常**。
 
-## 未完成项（下一会话按序补）
+## 续测结果（2026-10-30 第二轮，A9 收尾 + A4/A7/A11/A1 + B 组 21 支）
 
-1. **A9 长路径 cmd 测试**（深路径已就绪，协议见交接文件——严禁 shell cd 进深路径，用 `cmd /c "cd /d <深路径> && python dashboard.py"` 子进程方式）。
-2. **A4 reportp**：PowerShell 含中文+空格路径跑报告生成 + 浏览器渲染。
-3. **A7 pptp**：Playwright 启动与回退候选、PowerShell/cmd 引号与中文编码、超长路径。
-4. **A1 Pro 上架专家**：按 `references/windows-smoke-test.md` 跑 E-0 环境自举。
-5. **A11 naotu**：生成 .mm 并核对 XML 结构/层级（可先 Read 复核，装 XMind/FreeMind 的导入核对属用户侧）。
-6. **B**：其余 27 支抽查关键链路（PowerShell venv、中文路径、产物生成）。
-7. **C**：修复项汇总 → commit + push（当前工作区有 9 个已修改文件未提交：bangong×5、fapiao×1、mdppt×1、pdf×2）。
-8. **D**：真机全过后，把各支 Windows 结论从"代码级"升级为"真机已验证"。
+> 本轮全部在含中文与空格的目录 `real-test\runs\lls-<slug>\中文 测试\` 下执行；逐支命令、退出码与产物见 `lls-base-skills/real-tests/windows-real-b-抽查日志.txt`，产物归档于各支 `real-tests/<slug>/windows-real/`。
+
+### A4 lls-reportp 图文报告页面 — ✅ 通过
+
+- PowerShell 下建含中文+空格目录、`Copy-Item` 拷 assets（doc.css/doc.js/echarts.min.js），技能自带冒烟 `Test-Path` 三项全 True。
+- 手写 `index.html`（真数据来自 `revenue.csv`：分客群日营收、客单价拆解表、来源标注），本地 HTTP 服务 + 无头 Chromium 截图核对：标题/章节/双线折线图（企业客户 vs 中小企业）/中文表头表格/结论 callout 全部正常。
+- `--dump-dom` 确认 `nav.toc-rail` 由 doc.js 生成 6 个锚点（竖线轨 + 悬浮弹出，属设计形态）。
+- **`file://` 双击打开同样正常**（样式、目录轨、图表齐全）——这是报告页最真实的使用场景。
+- 待决策（非 Windows 问题）：`assets/doc.js` 的图表契约写死了汽车市场字段（`year`/`sales_m`/`penetration`，轴名「销量 百万辆」「渗透率」），非汽车主题的报告套不进去。本轮改用页面内联 `echarts.init` 画真实数据图，未改 doc.js。
+- 证据：`real-tests/lls-reportp/windows-real/中文 报告 页面/`（index.html + HTTP/file 两张渲染图）。
+
+### A7 lls-pptp 瀑布流演示页面 — ✅ 通过（含两项前置条件）
+
+- 校验链路：模板与中文+空格路径 deck 均 `passed: 15 cards checked`。
+- **Playwright 回退候选命中（关键结论）**：playwright 1.64.1 期望 chromium revision 1248，本机只有 1217/1223/1234 → 自带浏览器不可用；脚本 `findBrowserExecutable()` 按候选顺序命中 **系统 Chrome**（`C:\Program Files\Google\Chrome\Application\chrome.exe`），导出 15 页 PDF（4,297,476 字节）成功。`--browser-executable` 指定 Edge 同样成功 → Windows 用户不必下载 playwright 浏览器。
+- PowerShell 直接调用导出脚本（中文+空格路径变量传入）成功，15 页 4,308,301 字节。
+- 缺依赖原始报错：`导出失败：Cannot resolve playwright. Pass --node-modules or set NODE_PATH.`（技能包不自带 playwright/pdf-lib，已补进 SKILL.md 处理纪律第 9 条）。
+- **超长路径**：node 校验在 292 字符路径下 PASS（Node 内部给绝对路径加 `\\?\` 前缀，不受 260 限制）；PDF 导出 FAIL——`page.goto: net::ERR_FILE_NOT_FOUND`，即 Chrome 打不开 >260 字符的 file:// 地址，需把 deck 移到短路径。已补进失败分支第 6 行。
+- pptx 导出：`导出失败：Cannot resolve @oai/artifact-tool.`（私有包，npm 不可得）——与代码级结论一致。
+- 杀毒拦截：本机 `RealTimeProtectionEnabled=False`、`AntivirusEnabled=False`，**无法实测，记 N/A（不记通过）**。
+- 证据：`real-tests/lls-pptp/windows-real/`（中文 deck + 首页/次页渲染图 + 完整日志）。
+
+### A11 lls-naotu 思维导图 — ✅ 通过
+
+- 中文大纲（4 个一级分支、三级层级、32 节点）→ `naotu_make.py` 同时产出 `.mm` 与 HTML，脚本报「节点 31 个」（不含中心主题，口径一致）。
+- 独立解析 `.mm`：XML 良构、无 BOM、UTF-8、根元素 `<map version="1.0.1">`；逐层比对 32 个节点文字与大纲**逐字一致**，最大深度 3，层级归属正确。
+- HTML 预览用无头 Chromium 截图核对：缩进树层级清晰、中文正常。
+- 证据：`real-tests/lls-naotu/windows-real/`（大纲、.mm、.html、预览图）。
+
+### A1 wb-open-platform-handbook-pro 上架专家 E-0 — ⏸ 部分通过（需用户动作）
+
+- **第 1 步检测**：✅ `Get-Command ego-browser` 与 `where ego-browser` 两种写法都正确判定「未安装」（`where` 返回 exit=1「用提供的模式无法找到文件」），且 SKILL.md 已内置 Windows 分流语法 → 正确进入未安装分支。官网 `https://lite.ego.app/` 可达（确认为厂商站点）。
+- **第 2 步安装**：⏸ 需用户本人下载并运行 ego lite 安装包（含 SmartScreen 拦截处理），安装第三方软件属用户动作，本次未执行。
+- **第 3 步登录**：⏸ 需用户本人微信扫码。
+- 因此本支记为「部分真机」，不记通过。
+
+### B 其余 21 支抽查 — ✅ 21/21 通过（1 支 lint 按设计返回非 0）
+
+覆盖 aiwei、baoshui、biaoshu、fenjing、hetong、htmlppt、huiyi、kejian、koushuo、pingyu、shuzhi、timu、wenan、xuanti、zhouba、shujv、gongwen、pdf、pptx、fapiao、docpage，均在中文+空格路径下按各支 SKILL.md 最小链路跑通并核对产物（JSON 良构、xlsx/pptx/docx 结构有效、Office 产物经 LibreOffice 转 PDF 出图人眼核对）。逐支明细见 `windows-real-b-抽查日志.txt`。
+
+**本轮发现的真问题（已闭环）**：
+
+1. **lls-docpage docx 导出静默失败（已修代码）**。`export-paper-to-docx.mjs` 的 `findPython()` 优先取 `python3`，本机 `where python3` 首条是 `python3.cmd`；Node 的 `spawnSync` 不能直接执行 `.cmd`，失败时既无 stderr 也无提示，用户只看到「python-docx fallback was unavailable or failed」，无法区分「缺模块」还是「找不到解释器」。
+   修复：Windows 下 `findExecutable()` 只取真正的 `.exe`（跳过 .cmd/.bat 垫片）；`findPython()` 改为优先 `python`；回退失败时打印 `result.error` 与「可用 --python 指定解释器」。验证：修复后同样命令明确报 `ModuleNotFoundError: No module named 'lxml'`；把已装依赖的 venv 放到 PATH 前，导出成功 36,674 字节。SKILL.md 失败分支补 6、7 两行（playwright 依赖与 python-docx/lxml 前置）。
+2. **lls-pptx `pptx_check.py` 对封面页 1 条误报（仅记录，未改）**：4 页 deck 的第 1 页封面标题「数据看板入门」被判为「话题式标题，建议写结论句」——封面本就是 deck 名称，该规则应跳过封面。
+
+**非 Windows 问题但值得后续优化（仅记录）**：lls-huiyi 的说话人识别不认 `[时间] 姓名：` 这种常见转写格式（报「未标注」）；lls-fenjing 对无空行整段口播稿只出 1 个镜头；lls-fapiao 的价税合计必须带 `¥` 才会提取。
+
+## 仍未完成（需用户动作或另需决策）
+
+1. **A1 Pro 上架专家第 2/3 步**：需用户安装 ego lite 并扫码登录后，才能跑 E 代上架全流程。
+2. **杀毒拦截项**：本机未启用实时防护，无法实测。
+3. **待决策**：reportp 图表契约域锁定、pptx 封面误报、以及交接文件列出的 13 条既有待决策事项。
 
 ## 工具事故记录（本次真机验证自身的踩坑，2026-10-30）
 

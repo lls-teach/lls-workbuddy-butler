@@ -96,9 +96,11 @@
 
 另补 `lls-jiaoan/scripts/requirements.txt`（python-docx）。
 
-**剩余任务（按序）**：① A9 超长中文路径 cmd 测试（深路径基座已就绪，**外层 shell 严禁 cd 进深路径**，协议见进度交接文件）；② A4 reportp 的 PowerShell 中文+空格路径；③ A7 pptp 的 Playwright 启动/引号编码/长路径；④ A1 Pro 上架专家 E-0 自举；⑤ A11 naotu 的 .mm 结构核对；⑥ 其余 27 支抽查关键链路；⑦ 全绿后把各支 Windows 结论从”代码级”升级为”真机已验证”。
+**剩余任务（2026-10-30 第二轮已全部推进，详见测试报告「续测结果」章）**：① A9 超长中文路径 cmd 测试 ✅ 完成（边界 260 已量化，深路径已删）；② A4 reportp ✅ 完成（HTTP 与 file:// 双渲染）；③ A7 pptp ✅ 完成（Playwright 自动回退系统 Chrome/Edge）；④ A1 Pro 上架专家 E-0 ⏸ 仅第 1 步检测通过，安装与扫码需用户动作；⑤ A11 naotu ✅ 完成（.mm 良构与层级逐字核对）；⑥ 其余 21 支抽查 ✅ 21/21 通过；⑦ 结论升级 ✅ 已完成，总览表 Windows 列改为「真机，2026-10-30」。
 
-**代码提交状态**：上述修复与本轮真机证据已推送 origin/main（`4bc3df6` 修 4 类兼容问题、`a65321a` 证据归档与交接更新），工作区与远端同步、干净。后续新修按同一流程提交。
+**本轮新修**：lls-docpage 的 docx 导出一处 Windows 静默失败（`findPython()` 取到 `python3.cmd`，`spawnSync` 不能执行 .cmd，失败无任何提示）——改为只取 `.exe`、优先 `python`、并在失败时打印原因；另为 pptp / docpage / kanban 的 SKILL.md 补了 5 条 Windows 失败分支。
+
+**代码提交状态**：上述修复与本轮真机证据已推送 origin/main（`4bc3df6` 修 4 类兼容问题、`a65321a` 证据归档与交接更新），第二轮（A9 收尾 / A4 / A7 / A11 / B 组 21 支 / docpage 修复 / 结论升级）另成一个提交。后续新修按同一流程提交。
 
 **真机测试自身的一条硬教训**：Windows 上做超长路径测试时，测试工具自身的 cwd 一旦进入超 260 字符路径，进程将无法启动（本次实测导致会话 shell 全灭）。正确姿势是外层 shell 始终留在短路径，进深路径一律用 `cmd /c “cd /d <深路径> && <命令>”` 子进程。
 

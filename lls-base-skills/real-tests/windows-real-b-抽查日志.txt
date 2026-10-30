@@ -1,0 +1,47 @@
+B 组真机抽查日志（其余 skill 最小链路，2026-10-30）
+
+环境：win32 10.0.19045 ／ venv-main Python 3.14 ／ node v22.22.2 ／ LibreOffice headless
+测试目录：`F:\CODE\skill_windows\real-test\runs\lls-<slug>\中文 测试\`（**每支都在含中文与空格的路径下跑**）
+判定口径：只记有产物/日志的结果；命令与退出码为原样记录。
+
+| # | skill | 最小链路命令 | 结果 | 产物（归档于 real-tests/<slug>/windows-real/中文 测试/） |
+|---|---|---|---|---|
+| 1 | lls-aiwei | `aiwei_scan.py 原文.md -o 密度报告.md` | ✅ exit=0，密度 29.8/千字（重度），词级与句级命中均正常 | 密度报告.md |
+| 2 | lls-baoshui | `baoshui_list.py --type "个体工商户·查账征收" -o 报税清单.md` | ✅ exit=0，5 项资料 + 2 项动作 | 报税清单.md |
+| 3 | lls-biaoshu | `biaoshu_extract.py 招标文件.txt -o 要求清单.json` | ✅ exit=0，8 条硬性要求，JSON 良构可解析 | 招标文件.txt、要求清单.json |
+| 4 | lls-fenjing | `fenjing_make.py 口播稿.md -o 分镜表.md --xlsx 分镜表.xlsx --title ...` | ✅ exit=0，1 镜头/50 秒；xlsx 结构有效（sheet1 可读） | 口播稿.md、分镜表.md、分镜表.xlsx |
+| 5 | lls-hetong | `hetong_scan.py 合同.txt -o 风险报告.md` | ✅ exit=0，6 段条款、6 处风险命中（5 类） | 合同.txt、风险报告.md |
+| 6 | lls-htmlppt | `htmlppt_build.py --outline 大纲.md -o 演示.html` | ✅ exit=0，单文件 3 页 | 大纲.md、演示.html |
+| 7 | lls-huiyi | `huiyi_minutes.py 会议转写稿.txt -o 纪要骨架.md --title ... --date ...` | ✅ exit=0，发言 10 段、行动项 3、决策 1 | 会议转写稿.txt、纪要骨架.md |
+| 8 | lls-kejian | `kejian_outline.py --json 课程.json -o 课件大纲.md` | ✅ exit=0，3 知识点页 + 2 练习页 | 课程.json、课件大纲.md |
+| 9 | lls-koushuo | `koushuo_outline.py --title ... --minutes 5 --points "定口径，存快照，选图表"` | ✅ exit=0，钩子 144 字／正文 960 字／CTA 96 字 | 口播大纲.md |
+| 10 | lls-pingyu | `pingyu_lint.py 评语.md` | ✅ 判定正确：exit=1，命中 4 项（3 条模板化开头 + 1 条 28 字过短），与样本里预埋的缺陷一一对应 | 评语.md |
+| 11 | lls-shuzhi | `shuzhi_outline.py 述职.json -o 述职大纲.md` | ✅ exit=0；量化体检报"2 条成果 0 条含数字"，与输入一致 | 述职.json、述职大纲.md |
+| 12 | lls-timu | `timu_blueprint.py --json 测验蓝图.json -o 出题蓝图.md` | ✅ exit=0，3 知识点／20 题 | 测验蓝图.json、出题蓝图.md |
+| 13 | lls-wenan | `wentan_adapt.py 原始文案.md -o 适配文案.md` | ✅ exit=0，四平台各一版 | 原始文案.md、适配文案.md |
+| 14 | lls-xuanti | `xuanti_matrix.py --lane 技能变现 --crowd 职场新人 --platform 小红书` | ✅ exit=0，96 张选题卡 | 选题矩阵.md |
+| 15 | lls-zhouba | `zhouba_create.py 周报.json -o 周报.md` | ✅ exit=0 | 周报.json、周报.md |
+| 16 | lls-shujv | `shujv_report.py 营收明细.csv --group segment --value value --agg sum` | ✅ exit=0，按客群汇总 | 营收明细.csv、汇总报告.md |
+| 17 | lls-gongwen | `gongwen_create.py --json 公文.json -o 检查通知.docx` | ✅ exit=0；LibreOffice 转 PDF 渲染核对：标题居中、发文字号、主送机关、一级标题加粗、附件说明、落款日期齐全 | 公文.json、检查通知.docx、检查通知.pdf |
+| 18 | lls-pdf | `pdf_create.py --title ... --stdin-file 正文.txt` → `pdf_extract_text.py 报告.pdf` | ✅ exit=0，字体 LLSCJK；回读中文完整（标题/正文/分页标记均正确） | 正文.txt、报告.pdf、提取文本.txt |
+| 19 | lls-pptx | `pptx_create.py --outline 大纲.md --style formal` → `pptx_check.py` | ✅ exit=0，4 页；check 报 1 条警告（封面标题被判"话题式"） | 大纲.md、演示.pptx、演示.pdf |
+| 20 | lls-fapiao | `fapiao_parse.py 发票文本.txt` → `fapiao_baoxiao.py 发票清单.jsonl -o 报销单.xlsx` | ✅ exit=0，total=1120.0（conf 0.95）；报销单 2 笔合计 1680.00（公式 F4） | 发票文本.txt、发票.json、发票清单.jsonl、报销单.xlsx |
+| 21 | lls-docpage | `export-paper-to-pdf.mjs`（--chrome 系统 Chrome）／`export-paper-to-docx.mjs` | ✅ PDF exit=0（26,412 字节）；docx 修复后 exit=0（36,674 字节） | 主题冒烟.html、主题冒烟.pdf、主题冒烟.docx、主题冒烟.clean.html |
+
+## 未列入表内的两支
+
+- **lls-aizhijian**：纯文本闸门型技能，无 `scripts/`、无命令行链路可跑；抽查方式为阅读 SKILL.md 与 test-prompts.json，确认与代码级结论一致（无平台相关代码）。不记"真机通过"。
+- **wb-open-platform-handbook-pro**：E-0 环境自举第 1 步真机通过（`Get-Command ego-browser` 与 `where ego-browser` 均正确判定未安装）；第 2 步（下载并运行 ego lite 安装包）与第 3 步（微信扫码登录）需用户本人动作，本次未执行，不记通过。
+
+## 抽查中发现的两个真问题（均已在真机上闭环）
+
+1. **lls-docpage docx 导出静默失败**（已修）。`export-paper-to-docx.mjs` 的 `findPython()` 优先取 `python3`，本机 `where python3` 首条是 `python3.cmd`；Node 的 `spawnSync` 不能直接执行 `.cmd`，失败时既无 stderr 也无 exit 说明，用户只看到一句"python-docx fallback was unavailable or failed"，无法判断是缺模块还是找不到解释器。
+   修复：`findExecutable()` 在 Windows 下只取真正的 `.exe`（跳过 .cmd/.bat 垫片）；`findPython()` 改为优先 `python`；回退失败时打印 `result.error` 与"可用 --python 指定解释器"的提示。
+   验证：修复后同样命令会明确报 `ModuleNotFoundError: No module named 'lxml'`（指向真正原因）；把已装依赖的 venv 放到 PATH 前，导出成功 36,674 字节。
+2. **lls-pptx 的 `pptx_check.py` 对封面页有 1 条误报**（未修，仅记录）。生成的 4 页 deck 上，检查器把第 1 页封面标题"数据看板入门"判为"话题式标题，建议写结论句"——封面本身就是 deck 名称，该规则应跳过封面页。属判定精度问题，不影响产物，留待决策。
+
+## 备注（非 Windows 问题，供后续优化）
+
+- lls-huiyi：样本用 `[00:00:12] 张伟：…` 格式时被判为"未标注 10"，说明说话人识别只认特定格式；产物骨架与行动项抽取仍正确。
+- lls-fenjing：整段无空行的口播稿会被当成 1 个镜头，需要分镜时用户应在稿件中分段。
+- lls-fapiao：文本必须带 `¥` 才会提取价税合计（首轮样本缺符号时 total 为 None，补符号后 conf 0.95 正确识别）。

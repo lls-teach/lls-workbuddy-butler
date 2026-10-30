@@ -1,0 +1,4 @@
+{"exam": "数据看板入门 期中测验", "total": 20,
+ "topics": [{"name": "指标口径", "weight": 0.4}, {"name": "数据快照", "weight": 0.35}, {"name": "图表选择", "weight": 0.25}],
+ "types": ["单选", "多选", "判断", "简答"],
+ "difficulty": {"easy": 0.5, "mid": 0.3, "hard": 0.2}}

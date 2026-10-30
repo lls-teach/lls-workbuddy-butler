@@ -1,0 +1,69 @@
+A7 lls-pptp 瀑布流演示 — Windows 真机测试日志
+环境：win32 10.0.19045 / node v22.22.2 / playwright 1.64.1 / pdf-lib 1.17.1 / Python 3.14
+测试目录：F:\CODE\skill_windows\real-test\runs\lls-pptp\中文 演示 目录\
+说明：本机 Defender 实时防护为关闭状态，杀毒拦截一项无法实测（见第 5 条）。
+
+1) 校验冒烟（模板本身）
+$ node scripts/validate-waterfall-deck.mjs assets/template.html
+Waterfall deck validation passed: 15 cards checked.
+Warnings:
+- Template placeholders [TITLE] or [SUBTITLE] are still present.
+exit=0
+
+2) 校验（中文 + 空格路径）
+$ node scripts/validate-waterfall-deck.mjs ".../中文 演示 目录/季度复盘.html"
+Waterfall deck validation passed: 15 cards checked.
+exit=0
+（把 <title> 与首屏文案换成中文后重跑，0 warning，exit=0）
+
+3) PDF 导出 —— 缺依赖时的原始报错
+$ node scripts/export-waterfall-to-pdf.mjs ".../季度 复盘.html" ".../季度复盘.pdf"
+导出失败：Cannot resolve playwright. Pass --node-modules or set NODE_PATH.
+exit=1
+
+4) PDF 导出 —— 装依赖后（--node-modules）
+$ npm i playwright pdf-lib   → added 7 packages in 24s
+$ node scripts/export-waterfall-to-pdf.mjs ".../中文 演示 目录/季度复盘.html" ".../季度复盘.pdf" --node-modules "F:/CODE/skill_windows/real-test/node-pptp" --preview-dir ".../预览图"
+{
+  "output": "F:\\CODE\\skill_windows\\real-test\\runs\\lls-pptp\\中文 演示 目录\\季度复盘.pdf",
+  "slides": 15,
+  "previewDir": "F:\\CODE\\skill_windows\\real-test\\runs\\lls-pptp\\中文 演示 目录\\预览图"
+}
+exit=0   产物：季度复盘.pdf 4,297,476 字节；预览图 15 张
+
+浏览器回退候选命中情况（关键结论）：
+- playwright 1.64.1 期望 chromium revision 1248，本机 ms-playwright 只有 1217/1223/1234 → playwright 自带浏览器不可用。
+- 脚本 findBrowserExecutable() 按候选顺序回退，命中
+  C:\Program Files\Google\Chrome\Application\chrome.exe（系统 Chrome），导出正常 15 页。
+  即：Windows 用户不需要额外下载 playwright 浏览器，系统 Chrome/Edge 会被自动用上。
+- --browser-executable 显式指定 Edge（C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe）同样成功，15 页。
+
+5) PowerShell 调用（中文 + 空格路径，native 命令直传）
+PS> node $script $deck $out --node-modules "F:/CODE/skill_windows/real-test/node-pptp"
+{"output": "...\\季度复盘-ps.pdf", "slides": 15}    exit=0   产物 4,308,301 字节
+（PowerShell 5.1 对含空格的中文路径按变量传入即可，无需手工加引号；直接写内联字面量时仍需引号。）
+
+6) 杀毒拦截
+PS> Get-MpComputerStatus
+RealTimeProtectionEnabled : False
+AntivirusEnabled          : False
+AntispywareEnabled        : False
+→ 本机未启用实时防护，无法实测拦截，本项记为 N/A（非通过）。
+
+7) 超长路径（292 字符，10 层中文目录）
+- node 校验：PASS
+  $ node scripts/validate-waterfall-deck.mjs "...10 层.../季度 复盘.html"
+  Waterfall deck validation passed: 15 cards checked.  exit=0
+  （Node 会给绝对路径加 \\?\ 命名空间前缀，因此自身不受 260 限制）
+- PDF 导出：FAIL，稳定复现，约 1 秒内报错
+  导出失败：page.goto: net::ERR_FILE_NOT_FOUND at file:///F:/...（292 字符路径的 file URL）
+  → Chrome 打不开超 260 字符的 file:// 地址，导出无法进行；需把 deck 移到短路径。
+  备注：首次尝试时该命令挂起约 7 分钟无输出，杀进程后重跑即稳定复现上述报错；挂起原因未定位（不可复现）。
+
+8) pptx 导出
+$ node scripts/export-waterfall-to-pptx.mjs ... --node-modules ...
+导出失败：Cannot resolve @oai/artifact-tool. Initialize the presentation workspace or pass --node-modules.
+→ 私有包，npm 上不可得，pptx 导出在真机同样不可用（与此前代码级结论一致）。
+
+结论：校验链路（node）在中文/空格/超长路径下均正常；PDF 导出在中文+空格路径下正常，且能自动回退系统 Chrome/Edge；
+导出侧的两个真实限制是「依赖需自装」与「路径 >260 时 Chrome 打不开 file://」，均已补入 SKILL.md 失败分支。
