@@ -1,0 +1,139 @@
+{
+  "title": "Daily Revenue Command Center",
+  "subtitle": "Automation-ready sample dashboard for recurring operating metrics",
+  "timezone": "Asia/Shanghai",
+  "generatedAt": "2026-10-29T20:03:21.930393+00:00",
+  "dataMode": "snapshot",
+  "freshness": {
+    "latestDataDate": "2026-10-30",
+    "latestCapturedAt": "",
+    "source": "local snapshot"
+  },
+  "availableDates": [
+    "2026-10-28",
+    "2026-10-29",
+    "2026-10-30"
+  ],
+  "defaultRange": "30D",
+  "kpis": [
+    {
+      "id": "revenue30",
+      "label": "30 day revenue",
+      "value": "$674,700",
+      "delta": "+0.0%",
+      "detail": "vs prior available 30 day window"
+    },
+    {
+      "id": "pipeline30",
+      "label": "30 day pipeline",
+      "value": "$1,555,500",
+      "delta": "2.3x",
+      "detail": "pipeline coverage"
+    },
+    {
+      "id": "customers30",
+      "label": "30 day customers",
+      "value": "220",
+      "delta": "2 segments",
+      "detail": "active segment rows"
+    }
+  ],
+  "datasets": {
+    "daily": [
+      {
+        "date": "2026-10-28",
+        "revenue": 214000.0,
+        "pipeline": 491000.0,
+        "customers": 69
+      },
+      {
+        "date": "2026-10-29",
+        "revenue": 225500.0,
+        "pipeline": 518500.0,
+        "customers": 73
+      },
+      {
+        "date": "2026-10-30",
+        "revenue": 235200.0,
+        "pipeline": 546000.0,
+        "customers": 78
+      }
+    ],
+    "bySegment": [
+      {
+        "date": "2026-10-28",
+        "segment": "中小企业",
+        "revenue": 86000.0,
+        "pipeline": 190000.0,
+        "customers": 27,
+        "snapshot_date": "2026-10-28",
+        "source": "local snapshot"
+      },
+      {
+        "date": "2026-10-28",
+        "segment": "企业客户",
+        "revenue": 128000.0,
+        "pipeline": 301000.0,
+        "customers": 42,
+        "snapshot_date": "2026-10-28",
+        "source": "local snapshot"
+      },
+      {
+        "date": "2026-10-29",
+        "segment": "中小企业",
+        "revenue": 91000.0,
+        "pipeline": 203500.0,
+        "customers": 29,
+        "snapshot_date": "2026-10-29",
+        "source": "local snapshot"
+      },
+      {
+        "date": "2026-10-29",
+        "segment": "企业客户",
+        "revenue": 134500.0,
+        "pipeline": 315000.0,
+        "customers": 44,
+        "snapshot_date": "2026-10-29",
+        "source": "local snapshot"
+      },
+      {
+        "date": "2026-10-30",
+        "segment": "中小企业",
+        "revenue": 95400.0,
+        "pipeline": 216000.0,
+        "customers": 31,
+        "snapshot_date": "2026-10-30",
+        "source": "local snapshot"
+      },
+      {
+        "date": "2026-10-30",
+        "segment": "企业客户",
+        "revenue": 139800.0,
+        "pipeline": 330000.0,
+        "customers": 47,
+        "snapshot_date": "2026-10-30",
+        "source": "local snapshot"
+      }
+    ],
+    "leaderboard": [
+      {
+        "segment": "企业客户",
+        "revenue": 402300.0,
+        "pipeline": 946000.0,
+        "customers": 133
+      },
+      {
+        "segment": "中小企业",
+        "revenue": 272400.0,
+        "pipeline": 609500.0,
+        "customers": 87
+      }
+    ]
+  },
+  "sourceSnippets": {
+    "revenueTrend": "daily = make_daily_series(rows)\nfiltered = [row for row in daily if start_date <= row[\"date\"] <= end_date]\nseries = [{\"date\": row[\"date\"], \"revenue\": row[\"revenue\"]} for row in filtered]",
+    "segmentMix": "by_segment = make_segment_series(rows)\nfiltered = [row for row in by_segment if start_date <= row[\"date\"] <= end_date]\ngrouped = sum revenue by segment for the active time range",
+    "pipelineCoverage": "daily = make_daily_series(rows)\ncoverage = row[\"pipeline\"] / row[\"revenue\"] when revenue is non-zero\nthe chart recomputes coverage after the time filter changes",
+    "leaderboard": "leaderboard = make_leaderboard(rows)\ntable rows are sorted by revenue descending and bounded for display"
+  }
+}

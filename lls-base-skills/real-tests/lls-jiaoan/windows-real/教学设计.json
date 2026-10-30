@@ -1,0 +1,9 @@
+{"topic": "平面直角坐标系", "grade": "七年级", "subject": "数学", "duration": "45 分钟",
+ "goals": {"knowledge": ["说出坐标系各部分名称"], "skill": ["运用坐标描述位置"], "attitude": ["体会数形结合思想"]},
+ "key_points": ["点的坐标表示方法"], "difficult_points": ["各象限内坐标符号特征"],
+ "prep": {"teacher": ["方格纸课件"], "student": ["方格纸、直尺"]},
+ "process": [{"phase": "情境导入", "time": "5 分钟", "teacher": "展示座位图提问", "student": "观察回答", "design": "从生活经验引入"},
+             {"phase": "新知讲解", "time": "20 分钟", "teacher": "讲解坐标概念", "student": "听讲练习", "design": "概念建构"},
+             {"phase": "巩固练习", "time": "15 分钟", "teacher": "出题巡视", "student": "独立完成", "design": "应用强化"},
+             {"phase": "小结作业", "time": "5 分钟", "teacher": "总结布置", "student": "记录", "design": "收束"}],
+ "board": "平面直角坐标系：x轴、y轴、原点、象限", "homework": ["课本 P68 第 1-3 题"]}

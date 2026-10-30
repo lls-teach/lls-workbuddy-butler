@@ -1,13 +1,15 @@
 # Windows 兼容性后续工作交接（真机验证用）
 
-> 交接时间：2026-10-29。交接对象：全库 37 支 skill 的 Windows 兼容性工作。
+> 交接时间：2026-10-29 首版；**2026-10-30 真机进展与剩余任务见本文末尾第七节 + `windows-test-materials/真机验证-进度与交接-2026-10-30.md`**。
+> 交接对象：全库 37 支 skill 的 Windows 兼容性工作。
 > 代码版本：本交接对应的修复已包含在本提交及之后版本中，克隆即得修复后代码。测试物料在 `windows-test-materials/`（见第六节）。
 
 ## 一、已完成（代码级，沙盒 Linux，无真机）
 
 - 37 支全部做了 Windows 代码级审计（不是真机实测）：25 支兼容、2 支基本兼容、10 支需适配。
-- 10 支需适配的代码级不兼容项已修完（见第二节），冒烟循环句 37/37 已补（“做冒烟测试直到问题解决”）。
+- 10 支需适配的代码级不兼容项已修完（见第二节），冒烟循环句 37/37 已补（”做冒烟测试直到问题解决”）。
 - 完整测试报告：`~/workspace/skillhub-test/2026-10-29-skillhub-test-report.md`；各支证据：`~/workspace/skillhub-test/runs/<slug>/`。
+- **2026-10-30 起真机实测已启动**：Windows 真机（win32 10.0.19045）已跑通 kanban 全链路（含浏览器渲染）、PaddleOCR 真实识别、convert/mdppt/jiaoan/jianli/lunwen/docx/xlsx/zimu/bangong 产物链路，并修掉 4 类真机暴露的兼容问题（详见第七节与测试报告真机章）。
 
 ## 二、10 支需适配（代码级已修，真机未验证）
 
@@ -74,8 +76,29 @@
 1. **代码版本（已定）**：修复已随本提交推送到 GitHub，Windows 上直接克隆最新 main 即可，不用再拷工作区。
 2. **Windows 真机验证**：按第三节清单逐支跑，记录结果反馈回来。
 3. **反馈后修复**：真机失败项再做代码级修复 → 再推 → 再验，直到真机全过。
-4. **结论升级**：真机全过后，测试报告里的 Windows 结论从“代码级”升级为“真机已验证”，并更新质量框架交付记录。
+4. **结论升级**：真机全过后，测试报告里的 Windows 结论从”代码级”升级为”真机已验证”，并更新质量框架交付记录。
 5. **不阻塞 Windows 线的其他事**：13 条待决策事项（convert 的 ok:true 误判、docx 的 --stdin 路由不符、jiaoan 示例命令不符、Pro 案例库旧 slug 是否改等）另行拍板；四件套 WorkBuddy 提交等明日限额恢复后下令提交。
+
+## 七、真机实测进展（2026-10-30，Windows 本机）
+
+> 详细逐项结论与证据：`windows-test-materials/TEST-REPORT-2026-10-29.md` 文末「Windows 真机验证进展」章；
+> 剩余任务的完整操作协议：`windows-test-materials/真机验证-进度与交接-2026-10-30.md`；
+> 物证归档：`lls-base-skills/real-tests/<skill>/windows-real/` 与 `real-tests/windows-real-render/`（见 `windows-real-README.md`）。
+
+**已真机跑通**：lls-kanban（中文+空格路径生成 → node 校验全绿 → 浏览器渲染正常，KPI 与源数据逐项吻合）、lls-mdppt、lls-jiaoan、lls-jianli、lls-lunwen、lls-docx、lls-xlsx、lls-zimu、lls-convert（中文目录/空格文件名）、lls-bangong（含 PaddleOCR 真实识别）。
+
+**真机暴露并已修复的 4 类问题**（提交 `4bc3df6`，已推 GitHub）：
+
+1. PaddleOCR 在 paddlepaddle 3.x 上 oneDNN/PIR 推理崩溃（`NotImplementedError: ConvertPirAttribute2RuntimeAttribute not support [pir::ArrayAttribute<pir::DoubleAttribute>]`）→ win32 下 `enable_mkldnn=False`。修复后真机复跑识别正确。
+2. paddleocr 2.x / 3.x 接口不兼容（3.x 的 `.ocr()` 不收 `cls`、移除 `show_log`）→ 抽 `ocr_lines()` 统一两版调用，`fapiao_batch.py` 同步。
+3. Windows 保留字符/设备名只在保存阶段报裸 `OSError` → `guard_overwrite()` 在 win32 下提前校验并给可读错误（bangong 的 docx/pdf/pptx/xlsx 四支）。
+4. lls-mdppt 把转换脚本写入的 AI 标注注释渲染成了幻灯片内容 → `parse_md` 跳过整行 HTML 注释。
+
+另补 `lls-jiaoan/scripts/requirements.txt`（python-docx）。
+
+**剩余任务（按序）**：① A9 超长中文路径 cmd 测试（深路径基座已就绪，**外层 shell 严禁 cd 进深路径**，协议见进度交接文件）；② A4 reportp 的 PowerShell 中文+空格路径；③ A7 pptp 的 Playwright 启动/引号编码/长路径；④ A1 Pro 上架专家 E-0 自举；⑤ A11 naotu 的 .mm 结构核对；⑥ 其余 27 支抽查关键链路；⑦ 全绿后把各支 Windows 结论从”代码级”升级为”真机已验证”。
+
+**真机测试自身的一条硬教训**：Windows 上做超长路径测试时，测试工具自身的 cwd 一旦进入超 260 字符路径，进程将无法启动（本次实测导致会话 shell 全灭）。正确姿势是外层 shell 始终留在短路径，进深路径一律用 `cmd /c “cd /d <深路径> && <命令>”` 子进程。
 
 ## 七、参考
 
