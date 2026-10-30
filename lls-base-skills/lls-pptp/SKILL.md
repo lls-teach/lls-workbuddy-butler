@@ -43,6 +43,7 @@ license: MIT
 6. 交付前跑 validate，并说明"竖滚阅读 + 全屏放映 + 可导出 PDF/pptx"三种用法。
 7. **首行与注释**：`<!doctype html>` 必须保持首行，来源注释 `<!-- deck: 标题 -->` 放在 `<head>` 内前部，不要把注释移到 doctype 之前（会触发 quirks 模式、可能破坏布局）。
 8. **跨平台路径**：脚本一律用 `node scripts/...` 调用（不要直接执行 `.mjs`）；标题作目录/文件名时去掉 Windows 非法字符 `\ / : * ? " < > |`；含空格或中文的路径调用命令时加引号；HTML 内图片路径一律用正斜杠 `images/...`，不要用反斜杠；导出找不到浏览器时可用 `--browser-executable` 指定 Chrome/Edge，或设 `PLAYWRIGHT_CHROMIUM_EXECUTABLE`。
+9. **导出依赖**：导出脚本依赖 npm 包 `playwright` 与 `pdf-lib`，技能包不自带——先 `npm i playwright pdf-lib`，再用 `--node-modules <装依赖的目录>` 指过去（或设 `NODE_PATH`）。playwright 自带浏览器缺失时会自动回退到系统 Chrome/Edge，不必再下载 playwright 浏览器。
 
 ## 失败分支
 
@@ -52,6 +53,9 @@ license: MIT
 | 2 | 导出 pptx 版式错位 | 跑 validate 看结构问题；pptx 导出对复杂布局支持有限 | 建议交付 PDF 或 HTML |
 | 3 | 卡片数过多（>30） | 合并章节或拆分多份 deck | — |
 | 4 | 注释太长遮挡内容 | 缩短为要点式；完整稿另存讲稿文件 | — |
+| 5 | 导出报 `Cannot resolve playwright` / `Cannot resolve pdf-lib` | 导出依赖不在技能包内：`npm i playwright pdf-lib` 后用 `--node-modules <该目录>` 指过去 | 用浏览器"打印为 PDF"兜底交付 |
+| 6 | 导出报 `net::ERR_FILE_NOT_FOUND`（且路径很长） | deck 完整路径超过 260 字符时 Chrome 打不开该 `file://` 地址：把 deck 移到更短路径（如 `D:\decks\`）再导出 | `validate` 走 Node 不受此限，可先在原处校验再搬迁 |
+| 7 | 导出报 `Cannot resolve @oai/artifact-tool` | pptx 导出依赖私有包，npm 上不可得：改用 PDF 或直接交付 HTML | 需要可编辑 pptx 时手工重建 |
 
 ## 反例黑名单（不要做）
 

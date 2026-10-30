@@ -50,7 +50,9 @@ license: MIT
 | 2 | docx 导出样式丢失 | 用 `export-paper-docx-fallback.py` 降级方案 | 建议用户直接打印 PDF |
 | 3 | Mermaid 图不渲染 | `$PY scripts/render-mermaid-to-svg.mjs` 预渲染成 SVG | 改用静态图片 |
 | 4 | 中文字体打印异常 | 指定中文 serif/sans 回退链 | 提示用户系统字体情况 |
-| 5 | Windows 下找不到 pandoc / pdfinfo / pdftoppm / mmdc | 确认工具已安装并加入 PATH（脚本在 Windows 下用 where 查找），或用 --pandoc / --pdfinfo / --pdftoppm / --mmdc / --chrome 显式传路径 | PDF 导出本身走 Playwright 自带 Chromium，不受系统浏览器影响；校验与 PNG 渲染缺工具时只跳过该步 |
+| 5 | Windows 下找不到 pandoc / pdfinfo / pdftoppm / mmdc | 确认工具已安装并加入 PATH（脚本在 Windows 下用 where 查找），或用 --pandoc / --pdfinfo / --pdftoppm / --mmdc / --chrome 显式传路径 | 校验与 PNG 渲染缺工具时只跳过该步；PDF 导出可用 `--chrome` 指向系统 Chrome/Edge（playwright 自带浏览器缺失时不必额外下载） |
+| 6 | PDF 导出报 `Could not load the Playwright Node package` | 导出脚本依赖 npm 包 playwright：`npm i playwright` 后设 `NODE_PATH` 指向其 node_modules，或装进当前项目 | 浏览器本体用 `--chrome` 指向系统 Chrome/Edge |
+| 7 | docx 导出报 `Pandoc was not found, and python-docx fallback was unavailable or failed` | 回退走 PATH 上的 `python`：该解释器必须装 `python-docx` + `lxml`（Windows 上 `python3` 常是垫片或另一个解释器），用 `--python <解释器路径>` 明确指向已装依赖的 venv | 装 pandoc 走 pandoc 路线，或直接交付 PDF |
 
 ## 反例黑名单（不要做）
 

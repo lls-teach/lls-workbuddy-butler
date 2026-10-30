@@ -201,8 +201,13 @@ function findExecutable(command) {
   // Windows 没有 Unix 的 `command -v`，用 where.exe 查找；否则查到的一律为空。
   if (process.platform === "win32") {
     const result = spawnSync("where", [command], { encoding: "utf8" });
-    if (result.status === 0) return result.stdout.trim().split(/\r?\n/)[0];
-    return "";
+    if (result.status !== 0) return "";
+    const found = result.stdout.trim().split(/\r?\n/).filter(Boolean);
+    // where 常把 .cmd/.bat 垫片排在前面（例如 python3.cmd），而 spawnSync 不能直接
+    // 执行这类脚本（Node 20+ 对 .cmd 需要 shell:true，否则 EINVAL 且无 stderr），
+    // 结果是回退路径静默失败。这里只取真正的 .exe，全为垫片时返回空交给上层报错。
+    const exe = found.find((line) => /\.exe$/i.test(line));
+    return exe || "";
   }
   const result = spawnSync("command", ["-v", command], {
     encoding: "utf8",
@@ -213,7 +218,9 @@ function findExecutable(command) {
 }
 
 function findPython() {
-  return pythonArg || findExecutable("python3") || findExecutable("python");
+  // Windows 上 `python3` 常指向 python3.cmd 垫片或另一个没装 python-docx 的解释器，
+  // 因此优先用 `python`；两者都不合适时由用户用 --python 显式指定。
+  return pythonArg || findExecutable("python") || findExecutable("python3");
 }
 
 function exportWithPythonDocx({ python, cleanHtmlPath, outputPath }) {
@@ -228,6 +235,12 @@ function exportWithPythonDocx({ python, cleanHtmlPath, outputPath }) {
   if (result.status === 0) {
     if (result.stdout) process.stdout.write(result.stdout);
     return true;
+  }
+  if (result.error) {
+    process.stderr.write(
+      `python-docx 回退无法启动（解释器：${python}）：${result.error.message}\n` +
+        "可用 --python 指定已装 python-docx 的解释器路径。\n",
+    );
   }
   if (result.stderr) process.stderr.write(result.stderr);
   return false;

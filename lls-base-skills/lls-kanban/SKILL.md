@@ -55,6 +55,7 @@ license: MIT
 | 2 | ECharts 图表不显示 | 跑 validate 脚本定位；检查 option 结构与数据格式 | 用官方最小示例替换调试 |
 | 3 | 离线打开空白 | 检查 echarts.min.js 是否同目录、路径是否相对 | 确认 file:// 协议下无绝对路径 |
 | 4 | 数据量大（>5 万行） | 预聚合到 JSON，页面只渲染汇总 | 拆成多个时间范围的快照文件 |
+| 5 | Windows 下 cmd 报"系统找不到指定的路径"、Python 报 `WinError 206`/`WinError 267` | 输出目录完整路径过长：Win10 实测（`LongPathsEnabled=0`）含文件名的路径 ≤250 可用、建 `data/snapshots` 子目录 ≤216 可用、≥262 必失败 | 把产物目录换到更短路径（如 `D:\kanban\`）重跑；确认注册表 `LongPathsEnabled=1` 后也可解除限制 |
 
 ## 反例黑名单（不要做）
 
