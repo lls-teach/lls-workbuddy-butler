@@ -1,23 +1,19 @@
-import re
-import sys
-
-
 """lls-zimu 共享工具：SRT 解析/写出、口头禅与替换清洗、台词对齐。"""
 import difflib
+import os
 import re
+import sys
 
 SRT_TIME = re.compile(r"(\d{2}):(\d{2}):(\d{2})[,.](\d{3})\s*-->\s*(\d{2}):(\d{2}):(\d{2})[,.](\d{3})")
 FILLERS = ["嗯", "啊", "呃", "就是说", "然后然后", "这个这个", "对对对", "那个那个"]
 
 
 def die(msg, code=1):
-    import sys
     print(f"[lls-zimu] 错误: {msg}", file=sys.stderr)
     sys.exit(code)
 
 
 def ensure_parent(path):
-    import os
     parent = os.path.dirname(os.path.abspath(path))
     os.makedirs(parent, exist_ok=True)
     return path
@@ -49,7 +45,6 @@ def parse_srt(text: str) -> list[dict]:
 
 
 def write_srt(blocks: list[dict], path: str) -> None:
-    import os
     os.makedirs(os.path.dirname(os.path.abspath(path)) or ".", exist_ok=True)
     out = []
     for i, b in enumerate(blocks, 1):
