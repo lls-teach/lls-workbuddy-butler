@@ -63,6 +63,35 @@ Single-chart blocks should include:
 - optional hover `.chart-menu` with `data-chart-type` controls;
 - a visible caption with units and source context when relevant.
 
+Chart families implemented by `assets/doc.js`:
+
+| `data-chart` | Renders | Payload |
+| --- | --- | --- |
+| `trend` (aliases `line`, `bar`, `market-trend`) | multi-series trend with a line/bar toggle | trend payload below |
+| `share` (aliases `ranking`, `composition`, `share-ranking`) | ring or ranked bar for part-to-whole | share payload below |
+
+Family names are case-insensitive. An unregistered family falls back by `data-type` (`pie` → share, otherwise trend) and logs one console warning rather than rendering an empty canvas.
+
+Trend payload, explicit form — preferred whenever the series are not trivially named:
+
+```json
+{
+  "x": "date",
+  "xName": "日期",
+  "series": [
+    {"field": "enterprise", "name": "企业客户", "unit": "元"},
+    {"field": "customers", "name": "成交客户数", "unit": "家", "axis": 1}
+  ],
+  "data": [{"date": "10-28", "enterprise": 128000, "customers": 69}]
+}
+```
+
+Field names are free. `axis: 1` moves a series to the secondary axis. `unit` feeds tooltips and generated axis names; add `"percent": true` when the values are already percentages. `color` overrides the default palette slot for that series.
+
+Trend payload, compact form — a plain array is read as one category plus numeric values, taking the first non-numeric key as the category and every numeric key as a series. Series names fall back to field names.
+
+Share payload: `{"name": "segment", "value": "amount", "total": 235200, "data": [...]}`, or a plain array of `{name, value}` (the keys `brand`/`share` are also accepted). Include `total` so shares are computed against a stated denominator; without it the values are summed. When the values sum to roughly 100 they are displayed as percentages.
+
 Multi-chart comparison blocks should normally remain at document-column width and stack on mobile. Use wide layouts only when explicitly requested or when labels/axes would be unreadable otherwise.
 
 ## Diagram Blocks

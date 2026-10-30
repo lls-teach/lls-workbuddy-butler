@@ -28,117 +28,280 @@
     return { left: 58, right: 48, top: 52, bottom: 58, containLabel: true };
   }
 
-  function marketOption(rows, type) {
-    if (type === "bar") {
-      return {
-        animation: false,
-        color: [palette.blue, palette.gold],
-        tooltip: { trigger: "axis" },
-        legend: { top: 8 },
-        grid: grid(),
-        xAxis: { type: "category", data: rows.map((row) => row.year) },
-        yAxis: [
-          { type: "value", name: "销量 百万辆", splitLine: { lineStyle: { color: palette.line } } },
-          { type: "value", name: "渗透率", axisLabel: { formatter: (value) => value + "%" } }
-        ],
-        series: [
-          { name: "销量", type: "bar", data: rows.map((row) => row.sales_m) },
-          {
-            name: "渗透率",
-            type: "line",
-            yAxisIndex: 1,
-            data: rows.map((row) => row.penetration),
-            lineStyle: { width: 3 }
-          }
-        ]
-      };
+  // ——— 图表数据契约 ————————————————————————————————————————————————
+  // 数据块（data-data 指向的 <script type="application/json">）支持两种形态：
+  //   A. 显式：{ "x": "类目字段", "xName": "横轴名", "data": [ ... ],
+  //             "series": [{ "field", "name", "unit", "type", "axis", "color", "percent" }],
+  //             "yAxes": [{ "name", "percent" }] }
+  //   B. 纯数组：[{ "类目字段": "…", "数值字段A": 1, "数值字段B": 2 }]
+  //      取第一个非数值键作类目，其余数值键作序列，图例名用字段名。
+  // 图表族（data-chart，大小写不敏感）：
+  //   trend | line | bar | market-trend（旧名）→ 多序列趋势，线/柱可切换
+  //   share | ranking | composition | share-ranking（旧名）→ 占比环图或排行横条
+  // 未登记的族按 data-type 降级（pie 走占比、其余走趋势）并在控制台提示一次，
+  // 不再渲染空白图。
+  const TREND_KINDS = new Set(["trend", "line", "bar", "market-trend"]);
+  const SHARE_KINDS = new Set(["share", "ranking", "composition", "share-ranking"]);
+
+  // 趋势图序列默认取色与前两色顺序保持一致，既有页面的配色不变
+  const trendColors = [palette.blue, palette.gold, palette.teal, palette.rose, "#64748b", "#7c3aed"];
+
+  // 旧数据（纯数组 year/sales_m/penetration）的显示名与单位映射，保证既有页面外观不变
+  const LEGACY_FIELDS = {
+    sales_m: { name: "销量", unit: "百万辆" },
+    penetration: { name: "渗透率", percent: true, axis: 1 }
+  };
+
+  function isNumeric(value) {
+    return typeof value === "number" && Number.isFinite(value);
+  }
+
+  function formatNum(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return String(value === undefined || value === null ? "" : value);
+    // 万级以上加千分位便于阅读，小数字保持原样以免改变既有页面观感
+    return Math.abs(n) >= 10000 ? n.toLocaleString("zh-CN") : String(n);
+  }
+
+  function formatValue(value, series) {
+    const n = Number(value);
+    if (series && series.percent) {
+      return (Number.isFinite(n) ? n.toFixed(1) : String(value)) + "%";
     }
+    const text = Number.isFinite(n) ? formatNum(n) : String(value === undefined || value === null ? "" : value);
+    return series && series.unit ? text + " " + series.unit : text;
+  }
+
+  function pickField(obj, keys) {
+    for (const key of keys) {
+      if (obj && obj[key] !== undefined && obj[key] !== null && obj[key] !== "") return obj[key];
+    }
+    return undefined;
+  }
+
+  function axisNameOf(members) {
+    if (!members.length) return "";
+    const first = members[0];
+    if (first.name && first.unit) return first.name + " " + first.unit;
+    return first.name || "";
+  }
+
+  function normalizeTrend(rows) {
+    // 形态 A：显式声明
+    if (!Array.isArray(rows) && rows && Array.isArray(rows.series)) {
+      const data = Array.isArray(rows.data) ? rows.data : [];
+      const xKey = rows.x || Object.keys(data[0] || {})[0] || "x";
+      const series = rows.series
+        .map((item) => ({
+          field: item.field || item.key,
+          name: item.name || item.field || item.key,
+          unit: item.unit || "",
+          percent: Boolean(item.percent || item.isPercent),
+          axis: Number(item.axis) === 1 ? 1 : 0,
+          type: item.type,
+          color: item.color
+        }))
+        .filter((item) => Boolean(item.field));
+      return { rows: data, xKey, xName: rows.xName || "", series, yAxes: rows.yAxes || null };
+    }
+    // 形态 B：纯数组自动推断
+    const data = Array.isArray(rows) ? rows : [];
+    const sample = data[0] || {};
+    const keys = Object.keys(sample);
+    const xKey = keys.find((key) => !isNumeric(sample[key])) || keys[0] || "x";
+    const valueKeys = keys.filter((key) => key !== xKey && data.some((row) => isNumeric(row[key])));
+    const series = valueKeys.map((key) => {
+      const legacy = LEGACY_FIELDS[key] || {};
+      return {
+        field: key,
+        name: legacy.name || key,
+        unit: legacy.unit || "",
+        percent: Boolean(legacy.percent),
+        axis: legacy.axis === 1 ? 1 : 0
+      };
+    });
+    return { rows: data, xKey, xName: "", series, yAxes: null };
+  }
+
+  function normalizeShare(rows) {
+    const data = Array.isArray(rows) ? rows : rows && Array.isArray(rows.data) ? rows.data : [];
+    const nameKeys = [(rows && rows.name) || "name", "name", "brand", "label", "category", "segment", "item"];
+    const valueKeys = [(rows && rows.value) || "value", "value", "share", "amount", "count", "total"];
+    const items = data.map((row) => ({
+      name: String(pickField(row, nameKeys) || ""),
+      value: Number(pickField(row, valueKeys) || 0),
+      color: row.color
+    }));
+    const declared = rows && Number(rows.total);
+    const sum = items.reduce((acc, item) => acc + (Number.isFinite(item.value) ? item.value : 0), 0);
+    const total = Number.isFinite(declared) && declared > 0 ? declared : sum;
+    // 各值之和约等于 100 时，说明数值本身即百分比，轴与标签按百分比呈现
+    const valuesArePercent = total > 0 && Math.abs(total - 100) < 5;
+    return { items, total, valuesArePercent };
+  }
+
+  function trendOption(spec, type) {
+    const { rows, xKey, xName, series, yAxes } = spec;
+    const xs = rows.map((row) => row[xKey]);
+    const mainType = type === "bar" ? "bar" : "line";
+    const hasSecond = series.some((item) => item.axis === 1);
+
+    const groups = [{ index: 0, members: series.filter((item) => item.axis === 0) }];
+    if (hasSecond) groups.push({ index: 1, members: series.filter((item) => item.axis === 1) });
+
+    const yAxis = groups.map((group) => {
+      const declared = Array.isArray(yAxes) ? yAxes[group.index] : null;
+      const percent = declared
+        ? Boolean(declared.percent)
+        : group.members.some((item) => item.percent);
+      const name = (declared && declared.name) || axisNameOf(group.members);
+      return {
+        type: "value",
+        name,
+        splitLine: { lineStyle: { color: palette.line } },
+        axisLabel: percent ? { formatter: (value) => value + "%" } : { formatter: (value) => formatNum(value) }
+      };
+    });
+
+    const chartSeries = series.map((item, index) => {
+      const isSecond = item.axis === 1;
+      const kind = isSecond ? "line" : mainType;
+      const option = {
+        name: item.name,
+        type: kind,
+        color: item.color || trendColors[index % trendColors.length],
+        data: rows.map((row) => row[item.field])
+      };
+      if (isSecond) {
+        option.yAxisIndex = 1;
+        option.smooth = true;
+        option.lineStyle = { width: 3, type: "dashed" };
+      } else if (kind === "line") {
+        option.smooth = true;
+        option.lineStyle = { width: 3 };
+      }
+      return option;
+    });
 
     return {
       animation: false,
-      color: [palette.blue, palette.gold],
-      tooltip: { trigger: "axis" },
+      tooltip: {
+        trigger: "axis",
+        formatter: (params) => {
+          const list = Array.isArray(params) ? params : [params];
+          if (!list.length) return "";
+          const head = list[0].axisValueLabel === undefined ? list[0].name : list[0].axisValueLabel;
+          const lines = list.map((param) => {
+            const item = series[param.seriesIndex] || {};
+            return param.marker + " " + param.seriesName + "：" + formatValue(param.value, item);
+          });
+          return [head].concat(lines).join("<br/>");
+        }
+      },
       legend: { top: 8 },
       grid: grid(),
-      xAxis: { type: "category", data: rows.map((row) => row.year) },
-      yAxis: [
-        { type: "value", name: "销量 百万辆", splitLine: { lineStyle: { color: palette.line } } },
-        { type: "value", name: "渗透率", axisLabel: { formatter: (value) => value + "%" } }
-      ],
-      series: [
-        {
-          name: "销量",
-          type: "line",
-          smooth: true,
-          data: rows.map((row) => row.sales_m),
-          lineStyle: { width: 3 }
-        },
-        {
-          name: "渗透率",
-          type: "line",
-          yAxisIndex: 1,
-          smooth: true,
-          data: rows.map((row) => row.penetration),
-          lineStyle: { width: 3, type: "dashed" }
-        }
-      ]
+      xAxis: { type: "category", data: xs, name: xName || undefined, nameLocation: "middle", nameGap: 30 },
+      yAxis,
+      series: chartSeries
     };
   }
 
-  function shareOption(rows, type) {
+  function shareOption(spec, type) {
+    const { items, total, valuesArePercent } = spec;
+    const shareOf = (value) => (total > 0 ? (value / total) * 100 : 0);
+    const formatAxis = (value) => (valuesArePercent ? value + "%" : formatNum(value));
+
     if (type === "pie") {
       return {
         animation: false,
         color: chartColors,
-        tooltip: { trigger: "item", valueFormatter: (value) => pct(value) },
+        tooltip: {
+          trigger: "item",
+          formatter: (param) =>
+            param.marker + " " + param.name + "：" + formatNum(param.value) + "（" + pct(param.percent) + "）"
+        },
         legend: { bottom: 8, type: "scroll" },
         series: [
           {
             type: "pie",
             radius: ["42%", "70%"],
             center: ["50%", "42%"],
-            data: rows.map((row) => ({ name: row.brand, value: row.share })),
-            label: { formatter: (params) => params.name + "\n" + pct(params.value) }
+            data: items.map((item) =>
+              item.color
+                ? { name: item.name, value: item.value, itemStyle: { color: item.color } }
+                : { name: item.name, value: item.value }
+            ),
+            label: { formatter: (param) => param.name + "\n" + pct(param.percent) }
           }
         ]
       };
     }
 
-    const reversed = rows.slice().reverse();
+    // 排行横条：自上而下按传入顺序（ECharts 的类目轴自下而上，故反转）。
+    // 配色按传入顺序分配后再反转，保证同一实体在不同图表里颜色一致。
+    const ordered = items.map((item, index) => ({
+      ...item,
+      presetColor: item.color || chartColors[index % chartColors.length]
+    }));
+    const reversed = ordered.slice().reverse();
     return {
       animation: false,
-      color: [palette.teal],
       tooltip: {
         trigger: "axis",
         axisPointer: { type: "shadow" },
-        valueFormatter: (value) => pct(value)
+        formatter: (params) => {
+          const list = Array.isArray(params) ? params : [params];
+          if (!list.length) return "";
+          const param = list[0];
+          const item = reversed[param.dataIndex] || {};
+          return (
+            param.marker +
+            " " +
+            param.name +
+            "：" +
+            formatNum(param.value) +
+            "（" +
+            pct(shareOf(Number(item.value) || 0)) +
+            "）"
+          );
+        }
       },
       grid: { left: 92, right: 42, top: 28, bottom: 24, containLabel: true },
       xAxis: {
         type: "value",
-        axisLabel: { formatter: (value) => value + "%" },
+        axisLabel: { formatter: formatAxis },
         splitLine: { lineStyle: { color: palette.line } }
       },
-      yAxis: { type: "category", data: reversed.map((row) => row.brand) },
+      yAxis: { type: "category", data: reversed.map((item) => item.name) },
       series: [
         {
-          name: "份额",
+          name: "数值",
           type: "bar",
-          data: reversed.map((row) => ({
-            value: row.share,
-            itemStyle: {
-              color:
-                row.brand === "比亚迪"
-                  ? palette.teal
-                  : row.brand === "特斯拉中国"
-                    ? palette.rose
-                    : palette.blue
-            }
+          data: reversed.map((item) => ({
+            value: item.value,
+            itemStyle: { color: item.presetColor }
           })),
-          label: { show: true, position: "right", formatter: (params) => pct(params.value) }
+          label: { show: true, position: "right", formatter: (param) => formatAxis(param.value) }
         }
       ]
     };
+  }
+
+  const warnedChartKinds = new Set();
+
+  function buildOption(kind, rows, type) {
+    const family = String(kind || "").trim().toLowerCase();
+    if (SHARE_KINDS.has(family)) return shareOption(normalizeShare(rows), type);
+    if (TREND_KINDS.has(family)) return trendOption(normalizeTrend(rows), type);
+    // 未登记的族：按 data-type 降级，避免静默渲染空白图
+    if (!warnedChartKinds.has(family)) {
+      warnedChartKinds.add(family);
+      console.warn(
+        "doc.js: 未登记的 data-chart 族，已按 data-type 降级渲染：" + (kind || "(空)") +
+          "；可用族见 assets/doc.js 顶部注释"
+      );
+    }
+    return type === "pie" ? shareOption(normalizeShare(rows), type) : trendOption(normalizeTrend(rows), type);
   }
 
   function setupToc() {
@@ -239,15 +402,9 @@
         showChartFallback(block, "图表未能加载：请检查 data-data 指向的 JSON 数据块与 .chart-canvas 画布是否齐全。");
         return;
       }
-      if (chartKind !== "market-trend" && chartKind !== "share-ranking") {
-        console.warn("doc.js: 未知的 data-chart 类型，图表将为空", chartKind);
-      }
-
       const chart = echarts.init(canvas, null, { renderer: "canvas" });
       function optionFor(type) {
-        if (chartKind === "market-trend") return marketOption(rows, type);
-        if (chartKind === "share-ranking") return shareOption(rows, type);
-        return {};
+        return buildOption(chartKind, rows, type);
       }
       chart.setOption(optionFor(initialType), true);
       instances.push(chart);

@@ -40,15 +40,16 @@ def main() -> None:
         texts, bullet_count, char_count, fonts = [], 0, 0, set()
         title_text = None
         empty_frames = 0
+        text_shapes = 0
         for shape in slide.shapes:
             if not shape.has_text_frame:
                 continue
             # 只把真文本框的空壳算"空占位符"；矩形分隔线等 AUTO_SHAPE 天带空 text_frame
-            if not shape.text_frame.text.strip() and shape.shape_type == MSO_SHAPE_TYPE.TEXT_BOX:
-                empty_frames += 1
-                continue
             if not shape.text_frame.text.strip():
+                if shape.shape_type == MSO_SHAPE_TYPE.TEXT_BOX:
+                    empty_frames += 1
                 continue
+            text_shapes += 1
             # 标题候选：首个字号 > 12pt 的文本（跳过 10pt 页眉运行标题，否则
             # 每页都把页眉误判为标题）；都没有则回退首个文本。
             if title_text is None:
@@ -76,7 +77,18 @@ def main() -> None:
         if texts:
             title = title_text or texts[0]
             topic_markers = ("分析", "介绍", "概述", "关于", "情况", "简介")
-            if any(m in title for m in topic_markers) or re.fullmatch(r"[\d]+\.", title.strip()) or len(title.strip()) <= 8 and not any(ch in title for ch in "：:，,"):
+            # 封面页的标题本就是演示主题（如"数据看板入门"），不该按内容页要求改成结论句。
+            # 判定封面用"第 1 页 + 文本块少 + 总字数少"，避免把开门就上内容的首屏误当封面放过。
+            is_cover = i == 1 and text_shapes <= 3 and char_count < 60
+            looks_topic = (
+                any(m in title for m in topic_markers)
+                or re.fullmatch(r"[\d一二三四五六七八九十]+[.、]", title.strip()) is not None
+                or (
+                    len(title.strip()) <= 8
+                    and not any(ch in title for ch in "：:，,。；")
+                )
+            )
+            if looks_topic and not is_cover:
                 warnings.append(f"第 {i} 页标题疑似话题式（{title!r}）——建议写结论句")
         cjk_runs = [f for f in fonts if f and f != CN_FONT and any('\u4e00' <= ch <= '\u9fff' for ch in "".join(texts))]
         if CN_FONT not in fonts and texts:

@@ -32,6 +32,8 @@ Do not add Data Source modals. They make document-style pages feel like tooling 
 
 Use ECharts for standard statistical and analytical charts. Keep chart option builders in `assets/doc.js` when they are generic, or in a small page-local script when the chart is specific to one page. Do not introduce Python just to create ECharts options.
 
+The builders in `assets/doc.js` are field-agnostic: declare `x`, `series` (with `field`, `name`, `unit`, optional `axis`, `percent`, `color`) and `data`, and the option is generated for you. Payload shapes and family names are specified in `page-structure.md`; the page-local script route is only needed when a chart cannot be expressed that way.
+
 Do not implement quantitative charts as static SVG, CSS-only bars, HTML div charts, canvas drawings, or exported image snapshots by default. Those are allowed only when the user explicitly asks for a static/non-interactive figure, when the visual is a non-quantitative diagram, or when ECharts cannot run and the fallback is clearly labeled as a fallback.
 
 Use chart types for analytical fit:

@@ -26,9 +26,11 @@
     <h2>二、证据与图表</h2>
     <p>图表前必须先有一句结论句，再放图。</p>
     <!-- 图表契约（与 assets/doc.js 的 setupCharts 对应，缺一不可）：
-         data-chart：图表族（本模板用 market-trend）；
+         data-chart：图表族——trend=趋势（可切折线/柱状）、share=占比（环图/排行）；
+                     market-trend、share-ranking 是旧名别名，仍兼容；
          data-data：下方 JSON 数据块的 id；data-type：初始图型；
-         .chart-canvas：画布容器。不要改回旧的按 id 直连画布的内联脚本写法，doc.js 不认它。 -->
+         .chart-canvas：画布容器。不要改回旧的按 id 直连画布的内联脚本写法，doc.js 不认它。
+         数据字段名可自定义，两种写法见 references/page-structure.md 的 Chart Blocks。 -->
     <div class="doc-chart" data-chart="market-trend" data-data="chart-data" data-type="line">
       <div class="chart-canvas" style="width:100%;height:360px"></div>
       <div class="chart-menu">
@@ -37,7 +39,9 @@
       </div>
       <p>图 1：图表标题（单位：销量百万辆；来源：__SOURCE__）</p>
     </div>
-    <!-- 示例数据，建页时替换为真实数据：year 为年份，sales_m 为销量（百万辆），penetration 为渗透率（%）。 -->
+    <!-- 示例数据（旧字段写法，仍兼容）：year 为年份，sales_m 为销量（百万辆），penetration 为渗透率（%）。
+         换通用写法时改成 {"x":"date","xName":"日期","series":[{"field":"…","name":"…","unit":"…"}],"data":[…]},
+         series 里加 "axis":1 挂副轴，加 "percent":true 表示该序列本身是百分比。 -->
     <script type="application/json" id="chart-data">[{"year":"2023","sales_m":100,"penetration":20},{"year":"2024","sales_m":130,"penetration":26},{"year":"2025","sales_m":160,"penetration":32}]</script>
   </section>
 
