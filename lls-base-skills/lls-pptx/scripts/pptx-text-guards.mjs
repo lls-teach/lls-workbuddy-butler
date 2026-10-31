@@ -88,3 +88,20 @@ export function addSingleLineToken(slide, value, options = {}) {
     boxWidth,
   };
 }
+
+/* 标题两行算法：16:9 可用宽 11.6in，中文方块字宽 ≈ fontSize/72 in。
+ * 60pt → 每行 14 字，两行红线 28 字；44pt → 每行 19 字，两行 38 字。
+ * 返回 { ok, chars, max }；ok=false 即 FAIL：删词 → 放宽幅面 → 最后才缩小字号。 */
+export function headlineMaxChars(fontSize, usableWidthIn = 11.6) {
+  const size = Number(fontSize);
+  if (!Number.isFinite(size) || size <= 0) {
+    throw new TypeError("fontSize must be a positive number");
+  }
+  return Math.floor(usableWidthIn / (size / 72)) * 2;
+}
+
+export function checkHeadline(value, fontSize, usableWidthIn = 11.6) {
+  const text = String(value ?? "").replace(/\s+/gu, "");
+  const max = headlineMaxChars(fontSize, usableWidthIn);
+  return { ok: text.length <= max, chars: text.length, max };
+}
