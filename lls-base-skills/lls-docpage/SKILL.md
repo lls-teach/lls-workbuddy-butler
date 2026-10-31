@@ -15,7 +15,7 @@ examples_en:
   - Create an A4 resume page I can print directly
   - Turn this form into a printable document page
   - I want a document with paper-like pagination
-version: 1.0.1
+version: 1.1.0
 author: 刘老师系列
 license: MIT
 ---
@@ -29,7 +29,7 @@ license: MIT
 | 用户要做什么 | 执行 |
 | --- | --- |
 | 选文档形态 | 先读 `@references/document-types.md` 判定是报告/表单/日程/简历/备忘/记录 |
-| 定视觉基调 | 读 `@references/design.md`（正式度、密度、读者体验） |
+| 定视觉基调 | `python scripts/taste_deal.py --options 3` 发牌 → `python scripts/taste_cards.py --deal 3` 亮牌面图给用户看，用户选牌（绝不代选；不满意说"重发"）；牌面配色见 `@references/taste-palettes.json`，流程见 `@references/taste-deal.md` |
 | 报告类配色 | 读 `@references/research-palettes.md`（科研/医疗/政策/工程） |
 | 分页与版心 | `@references/pagination.md`、`@references/typography-print.md` |
 | 内容块与图片 | `@references/content-blocks.md`、`@references/images-media.md` |
@@ -42,7 +42,8 @@ license: MIT
 2. **内容与分页分离**：连续语义 HTML → CSS 分页；手工分页只在用户明说时做。
 3. **打印优先**：所有排版以浏览器打印结果为准（用 `theme-smoke-test.html` 做打印预检）。
 4. 🔴 CHECKPOINT：文档类型与目标读者确认后再选模板。
-5. 交付时说明三种用法：屏幕阅读 / 打印 PDF / 导出 docx。
+5. **审美三件套**：文案先过 `python scripts/taste_lint.py`；出图后按 `@references/taste-critique.md` 看图法过一遍；动笔前可按 `@references/taste-brief-template.md` 写一页简报。
+6. 交付时说明三种用法：屏幕阅读 / 打印 PDF / 导出 docx。
 
 ## 失败分支
 
