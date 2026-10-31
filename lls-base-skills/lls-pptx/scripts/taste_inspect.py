@@ -58,9 +58,9 @@ def analyze(path, palette):
     def is_bg(p):
         return dist(p, paper) < 36
 
-    # 2. 空白率
+    # 2. 空白率（幻灯片校准：纸底图表计入空白，合法稀疏页约 88–96%，仅 >97% 告警）
     blank = sum(1 for p in px if is_bg(p)) / n
-    if blank > 0.88:
+    if blank > 0.97:
         warns.append("空白率 %.0f%%，疑似空洞" % (blank * 100))
 
     # 3. 贴边
