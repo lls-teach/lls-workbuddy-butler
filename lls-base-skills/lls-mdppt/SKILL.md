@@ -15,7 +15,7 @@ examples_en:
   - Convert this markdown note into slides
   - Turn this long document into a presentation
   - Can code blocks and tables go into the deck?
-version: 1.0.3
+version: 1.1.0
 author: 刘老师系列
 license: MIT
 ---
@@ -54,9 +54,10 @@ license: MIT
 ## 处理纪律
 
 1. 🔴 CHECKPOINT：转换后把「页数预算 + AI 提炼位清单」展示给用户，提炼结果经确认再渲染。
-2. **提炼忠实原文**：要点必须能回溯到原段落——转写不是创作。
-3. 代码页 ≤14 行/页，超出拆页；表格 ≤8 行/页。
-4. 渲染后重新验收。
+2. **文案过 lint**：标题与要点先过 `python scripts/taste_lint.py`（tells 见 `references/taste-tells.md`），再渲染。
+3. **提炼忠实原文**：要点必须能回溯到原段落——转写不是创作。
+4. 代码页 ≤14 行/页，超出拆页；表格 ≤8 行/页。
+5. 渲染后重新验收。
 
 ## 失败分支
 
