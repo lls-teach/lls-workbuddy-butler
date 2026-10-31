@@ -4,9 +4,9 @@ slug: lls-pptx
 display_name: PPT演示文稿
 displayName: "PPT演示文稿"
 display_name_en: "PPT Slides Toolkit"
-description: "处理 PowerPoint/.pptx 的全能工具箱：六套设计系统一键成片（正式汇报/咨询研报/教学课件/社区党建/艺术市集/编辑画册）、读取每页内容、批量替换、模板页复制、程序化质量检查、缩略图总览、图片适配、单行 token 保护、中文字体原生。当用户提到 PPT、幻灯片、演示文稿、汇报、课件、路演、美化、pptx 时使用本技能。。"
-description_zh: "PPT 全能处理：六套设计系统一键成片、读取、批量改字、模板加页、质量检查、缩略图总览、图片适配。汇报、课件、路演快速出片，中文字体原生。"
-description_en: "All-in-one PPT toolkit: six design systems for deck generation, per-slide reading, batch replace, template slide duplication, programmatic QA, thumbnail overview, image fitting, single-line token protection, Chinese-native fonts."
+description: "处理 PowerPoint/.pptx 的全能工具箱：七套设计系统一键成片（正式汇报/咨询研报/教学课件/社区党建/艺术市集/编辑画册/历史教学）、读取每页内容、批量替换、模板页复制、程序化质量检查、缩略图总览、图片适配、单行 token 保护、双路线生成（Python 与 Node）、中文字体原生。当用户提到 PPT、幻灯片、演示文稿、汇报、课件、路演、美化、pptx 时使用本技能。。"
+description_zh: "PPT 全能处理：七套设计系统一键成片、读取、批量改字、模板加页、质量检查、缩略图总览、图片适配。汇报、课件、路演快速出片，中文字体原生。"
+description_en: "All-in-one PPT toolkit: seven design systems for deck generation, per-slide reading, batch replace, template slide duplication, programmatic QA, thumbnail overview, image fitting, single-line token protection, dual Python/Node generation, Chinese-native fonts."
 examples_zh:
   - 用正式汇报风格，按这份大纲做一个 8 页的 PPT
   - 把这份 PPT 每一页的内容列给我，再检查有没有超密度
@@ -15,12 +15,12 @@ examples_en:
   - Build an 8-slide deck in the formal report style from this outline
   - List every slide's content and check for over-dense pages
   - Replace all "2025" with "2026" in this deck
-version: 2.3.0
+version: 2.4.0
 author: 刘老师系列
 license: MIT
 ---
 
-# PPT 演示文稿（lls-pptx 底座 v2.3）
+# PPT 演示文稿（lls-pptx 底座 v2.4）
 
 你是 PPT 处理执行器 + 视觉执行者。确定性操作调用 `scripts/`（python-pptx 等 MIT 库），中文字体原生。视觉决策依据 `@references/design-system.md`。
 
@@ -42,13 +42,22 @@ if (-not (Test-Path "$VENV\Scripts\python.exe")) { py -3 -m venv $VENV }
 $PY = "$VENV\Scripts\python.exe"
 ```
 
+Node 路线（可选，仅当走 PptxGenJS 路线时需要，见实现路线）：
+
+```bash
+command -v node >/dev/null || echo "未装 Node，走 Python 路线"
+npm ls pptxgenjs >/dev/null 2>&1 || npm install pptxgenjs
+# 图片 cover 先裁后放需 sharp（按需安装，二进制预编译包）
+npm ls sharp >/dev/null 2>&1 || npm install sharp
+```
+
 ## 第 1 步：风格简报（生成类任务必做，缺一不可）
 
 生成 PPT 前先定五件事（读 @references/design-system.md 第一节）：
 
 1. **受众与目的**：给谁看、要促成什么判断。
 2. **密度**：低（发布会）／中（路演培训）／高（决策会研报）。
-3. **风格**：`formal`（正式汇报）／`consulting`（咨询研报）／`teaching`（教学课件）／`civic`（社区党建）／`art`（艺术市集）／`editorial`（编辑画册）。历史题材用 `teaching` 的历史变体。
+3. **风格**：`formal`（正式汇报）／`consulting`（咨询研报）／`teaching`（教学课件）／`civic`（社区党建）／`art`（艺术市集）／`editorial`（编辑画册）／`history`（历史教学）。
 4. **一句风格简报**：三个形容词 + 一个有益张力（例："分析性、紧凑、冷静——张力在于数据密集但有人味儿"）。
 5. **图片行为**：有图时定满版、证据配图还是留白；无图不写。
 
@@ -66,6 +75,19 @@ $PY = "$VENV\Scripts\python.exe"
 | 程序化质量检查 | `$PY scripts/pptx_check.py 输入.pptx`（秒级，零渲染） |
 | 添加原生图表 | `$PY scripts/pptx_add_chart.py 输入.pptx --slide N --type bar --title 标题 --categories "a,b,c" --series "系列=1,2,3" -o 新.pptx`（图表为原生对象可在 Office 中编辑；目标页应为空证据场页，避免与要点重叠） |
 | 缩略图总览 | `$PY scripts/pptx_thumbs.py 输入.pptx 前缀`（需 LibreOffice，见失败分支 5） |
+
+## 实现路线（双路线，视觉系统与路线无关）
+
+同一套设计系统换路线仍成立，按交付物和环境选路线，不是按喜好：
+
+| 路线 | 走它 | 助手 |
+| --- | --- | --- |
+| Python（缺省，自包含） | 大纲成片、读取、编辑、复制、检查、原生图表；已有母版／占位符继承要保留时也走它（直接改原文件） | `scripts/*.py`（python-pptx） |
+| Node（PptxGenJS） | 从零创建、批量生成相关页面、编码可复用设计系统、原生图表／表格／模板、程序化检查收益大时 | `scripts/pptx-text-guards.mjs`（单行 token）、`scripts/raster-fit.mjs`（图片先裁后放）；实现指引见 `references/pptxgenjs-implementation.md` |
+| 其他原生工具 | 交付物明确为 Google Slides 时 | 对应原生工具 |
+| HTML 路线 | 浏览器动画、交互或网页交付是核心需求时 | — |
+
+Node 路线四层结构：内容模型（论点、证据、数据、来源、页面角色）／设计 token（角色配色、字体角色、间距节奏、线条、语义色）／基础构件（文字、规则线、面板、图片、图表、表格、进度、来源、页码）／页面组合（按叙事任务命名的布局函数）。风格变体用配置对象，不复制整套生成器。原生文字、表格、图表、简单形状优先于扁平图；字体取目标环境已有的；按实际 16:9 画布设计，在渲染尺寸下检验最小有效文字。
 
 **大纲语法**（按内容选版式形状）：
 
@@ -112,6 +134,8 @@ $PY = "$VENV\Scripts\python.exe"
 | 7 | 图片变形或溢出框 | 确认大纲 `[IMAGE]` 模式：contain 等比居中、cover 先裁后放；检查原图尺寸与目标框比例 | 原图本身过小（<100px/英寸）时明说会糊，不硬拉 |
 | 8 | 页码/KPI 数字换行堆叠 | 已走单行保护仍窄时加宽盒子，不要关掉保护硬塞 | — |
 | 9 | 风格混搭成平庸折中 | 声明主风格和辅助风格，只调该风格的 remix 开关，不平均两种风格 | — |
+| 10 | Node 不可用 | 走 Python 路线；不要为装 Node 阻塞交付 | — |
+| 11 | raster-fit 报缺 sharp | 按其提示装 sharp，或改用 contain（等比居中，不裁剪） | — |
 
 ## SMOKE-TEST 协议（遇问题必走：最小冒烟 → 定位 → 回归解决）
 

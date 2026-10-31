@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从大纲生成 PPT v2.3（版式词汇：KPI 行 / 语义状态表 / 进度条 / 斑马表 / 来源行 / 图片页 / 单行 token 保护）。
+"""从大纲生成 PPT v2.4（版式词汇：KPI 行 / 语义状态表 / 进度条 / 斑马表 / 来源行 / 图片页 / 单行 token 保护；七套风格）。
 
 用法: python3 pptx_create.py -o 成片.pptx --title 标题 --subtitle 副标题 --outline 大纲.md [--style formal]
 大纲语法:
@@ -10,6 +10,7 @@
   '[TABLE] 合作项|投入|周期'                   斑马表（首行表头）
   '[IMAGE] 图片路径|说明|contain'              图片页（contain 等比居中 / cover 先裁后放；图片页建议独占证据场）
   '- ' 要点（>=5 两列）   '> ' 结论带   '= ' 来源行
+Node 路线（PptxGenJS）见 SKILL.md 实现路线，助手脚本在 scripts/*.mjs。
 """
 import argparse
 import math
@@ -74,7 +75,20 @@ STYLES = {
         "rule": RGBColor(0xD8, 0xD2, 0xC8), "zebra": RGBColor(0xEF, 0xEA, 0xE2),
         "title_pt": 26, "body_pt": 16, "cover_title_pt": 42,
     },
+    # history：历史教学——暖纸底、墨色、矿物蓝绿主导、朱砂只用于日期与转折点、宋体标题
+    "history": {
+        "bg": RGBColor(0xF8, 0xF1, 0xDE), "fg": RGBColor(0x1E, 0x1E, 0x1A),
+        "muted": RGBColor(0x6E, 0x6A, 0x5E), "accent": RGBColor(0x2F, 0x6B, 0x62),
+        "accent2": RGBColor(0xB0, 0x3A, 0x2A),
+        "rule": RGBColor(0xDD, 0xD2, 0xB8), "zebra": RGBColor(0xF1, 0xE6, 0xCC),
+        "title_pt": 32, "body_pt": 17, "cover_title_pt": 44,
+        "title_font": "宋体",
+    },
 }
+# 字体角色：缺省标题与正文同为微软雅黑；history 的标题用宋体（正文仍用黑体，见设计系统）。
+for _s in STYLES.values():
+    _s.setdefault("title_font", CN_FONT)
+    _s.setdefault("body_font", CN_FONT)
 # 语义色：状态关键词 → 颜色；第 5 列可显式指定 amber/blue/good/muted
 SEMANTIC = {
     "amber": RGBColor(0xB7, 0x79, 0x1F), "blue": RGBColor(0x2B, 0x6C, 0xB0),
@@ -105,14 +119,14 @@ def new_slide(prs, S):
     return slide
 
 
-def add_text(slide, text, left, top, width, height, size, color, bold=False):
+def add_text(slide, text, left, top, width, height, size, color, bold=False, font_name=None):
     box = slide.shapes.add_textbox(Inches(left), Inches(top), Inches(width), Inches(height))
     tf = box.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
     p.text = text
     for run in p.runs:
-        apply_cn_font(run)
+        apply_cn_font(run, font_name or CN_FONT)
         run.font.size = Pt(size)
         run.font.bold = bold
         run.font.color.rgb = color
@@ -279,7 +293,8 @@ def main() -> None:
     prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
 
     cover = new_slide(prs, S)
-    add_text(cover, args.title, 1.0, 2.7, 11.3, 1.4, S["cover_title_pt"], S["fg"], bold=True)
+    add_text(cover, args.title, 1.0, 2.7, 11.3, 1.4, S["cover_title_pt"], S["fg"], bold=True,
+             font_name=S["title_font"])
     if args.subtitle:
         add_text(cover, args.subtitle, 1.0, 4.3, 11.3, 0.7, 18, S["muted"])
     add_rule(cover, 1.0, 4.05, 2.2, S["accent2"])
@@ -289,7 +304,7 @@ def main() -> None:
         add_text(slide, args.title, 0.6, 0.16, 9.0, 0.32, 10, S["muted"])
         title_text = f"{i}. {sd['title']}" if sd["title"] else str(i)
         add_text(slide, title_text, 0.6, BANDS["title_top"], 12.1, BANDS["title_h"],
-                 S["title_pt"], S["fg"], bold=True)
+                 S["title_pt"], S["fg"], bold=True, font_name=S["title_font"])
         add_rule(slide, 0.6, 1.42, 12.1, S["rule"])
 
         content_h = BANDS["content_bottom"] - BANDS["content_top"] - (0.55 if sd.get("takeaway") else 0)
