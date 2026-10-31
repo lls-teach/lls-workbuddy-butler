@@ -15,7 +15,7 @@ examples_en:
   - Turn this data into an illustrated report page
   - I need a market brief I can send as a link
   - The report should have a TOC and charts
-version: 1.1.0
+version: 1.1.1
 author: 刘老师系列
 license: MIT
 ---

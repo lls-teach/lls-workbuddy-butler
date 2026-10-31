@@ -15,7 +15,7 @@ examples_en:
   - Build a monthly business metrics dashboard
   - Can this sales data become a daily-updated dashboard?
   - I want a dashboard that opens offline
-version: 1.1.0
+version: 1.1.1
 author: 刘老师系列
 license: MIT
 ---

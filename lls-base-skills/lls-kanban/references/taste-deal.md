@@ -1,9 +1,9 @@
-# 发牌指引：taste 美术方向牌（PPT 版）
+# 发牌指引：taste 美术方向牌（页面版）
 
 ## 牌是什么
 
 一副 10 张美术方向牌（`references/taste-palettes.json`），思路取自 taste-skill：
-从获奖站点提炼方向，剔除禁用组合（紫/靛、奶油黄+陶土），按幻灯片重写。
+从获奖站点提炼方向，剔除禁用组合（紫/靛、奶油黄+陶土），按页面重写。
 每张牌 = 一套配色（底/墨/强调/色块）＋ 比例 ＋ 气质 ＋ 适用主题 ＋ idea 引导。
 
 ## 怎么发、怎么选（亮牌流程）
@@ -29,7 +29,7 @@ python scripts/taste_deal.py --palette <id>                  # 选定后打印�
 
 ## 牌与风格配方的关系（重要）
 
-- **颜色按牌走**：整套 deck 的底/墨/强调/块四色用选中牌的色值。
+- **颜色按牌走**：整套页面的底/墨/强调/块四色用选中牌的色值。
 - **比例按配方走**：底墨强调块各占多少，听风格配方的。
 - 打架时先换一次牌；主题色极明确时保留比例换颜色，并写进报告。
 - 深底牌（如炭黑鎏金）：底墨角色互换，字用浅墨，强调色只给最高光的一处。
@@ -38,28 +38,14 @@ python scripts/taste_deal.py --palette <id>                  # 选定后打印�
 
 选中后打印方向单，动笔前填完 idea 句填空：
 
-> 在这份 deck 里，___（主题独有的东西）变成 ___（版式装置）。
+> 在这个页面里，___（主题独有的东西）变成 ___（视觉装置）。
 
 填空过不了竞争者测试（代入竞品还成立），重写。
-
-## 版式牌
-
-`references/taste-layouts.json`：10 张版式牌（封面深/英雄数字/左图右文/左文右图/
-满版深色/双图并置/图表全宽/陈述三叠/证据卡/口径表），从 lls-pptx v1–v5 验证过的版式提炼。
-
-```bash
-python scripts/taste_layouts.py --assign --pages 12 --seed 3   # 指派整 deck
-python scripts/taste_layouts.py --redraw-layout 5 --current hero-number --seed 7  # 重抽第 5 页
-python scripts/taste_layouts.py --list                          # 看整副牌
-```
-
-同构图一 deck 最多 2 次；指派结果写进简报给用户过目，只换有问题的页。
 
 ## 重抽规则
 
 一次只换一个槽位，且必须一句话理由写进简报：
 
 - 换配色：`python scripts/taste_deal.py --redraw palette --seed <新种子>`
-- 换某页版式：`python scripts/taste_layouts.py --redraw-layout <页> --current <id> --seed <新种子>`
 
 禁止"看着不顺眼"重抽；三张都不对才整手重发。

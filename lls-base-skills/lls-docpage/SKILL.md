@@ -15,7 +15,7 @@ examples_en:
   - Create an A4 resume page I can print directly
   - Turn this form into a printable document page
   - I want a document with paper-like pagination
-version: 1.1.0
+version: 1.1.1
 author: 刘老师系列
 license: MIT
 ---

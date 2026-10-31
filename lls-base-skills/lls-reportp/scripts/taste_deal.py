@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""taste 发牌：给 PPT 发美术方向牌，三选一。纯标准库，零依赖。
+"""taste 发牌：给页面发美术方向牌，三选一。纯标准库，零依赖。
 按槽位重抽：python scripts/taste_deal.py --redraw palette --seed 9
 （只换配色槽位，理由必填，写进简报）
-版式重抽：python scripts/taste_layouts.py --redraw-layout <页> --current <id>
 """
 import argparse
 import json
