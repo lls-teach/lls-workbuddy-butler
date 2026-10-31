@@ -15,7 +15,7 @@ examples_en:
   - Build a data-comparison slide in the consulting research style
   - Distill a reusable visual system from this reference image
   - Improve the hierarchy and density of this deck
-version: 2.9.0
+version: 2.10.0
 ---
 
 # 精美 PPT
@@ -62,6 +62,10 @@ version: 2.9.0
    请用户选一张（可附一句话推荐，但绝不代选）；亮牌后主动说"不满意说'重发'，再来三张"。
    用户选定后跑 `python scripts/taste_deal.py --palette <id>` 打印方向单，直接使用。
    颜色按牌走，版式仍按风格配方走（比例按配方）。玩法见 [发牌指引](references/taste-deal.md)。
+   版式指派：`python scripts/taste_layouts.py --assign --pages <N> --seed <S>` 给每页指派版式牌
+   （同构图一 deck 最多 2 次），结果写进简报。重抽规则：一次只换一个槽位——
+   `taste_deal.py --redraw palette` 换配色、`taste_layouts.py --redraw-layout <页> --current <id>` 换某页版式，
+   必须一句话理由写进简报；禁止"看着不顺眼"重抽。
 3. 按主题契合度选一套风格配方并写一句话理由；不混搭（本条取代"有意识地组合两种风格"）。
 4. 生成前逐项过门禁清单（【数据】有研究支撑，【品味】是审美决定；tells 详见 [tells 注册表](references/taste-tells.md)），
    并跑 `python scripts/taste_lint.py --scan-js <构建脚本>` 过文案：
@@ -69,8 +73,9 @@ version: 2.9.0
    无静止阴影【数据】、无助手配色【数据】、无小号大写标签【数据】、无图标卡片阵【数据】、
    无玻璃/emoji/装饰形【数据】、标题无花式强调【品味】、一页三种干活字号【数据】、特大与常规比拉开【数据】。
    检查分 PASS/WARN/FAIL：FAIL 全修；WARN 修掉或写一句话辩护进交付报告。
-5. 渲染后按 [十三遍看图法](references/taste-critique.md) 看图，改最严重的三个问题，最多三轮；
-   删了装饰却什么都没补的页叫空，不叫干净。
+5. 渲染后先跑 `python scripts/taste_inspect.py --pages "<渲染图>" --palette <牌id>` 做程序化测量
+   （画幅比/空洞/贴边/跑出配色），再按 [十三遍看图法](references/taste-critique.md) 看图，
+   改最严重的三个问题，最多三轮；删了装饰却什么都没补的页叫空，不叫干净。
 6. 交付附 [设计报告](references/taste-report-template.md)：方向＋种子、idea 句、重抽理由、
    检查结果、没跑过的检查一个不落。
 

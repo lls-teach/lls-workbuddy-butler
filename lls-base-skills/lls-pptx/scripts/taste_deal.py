@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""taste 发牌：给 PPT 发美术方向牌，三选一。纯标准库，零依赖。"""
+"""taste 发牌：给 PPT 发美术方向牌，三选一。纯标准库，零依赖。
+按槽位重抽：python scripts/taste_deal.py --redraw palette --seed 9
+（只换配色槽位，理由必填，写进简报）
+版式重抽：python scripts/taste_layouts.py --redraw-layout <页> --current <id>
+"""
 import argparse
 import json
 import os
@@ -48,6 +52,7 @@ def main(argv=None):
     ap.add_argument("--seed", type=int, default=None, help="随机种子，可复现")
     ap.add_argument("--palette", default=None, help="打印指定牌的方向单（用牌 id）")
     ap.add_argument("--list", action="store_true", help="列出整副牌")
+    ap.add_argument("--redraw", default=None, help="按槽位重抽：palette")
     args = ap.parse_args(argv)
 
     deck = load_deck()
@@ -72,7 +77,10 @@ def main(argv=None):
     n = max(1, min(args.options, len(cards)))
     dealt = rng.sample(cards, n)
     seed_note = "（seed=%s）" % args.seed if args.seed is not None else ""
-    print("发牌 %d 张%s，选一张最契合主题的：\n" % (n, seed_note))
+    if args.redraw == "palette":
+        print("按槽位重抽配色%s，新牌如下（理由必填，写进简报）：\n" % seed_note)
+    else:
+        print("发牌 %d 张%s，选一张最契合主题的：\n" % (n, seed_note))
     for i, c in enumerate(dealt, 1):
         print(fmt_card(c, i))
         print()
