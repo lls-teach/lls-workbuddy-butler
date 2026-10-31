@@ -15,7 +15,7 @@ examples_en:
   - Build a monthly business metrics dashboard
   - Can this sales data become a daily-updated dashboard?
   - I want a dashboard that opens offline
-version: 1.0.1
+version: 1.1.0
 author: 刘老师系列
 license: MIT
 ---
@@ -29,6 +29,7 @@ license: MIT
 | 用户要做什么 | 执行 |
 | --- | --- |
 | 新建看板 | 确认指标口径 → 把三件套一并拷入 `看板slug/`：`assets/dashboard_template.py` 改名为 `dashboard.py`，`assets/echarts.min.js` 与 `assets/dashboard_runtime.js` 原名保留 → 改 ECharts 配置 → `python 看板slug/dashboard.py` 生成 `index.html` → `node scripts/validate-echarts-dashboard.mjs 看板slug/index.html` |
+| 定美术方向（反默认看板审美） | `python scripts/taste_deal.py --options 3` 发牌 → `python scripts/taste_cards.py --deal 3` 亮牌面图给用户看，用户选牌（绝不代选）；看板最容易掉进"深蓝渐变+发光"套路，牌面配色见 `@references/taste-palettes.json` |
 
 | 每日快照追加 | 读 `@references/data-and-automation.md` 的自动化规则 |
 | 版式与交互规则 | `@references/dashboard-structure.md`、`@references/visual-interactions.md` |
@@ -47,7 +48,8 @@ license: MIT
 3. **来源可追溯**：每个 KPI 块可点开来源弹窗（原始文件/口径说明）。
 4. **无快照不静默**：`data/snapshots/` 为空时生成器会回落内置演示数据，同时在终端打印 WARNING、看板新鲜度行标注 DEMO DATA、`dashboard_data.json` 记 `dataMode: demo`；演示数仅用于占位演示，交付前必须换成真实快照并重新生成。
 5. 🔴 CHECKPOINT：指标口径（六项）与用户逐项确认后再生成代码。
-6. 交付后跑 validate 脚本，校验通过才算完成。
+6. **文案过 lint**：看板上的标题/指标名/注释先过 `python scripts/taste_lint.py`，再生成。
+7. 交付后跑 validate 脚本，校验通过才算完成。
 
 ## 失败分支
 
