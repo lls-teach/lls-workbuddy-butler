@@ -15,7 +15,7 @@ examples_en:
   - Write a Word notice with title and signature block
   - Convert this CSV to Excel with styled headers and a SUM formula
   - Build an 8-slide deck from this outline in formal report style
-version: 1.0.2
+version: 1.1.0
 author: lhg
 ---
 
@@ -63,7 +63,7 @@ $PY scripts/check_env.py
 | Excel 读取 / 转 CSV / 转 JSON | `$PY scripts/xlsx_read.py 输入.xlsx [--sheet 表名] [--to-csv 输出.csv] [--json 输出.json]` |
 | Excel 批量改单元格 / 追加行 | `$PY scripts/xlsx_edit.py 输入.xlsx --set 表!单元格=值（可多次） [--append-sheet 表名 --row-json 行] -o 输出.xlsx` |
 | Excel 公式重算 | `$PY scripts/xlsx_recalc.py 输入.xlsx` |
-| PPT 生成（三套设计系统：正式汇报/咨询研报/教学课件） | `$PY scripts/pptx_create.py -o 输出.pptx --title 标题 --outline 大纲文件 [--style formal]`（`--outline` 传大纲文件路径，每页以 `# 标题` 开头；也可直接传多行大纲文本），设计系统见 `references/design-system.md` |
+| PPT 生成（审美六步流程：简报→发牌→版式指派→门禁→质检→交付） | 先写简报（主题清单/逐页论点/idea 句，见 `references/taste-brief-template.md`），再 `scripts/taste_deal.py --options 3` 发牌定美术方向（用户选牌，不代选），`scripts/taste_cards.py --deal 3` 亮牌面图，`scripts/taste_layouts.py --assign` 指派版式，生成时标题走 `scripts/pptx-text-guards.mjs` 两行算法，文案过 `scripts/taste_lint.py`，渲染后先跑 `scripts/taste_inspect.py` 再按 `references/taste-critique.md` 看图；底层生成仍用 `pptx_create.py` 等脚本 |
 | PPT 读取每页内容 | `$PY scripts/pptx_read.py 输入.pptx [--json]` |
 | PPT 批量替换 / 改标题 | `$PY scripts/pptx_edit.py 输入.pptx --replace 旧=新（可多次） [--slide 页码 --set-title 标题]` |
 | PPT 加图表 / 复制页 / 质量检查 / 缩略图 | `$PY scripts/pptx_add_chart.py` / `pptx_duplicate_slide.py` / `pptx_check.py` / `pptx_thumbs.py` |
@@ -88,7 +88,7 @@ $PY scripts/check_env.py
    - 批量转格式：同一转换对文件夹内全部文件循环执行，逐个报告成功/失败，不因单个失败中断整批。
 3. **中文字体原生**：创建类操作默认中文字体（宋体/黑体/楷体），渲染与 OCR 默认中英混合，出现方块字先查字体再查内容。
 4. **输出纪律**：编辑/转换一律 `-o` 写新文件；目标已存在时先确认或改名，不静默覆盖（批量模式先报同名清单再确认）。
-5. **校验闭环**：合并后必跑 `pdf_check.py --expect-pages` 核页数；PPT 生成后必跑 `pptx_check.py` 核单页密度；Excel 写公式后必跑 `xlsx_recalc.py`。
+5. **校验闭环**：合并后必跑 `pdf_check.py --expect-pages` 核页数；PPT 生成后必跑 `pptx_check.py` 核单页密度，再跑 `taste_inspect.py` 做渲染质检；Excel 写公式后必跑 `xlsx_recalc.py`。
 
 ## 失败分支（按序排查）
 
