@@ -15,7 +15,7 @@ examples_en:
   - Turn this outline into a scrolling web deck
   - I need a shareable-link presentation page
   - The deck should export to PDF
-version: 1.0.1
+version: 1.1.0
 author: 刘老师系列
 license: MIT
 ---
@@ -29,7 +29,7 @@ license: MIT
 | 用户要做什么 | 执行 |
 | --- | --- |
 | 新建演示 | `assets/template.html` → 复制为 `output/ppt/<标题>/<标题>.html` → 替换卡片块 |
-| 选视觉风格 | 从 `@references/style-presets.md` 选一套（除非用户指定） |
+| 选视觉风格 | `python scripts/taste_deal.py --options 3` 发牌 → `python scripts/taste_cards.py --deal 3` 亮牌面图给用户看，用户选牌（绝不代选；不满意说"重发"）；牌面配色见 `@references/taste-palettes.json`，流程见 `@references/taste-deal.md`（原 `@references/style-presets.md` 保留作备选） |
 | 版式与图表 | `@references/layout-patterns.md`、`@references/data-analysis-charts.md` |
 | 插画与内容 | `@references/illustration-system.md`、`@references/content-patterns.md` |
 | 导出 | `node scripts/export-waterfall-to-pdf.mjs` / `export-waterfall-to-pptx.mjs` |
@@ -39,13 +39,14 @@ license: MIT
 
 1. **一问结构，不问细节**：只确认会影响结构的输入（受众、语言、素材、卡片数、注释长短），语料够就直接做。
 2. **一 deck 一目录**：`output/ppt/<标题>/` 下放 HTML 与 `images/`，**不要跨 deck 共用顶层 images 目录**。
-3. **风格只选一套**：从预设里挑一个，不要混搭；无官方品牌色时说明假设。
+3. **风格只选一套**：发牌选定一张，不混搭；无官方品牌色时说明假设。
 4. **不加页面级标题/导航**：第一屏就是封面卡片，不要额外的 deck 标题栏（除非用户要求）。
 5. 🔴 CHECKPOINT：卡片数与注释构成确认后再生成。
 6. 交付前跑 validate，并说明"竖滚阅读 + 全屏放映 + 可导出 PDF/pptx"三种用法。
-7. **首行与注释**：`<!doctype html>` 必须保持首行，来源注释 `<!-- deck: 标题 -->` 放在 `<head>` 内前部，不要把注释移到 doctype 之前（会触发 quirks 模式、可能破坏布局）。
-8. **跨平台路径**：脚本一律用 `node scripts/...` 调用（不要直接执行 `.mjs`）；标题作目录/文件名时去掉 Windows 非法字符 `\ / : * ? " < > |`；含空格或中文的路径调用命令时加引号；HTML 内图片路径一律用正斜杠 `images/...`，不要用反斜杠；导出找不到浏览器时可用 `--browser-executable` 指定 Chrome/Edge，或设 `PLAYWRIGHT_CHROMIUM_EXECUTABLE`。
-9. **导出依赖**：导出脚本依赖 npm 包 `playwright` 与 `pdf-lib`，技能包不自带——先 `npm i playwright pdf-lib`，再用 `--node-modules <装依赖的目录>` 指过去（或设 `NODE_PATH`）。playwright 自带浏览器缺失时会自动回退到系统 Chrome/Edge，不必再下载 playwright 浏览器。
+7. **审美三件套**：文案先过 `python scripts/taste_lint.py`（赋能/抓手/闭环等词是 WARN/FAIL）；出图后按 `@references/taste-critique.md` 看图法过一遍；动笔前可按 `@references/taste-brief-template.md` 写一页简报。
+8. **首行与注释**：`<!doctype html>` 必须保持首行，来源注释 `<!-- deck: 标题 -->` 放在 `<head>` 内前部，不要把注释移到 doctype 之前（会触发 quirks 模式、可能破坏布局）。
+9. **跨平台路径**：脚本一律用 `node scripts/...` 调用（不要直接执行 `.mjs`）；标题作目录/文件名时去掉 Windows 非法字符 `\ / : * ? " < > |`；含空格或中文的路径调用命令时加引号；HTML 内图片路径一律用正斜杠 `images/...`，不要用反斜杠；导出找不到浏览器时可用 `--browser-executable` 指定 Chrome/Edge，或设 `PLAYWRIGHT_CHROMIUM_EXECUTABLE`。
+10. **导出依赖**：导出脚本依赖 npm 包 `playwright` 与 `pdf-lib`，技能包不自带——先 `npm i playwright pdf-lib`，再用 `--node-modules <装依赖的目录>` 指过去（或设 `NODE_PATH`）。playwright 自带浏览器缺失时会自动回退到系统 Chrome/Edge，不必再下载 playwright 浏览器。
 
 ## 失败分支
 
