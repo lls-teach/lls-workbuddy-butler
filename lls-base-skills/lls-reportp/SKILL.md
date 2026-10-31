@@ -15,7 +15,7 @@ examples_en:
   - Turn this data into an illustrated report page
   - I need a market brief I can send as a link
   - The report should have a TOC and charts
-version: 1.0.1
+version: 1.1.0
 author: 刘老师系列
 license: MIT
 ---
@@ -29,6 +29,7 @@ license: MIT
 | 用户要做什么 | 执行 |
 | --- | --- |
 | 规划叙事结构 | `@references/story-planning.md` |
+| 定美术方向 | `python scripts/taste_deal.py --options 3` 发牌 → `python scripts/taste_cards.py --deal 3` 亮牌面图给用户看，用户选牌（绝不代选；不满意说"重发"）；牌面配色见 `@references/taste-palettes.json`，流程见 `@references/taste-deal.md` |
 | 页面骨架与目录 | `@references/page-structure.md` |
 | 选图表类型 | `@references/chart-selection.md` → `@references/data-and-charts.md` |
 | 图示与图片 | `@references/media-and-diagrams.md` |
@@ -40,7 +41,8 @@ license: MIT
 2. **图表是为结论服务的**：每张 ECharts 图前必须有一句结论句；为配图而配图 = 失败。
 3. **来源可查**：引用数据处标来源与时间（报告的可信度全靠这个）。
 4. 🔴 CHECKPOINT：报告大纲（章节 + 核心结论 + 图表清单）确认后再生成页面。
-5. **体积控制（硬要求）**：`echarts.min.js`(1MB) 随包可用；**Mermaid 图需要时由用户自行下载** `mermaid.min.js` 到 assets/（3.2MB 会超平台包体上限），或改用 echarts/静态 SVG。没图表就不要引入任何库。
+5. **审美三件套**：文案先过 `python scripts/taste_lint.py`；出图后按 `@references/taste-critique.md` 看图法过一遍；动笔前可按 `@references/taste-brief-template.md` 写一页简报。
+6. **体积控制（硬要求）**：`echarts.min.js`(1MB) 随包可用；**Mermaid 图需要时由用户自行下载** `mermaid.min.js` 到 assets/（3.2MB 会超平台包体上限），或改用 echarts/静态 SVG。没图表就不要引入任何库。
 
 ## 失败分支
 

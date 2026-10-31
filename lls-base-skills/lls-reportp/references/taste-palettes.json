@@ -1,0 +1,133 @@
+{
+  "banned": [
+    "紫/靛",
+    "奶油黄+陶土"
+  ],
+  "cards": [
+    {
+      "accent": "#0F766E",
+      "block": "#E8EDF3",
+      "for_theme": "数据报告、市场分析、普查类",
+      "id": "white-navy-tab",
+      "idea_hint": "把数字的冷，变成纸面的稳",
+      "ink": "#1B2A41",
+      "mood": "冷静研报",
+      "name_zh": "纸白藏青",
+      "paper": "#FFFFFF",
+      "ratio": "底60／墨25／强调10／块5"
+    },
+    {
+      "accent": "#5F7161",
+      "block": "#E3DCD2",
+      "for_theme": "复盘、增长叙事、季度总结",
+      "id": "rose-grey-green",
+      "idea_hint": "把增长的土，变成纸面的根",
+      "ink": "#3A3632",
+      "mood": "沉稳生长",
+      "name_zh": "玫瑰灰绿",
+      "paper": "#F4F1EC",
+      "ratio": "底60／墨25／强调10／块5"
+    },
+    {
+      "accent": "#A67C52",
+      "block": "#DCD8D0",
+      "for_theme": "年度总结、品牌、里程碑",
+      "id": "lunar-grey-bronze",
+      "idea_hint": "把时间的沉，变成铜色的光",
+      "ink": "#232323",
+      "mood": "内敛质感",
+      "name_zh": "月灰古铜",
+      "paper": "#EDEDEA",
+      "ratio": "底60／墨25／强调10／块5"
+    },
+    {
+      "accent": "#C73E3A",
+      "block": "#EAE4D6",
+      "for_theme": "文化、党建（红为题材色时更顺）、公文",
+      "id": "ink-paper-vermilion",
+      "idea_hint": "把文字的重量，变成朱砂的一点",
+      "ink": "#1E1E1E",
+      "mood": "东方文书",
+      "name_zh": "宣纸朱砂",
+      "paper": "#F7F4EC",
+      "ratio": "底65／墨25／强调8／块2"
+    },
+    {
+      "accent": "#2F5D50",
+      "block": "#DCE5DE",
+      "for_theme": "教育、科普、课程",
+      "id": "pine-mist",
+      "idea_hint": "把知识的密，变成雾气的透",
+      "ink": "#22302A",
+      "mood": "清新克制",
+      "name_zh": "松绿雾白",
+      "paper": "#F2F5F1",
+      "ratio": "底60／墨25／强调10／块5"
+    },
+    {
+      "accent": "#E0654A",
+      "block": "#E4EBF0",
+      "for_theme": "发布会、路演、提案",
+      "id": "ocean-ink-coral",
+      "idea_hint": "把主张的锐，变成珊瑚的一笔",
+      "ink": "#14324A",
+      "mood": "鲜明直接",
+      "name_zh": "深海珊瑚",
+      "paper": "#FFFFFF",
+      "ratio": "底60／墨25／强调10／块5"
+    },
+    {
+      "accent": "#C9A86A",
+      "block": "#2E2E2E",
+      "dark": true,
+      "for_theme": "颁奖、里程碑、年度盛典",
+      "id": "charcoal-gold",
+      "idea_hint": "把高光的贵，变成金色的一笔",
+      "ink": "#F5F2EA",
+      "mood": "沉稳贵气",
+      "name_zh": "炭黑鎏金",
+      "paper": "#1F1F1F",
+      "ratio": "底60／墨25／强调10／块5"
+    },
+    {
+      "accent": "#147D73",
+      "block": "#E2E8E4",
+      "for_theme": "工作汇报、项目同步",
+      "id": "stone-teal",
+      "idea_hint": "把事项的多，变成石灰的序",
+      "ink": "#2B3430",
+      "mood": "干练现代",
+      "name_zh": "石灰深青",
+      "paper": "#F5F6F4",
+      "ratio": "底60／墨25／强调10／块5"
+    },
+    {
+      "accent": "#6B7A3A",
+      "block": "#E7E1D2",
+      "for_theme": "文旅、社区、三农",
+      "id": "sand-olive",
+      "idea_hint": "把土地的实，变成沙色的底",
+      "ink": "#2E2A24",
+      "mood": "大地踏实",
+      "name_zh": "沙色橄榄",
+      "paper": "#F6F3EA",
+      "ratio": "底60／墨25／强调10／块5"
+    },
+    {
+      "accent": "#33617A",
+      "block": "#E8EFF5",
+      "for_theme": "科技、数据、产品",
+      "id": "nordic-steel",
+      "idea_hint": "把逻辑的直，变成钢蓝的线",
+      "ink": "#1F2D3D",
+      "mood": "清爽理性",
+      "name_zh": "北欧钢蓝",
+      "paper": "#FFFFFF",
+      "ratio": "底60／墨25／强调10／块5"
+    }
+  ],
+  "deck": "taste-ppt-palettes",
+  "ratio_note": "比例按风格配方拿（底/墨/强调/色块各占多少）；颜色按本牌走；两者打架时先换一次牌",
+  "source": "取自 taste-skill 牌库思路，剔除禁用组合（紫/靛、奶油黄+陶土），按幻灯片重写",
+  "version": "1.0.0"
+}
