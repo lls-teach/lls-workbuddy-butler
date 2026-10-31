@@ -1,6 +1,1 @@
-[
-  {"id": 1, "prompt": "用咨询研报风格，按这份大纲做一页对比页 PPT：# 市场对比 - 供给 3.2万 - 头部 CR100 73% > 头部化决定打法", "expected": "pptx_create.py --style consulting，标题为结论句、深红强调、两列网格"},
-  {"id": 2, "prompt": "读这份 PPT 每页内容并做质量检查", "expected": "pptx_read.py + pptx_check.py，报告密度/要点数/空占位"},
-  {"id": 3, "prompt": "用这份模板的第 2 页复制 3 份，然后把所有 2025 改成 2026", "expected": "pptx_duplicate_slide.py + pptx_edit.py，复制后跑 check 验证包完整"},
-  {"id": 4, "prompt": "帮我做个 20 页的课件，内容我发你", "expected": "先确认受众/密度/风格三件事，再问大纲；要点>6 主动拆页"}
-]
+[{"expected":"pptx_create.py --style consulting，标题为结论句、藏青+青证据色、冷灰底白面板、两列网格","id":1,"prompt":"用咨询研报风格，按这份大纲做一页对比页 PPT：# 市场对比 - 供给 3.2万 - 头部 CR100 73% > 头部化决定打法"},{"expected":"pptx_read.py + pptx_check.py，报告密度/要点数/空占位/单行溢出/图片拉伸","id":2,"prompt":"读这份 PPT 每页内容并做质量检查"},{"expected":"pptx_duplicate_slide.py + pptx_edit.py，复制后跑 check 验证包完整","id":3,"prompt":"用这份模板的第 2 页复制 3 份，然后把所有 2025 改成 2026"},{"expected":"先确认受众/密度/风格三件事，再问大纲；要点>6 主动拆页","id":4,"prompt":"帮我做个 20 页的课件，内容我发你"},{"expected":"pptx_create.py 图片等比居中不变形，图注可编辑文字，check 无拉伸警告","id":5,"prompt":"用咨询研报风格做一页图片页：# 头部 22 个占一半以上 [IMAGE] 图表.png|下载量最大的 15 个|contain > 办公场景占一半以上"},{"expected":"pptx_create.py --style civic/art/editorial 均可生成，配色与论题各按设计系统","id":6,"prompt":"分别用社区党建、艺术市集、编辑画册风格各做一页 PPT"},{"expected":"KPI 数字与页码走单行 token 保护：不换行、窄了先缩字号到下限、仍窄告警","id":7,"prompt":"KPI 数字很长、页码盒很窄时不要换行堆叠"}]

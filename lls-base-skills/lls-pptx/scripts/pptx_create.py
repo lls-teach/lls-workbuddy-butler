@@ -1,44 +1,78 @@
 #!/usr/bin/env python3
-"""从大纲生成 PPT v2.2（版式词汇：KPI 行 / 语义状态表 / 进度条 / 斑马表 / 来源行）。
+"""从大纲生成 PPT v2.3（版式词汇：KPI 行 / 语义状态表 / 进度条 / 斑马表 / 来源行 / 图片页 / 单行 token 保护）。
 
 用法: python3 pptx_create.py -o 成片.pptx --title 标题 --subtitle 副标题 --outline 大纲.md [--style formal]
 大纲语法:
   '# ' 页标题（写结论不写话题）
-  '[KPI] 31,940|技能总量|仍在高速增长'        KPI 数字行
+  '[KPI] 31,940|技能总量|仍在高速增长'        KPI 数字行（数字走单行 token 保护）
   '[STATUS] 发票报销管家|163 竞品仅 3.5 万次|11 月中旬|研发中|amber'
   '[BAR] 58|实名认证'                          进度条
   '[TABLE] 合作项|投入|周期'                   斑马表（首行表头）
+  '[IMAGE] 图片路径|说明|contain'              图片页（contain 等比居中 / cover 先裁后放；图片页建议独占证据场）
   '- ' 要点（>=5 两列）   '> ' 结论带   '= ' 来源行
 """
 import argparse
 import math
 import re
+import sys
 
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.util import Inches, Pt
 
-from lls_pptx_utils import apply_cn_font, CN_FONT, die, ensure_parent, guard_overwrite, parse_outline
+from lls_pptx_utils import (add_single_line_token, apply_cn_font, CN_FONT, contain_rect,
+                            cover_image_bytes, die, ensure_parent, guard_overwrite,
+                            image_size, parse_outline)
 
 STYLES = {
+    # formal：暖白底、近黑主文字、藏蓝强调（琥珀仅作点缀，见 accent2）
     "formal": {
         "bg": RGBColor(0xFA, 0xFA, 0xF7), "fg": RGBColor(0x21, 0x24, 0x28),
         "muted": RGBColor(0x6E, 0x74, 0x7B), "accent": RGBColor(0x1F, 0x46, 0x9C),
+        "accent2": RGBColor(0x1F, 0x46, 0x9C),
         "rule": RGBColor(0xD9, 0xDC, 0xE0), "zebra": RGBColor(0xF1, 0xEF, 0xE9),
         "title_pt": 26, "body_pt": 17, "cover_title_pt": 40,
     },
+    # consulting：冷灰底、白面板、藏青 + 青证据色（原单深红已升级）
     "consulting": {
-        "bg": RGBColor(0xFF, 0xFF, 0xFF), "fg": RGBColor(0x2B, 0x2B, 0x2B),
-        "muted": RGBColor(0x77, 0x77, 0x77), "accent": RGBColor(0x8C, 0x1F, 0x3F),
-        "rule": RGBColor(0xE0, 0xE0, 0xE0), "zebra": RGBColor(0xF2, 0xF2, 0xF2),
-        "title_pt": 24, "body_pt": 15, "cover_title_pt": 38,
+        "bg": RGBColor(0xF2, 0xF4, 0xF7), "fg": RGBColor(0x1A, 0x20, 0x27),
+        "muted": RGBColor(0x5A, 0x6B, 0x7C), "accent": RGBColor(0x1F, 0x4E, 0x79),
+        "accent2": RGBColor(0x0E, 0x7C, 0x7B),
+        "rule": RGBColor(0xD0, 0xD7, 0xDE), "zebra": RGBColor(0xFF, 0xFF, 0xFF),
+        "title_pt": 28, "body_pt": 17, "cover_title_pt": 40,
     },
+    # teaching：浅色底、暖色强调（橙/青双强调允许），历史题材启用历史变体（见设计系统）
     "teaching": {
         "bg": RGBColor(0xFD, 0xFB, 0xF3), "fg": RGBColor(0x30, 0x33, 0x38),
         "muted": RGBColor(0x7A, 0x7F, 0x85), "accent": RGBColor(0xE2, 0x6D, 0x2C),
+        "accent2": RGBColor(0x0E, 0x7C, 0x7B),
         "rule": RGBColor(0xEA, 0xE4, 0xD5), "zebra": RGBColor(0xF5, 0xF0, 0xE2),
         "title_pt": 28, "body_pt": 20, "cover_title_pt": 44,
+    },
+    # civic：社区党建——深红、暖米、哑金、深墨，对称 + 圆形/放射母题
+    "civic": {
+        "bg": RGBColor(0xFD, 0xF3, 0xDC), "fg": RGBColor(0x1A, 0x1A, 0x1A),
+        "muted": RGBColor(0x6E, 0x6E, 0x6E), "accent": RGBColor(0x9E, 0x1B, 0x1B),
+        "accent2": RGBColor(0xB8, 0x96, 0x4A),
+        "rule": RGBColor(0xE5, 0xD5, 0xB8), "zebra": RGBColor(0xF7, 0xE9, 0xC9),
+        "title_pt": 26, "body_pt": 17, "cover_title_pt": 40,
+    },
+    # art：艺术市集——高饱和少色 + 接地深色，超大展示字
+    "art": {
+        "bg": RGBColor(0xFF, 0xFF, 0xFF), "fg": RGBColor(0x11, 0x11, 0x11),
+        "muted": RGBColor(0x66, 0x66, 0x66), "accent": RGBColor(0xE6, 0x3B, 0x2E),
+        "accent2": RGBColor(0x1A, 0x1A, 0x2E),
+        "rule": RGBColor(0xE0, 0xE0, 0xE0), "zebra": RGBColor(0xF5, 0xF5, 0xF5),
+        "title_pt": 30, "body_pt": 17, "cover_title_pt": 48,
+    },
+    # editorial：编辑画册——中性/淡彩底、深墨、克制单强调，大图场 + 精确图注
+    "editorial": {
+        "bg": RGBColor(0xF7, 0xF5, 0xF0), "fg": RGBColor(0x1E, 0x1E, 0x1E),
+        "muted": RGBColor(0x77, 0x77, 0x77), "accent": RGBColor(0x4A, 0x5A, 0x6A),
+        "accent2": RGBColor(0x4A, 0x5A, 0x6A),
+        "rule": RGBColor(0xD8, 0xD2, 0xC8), "zebra": RGBColor(0xEF, 0xEA, 0xE2),
+        "title_pt": 26, "body_pt": 16, "cover_title_pt": 42,
     },
 }
 # 语义色：状态关键词 → 颜色；第 5 列可显式指定 amber/blue/good/muted
@@ -124,7 +158,8 @@ def add_kpis(slide, kpis, S, top):
     for i, k in enumerate(kpis[:n]):
         num, label, note = (k + ["", ""])[:3]
         x = 0.75 + i * col_w
-        add_text(slide, num, x, top, col_w - 0.3, 0.85, 36, S["fg"], bold=True)
+        # KPI 数字走单行 token 保护：窄列自动缩小、仍窄告警，不换行堆叠
+        add_single_line_token(slide, num, x, top, col_w - 0.3, 0.85, 36, S["fg"], bold=True, min_size=20)
         add_text(slide, label, x, top + 0.85, col_w - 0.3, 0.35, 13, S["fg"])
         if note:
             add_text(slide, note, x, top + 1.2, col_w - 0.3, 0.35, 11, S["muted"])
@@ -176,6 +211,34 @@ def add_bars(slide, bars, S, top, height):
         add_text(slide, f"{v:g}%", 10.75, y, 1.5, row_h, 14, S["fg"], bold=True)
 
 
+def add_images(slide, images, S, top, height):
+    """图片页：contain 等比居中（不变形）/ cover 先裁后放（防渲染器走样）。
+    图片页建议独占证据场，不要同页再叠表格。"""
+    if not images:
+        return
+    slot_h = height / len(images)
+    for i, img in enumerate(images):
+        y = top + i * slot_h
+        caption = img.get("caption", "")
+        mode = (img.get("mode") or "contain").lower()
+        img_h = slot_h - (0.35 if caption else 0.1)
+        if img_h <= 0.2:
+            continue
+        try:
+            iw, ih = image_size(img["path"])
+        except Exception as e:  # noqa: BLE001
+            print(f"[lls-pptx] 图片读不到，跳过：{img['path']}（{e}）", file=sys.stderr)
+            continue
+        if mode == "cover":
+            bio, _, _ = cover_image_bytes(img["path"], 11.8, img_h)
+            slide.shapes.add_picture(bio, Inches(0.75), Inches(y), Inches(11.8), Inches(img_h))
+        else:
+            x, iy, w, h = contain_rect(iw, ih, 0.75, y, 11.8, img_h)
+            slide.shapes.add_picture(img["path"], Inches(x), Inches(iy), Inches(w), Inches(h))
+        if caption:
+            add_text(slide, caption, 0.75, y + img_h + 0.05, 11.8, 0.3, 11, S["muted"])
+
+
 def add_table(slide, rows, S, top, height):
     row_h = min(0.6, height / max(len(rows), 1))
     ncols = max(len(r) for r in rows)
@@ -219,7 +282,7 @@ def main() -> None:
     add_text(cover, args.title, 1.0, 2.7, 11.3, 1.4, S["cover_title_pt"], S["fg"], bold=True)
     if args.subtitle:
         add_text(cover, args.subtitle, 1.0, 4.3, 11.3, 0.7, 18, S["muted"])
-    add_rule(cover, 1.0, 4.05, 2.2, S["accent"])
+    add_rule(cover, 1.0, 4.05, 2.2, S["accent2"])
 
     for i, sd in enumerate(outline, 1):
         slide = new_slide(prs, S)
@@ -242,26 +305,28 @@ def main() -> None:
             add_bars(slide, sd["bars"], S, cursor, max(1.0, BANDS["content_bottom"] - 0.7 - cursor))
             cursor += min(len(sd["bars"]) * 0.6, 3.0)
         bottom = BANDS["content_bottom"] - (0.55 if sd.get("takeaway") else 0)
+        # 结论带 Y 先算出来：图片区（含图注）必须在它上方结束，否则图注与结论带重叠
+        takeaway_y = None
+        if sd.get("takeaway"):
+            takeaway_y = BANDS["content_bottom"] - 0.45 - (0.42 if sd.get("source") else 0)
+        if sd["images"]:
+            img_bottom = takeaway_y - 0.1 if takeaway_y else bottom
+            add_images(slide, sd["images"], S, cursor, max(1.0, img_bottom - cursor))
+            cursor = img_bottom
         if sd["status_rows"]:
             add_status_table(slide, sd["status_rows"], S, cursor, max(1.0, bottom - cursor))
         if sd["table_rows"]:
             add_table(slide, sd["table_rows"], S, cursor, max(1.0, bottom - cursor))
         if sd.get("takeaway"):
             takeaway = re.sub(r"^结论[:：]\s*", "", sd["takeaway"])
-            tk_y = BANDS["content_bottom"] - 0.45 - (0.42 if sd.get("source") else 0)
-            add_text(slide, "本页结论：" + takeaway, 0.75, tk_y, 11.8, 0.5,
+            add_text(slide, "本页结论：" + takeaway, 0.75, takeaway_y, 11.8, 0.5,
                      S["body_pt"] - 2, S["accent"], bold=True)
         if sd.get("source"):
             # 大纲写法本就是 "= 来源：…"，先剥掉自带前缀，避免 "来源：来源："
             src_text = re.sub(r"^来源[:：]\s*", "", sd["source"])
             add_text(slide, "来源：" + src_text, 0.75, BANDS["footer"] - 0.22, 11.8, 0.3, 10, S["muted"])
-        folio = slide.shapes.add_textbox(Inches(12.3), Inches(BANDS["footer"]), Inches(0.8), Inches(0.35))
-        fp = folio.text_frame.paragraphs[0]
-        fp.text = f"{i + 1} / {total}"
-        for run in fp.runs:
-            apply_cn_font(run)
-            run.font.size = Pt(10)
-            run.font.color.rgb = S["muted"]
+        folio = add_single_line_token(slide, f"{i + 1} / {total}", 12.15, BANDS["footer"],
+                                      0.95, 0.35, 10, S["muted"], min_size=8)
 
     out = guard_overwrite(args.output, args.force)
     ensure_parent(out)

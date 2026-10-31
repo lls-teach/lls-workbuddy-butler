@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""程序化检查 PPT：密度、要点数、空占位、中文字体、页数健康度。零渲染、秒级。
+"""程序化检查 PPT：密度、要点数、空占位、中文字体、页数健康度、单行 token 溢出、图片拉伸。零渲染、秒级。
 
 用法: python3 pptx_check.py 输入.pptx [--max-bullets 6] [--max-chars 600]
 退出码: 0=通过 1=有警告（不阻塞，供 AI 汇报）
@@ -11,7 +11,7 @@ import sys
 from pptx import Presentation
 from pptx.enum.shapes import MSO_SHAPE_TYPE
 
-from lls_pptx_utils import CN_FONT, die
+from lls_pptx_utils import CN_FONT, die, estimate_single_line_width
 
 warnings: list[str] = []
 
@@ -93,6 +93,33 @@ def main() -> None:
         cjk_runs = [f for f in fonts if f and f != CN_FONT and any('\u4e00' <= ch <= '\u9fff' for ch in "".join(texts))]
         if CN_FONT not in fonts and texts:
             warnings.append(f"第 {i} 页未设置 {CN_FONT} 字体（渲染环境可能缺字）")
+        # 单行 token 溢出：word_wrap 关掉的框按单行估算（先按请求字号算，缩到 8pt 仍塞不下才报）
+        for shape in slide.shapes:
+            if not shape.has_text_frame or shape.text_frame.word_wrap is not False:
+                continue
+            for para in shape.text_frame.paragraphs:
+                t = "".join(r.text for r in para.runs).strip()
+                if not t:
+                    continue
+                sizes = [r.font.size.pt for r in para.runs if r.font.size]
+                size = max(sizes) if sizes else 18
+                est = estimate_single_line_width(t, size)
+                if est <= shape.width.inches:
+                    continue
+                eff = max(8.0, size * shape.width.inches / est)
+                if estimate_single_line_width(t, eff) > shape.width.inches:
+                    warnings.append(f"第 {i} 页单行文本可能溢出（{t[:12]!r} 需 {est:.2f}in，框 {shape.width.inches:.2f}in）——加宽盒子或缩小字号")
+        # 图片拉伸：框比例与原图比例差 >2% 即报（比例比较与单位无关）
+        for shape in slide.shapes:
+            if shape.shape_type != MSO_SHAPE_TYPE.PICTURE:
+                continue
+            try:
+                iw, ih = shape.image.size
+                fw, fh = shape.width.inches, shape.height.inches
+                if iw and ih and fw and fh and abs(iw / ih - fw / fh) / (iw / ih) > 0.02:
+                    warnings.append(f"第 {i} 页图片疑似被拉伸（原图 {iw}×{ih}，框 {fw:.2f}×{fh:.2f}in）——应走 contain/cover")
+            except Exception:  # noqa: BLE001
+                pass
 
     # 汇总
     if warnings:
