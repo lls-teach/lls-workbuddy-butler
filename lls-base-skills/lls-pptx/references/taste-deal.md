@@ -6,18 +6,26 @@
 从获奖站点提炼方向，剔除禁用组合（紫/靛、奶油黄+陶土），按幻灯片重写。
 每张牌 = 一套配色（底/墨/强调/色块）＋ 比例 ＋ 气质 ＋ 适用主题 ＋ idea 引导。
 
-## 怎么发、怎么选
+## 怎么发、怎么选（亮牌流程）
 
 ```bash
-python scripts/taste_deal.py --options 3          # 发三张，三选一
-python scripts/taste_deal.py --options 3 --seed 7 # 指定种子，结果可复现
-python scripts/taste_deal.py --palette <id>       # 打印选中牌的方向单
-python scripts/taste_deal.py --list               # 看整副牌
+python scripts/taste_cards.py --deal 3 --out ./deal/          # 发三张并渲染牌面图
+python scripts/taste_cards.py --deal 3 --seed 7 --out ./deal/ # 指定种子，可复现
+python scripts/taste_cards.py --cards <id1>,<id2> --out ./deal/  # 渲染指定牌
+python scripts/taste_deal.py --palette <id>                  # 选定后打印方向单
 ```
 
 发牌时机：写完主题清单、论点、idea 句之后，选风格配方之前。
-选牌标准：哪张的气质最契合主题，就选哪张；三张都不对就重发一次，
-重发仍不对，直接按主题定（牌是拐杖，不是镣铐）。
+
+铁律（2026-10-31 用户纠正后立规）：
+
+1. **必须亮牌面图给用户看**：发牌后把 3 张牌面图展示给用户，一张一张看得到颜色和气质，不许只报文字。
+2. **选牌权在用户**：agent 可以附一句话推荐（"我推荐第×张，因为……"），但绝不代选；用户说选哪张就用哪张。
+3. **主动提醒重发**：亮牌后必须说一句"不满意说'重发'，再来三张"。用户说重发就换种子再发三张新的。
+4. **选定即用**：用户选定后，跑 `--palette <id>` 打印方向单，直接进入下一步，不再反复确认。
+
+选牌标准（给用户的参考）：哪张的气质最契合主题就选哪张；三张都不对就重发；
+重发仍不对，直接按主题定——牌是拐杖，不是镣铐。
 
 ## 牌与风格配方的关系（重要）
 

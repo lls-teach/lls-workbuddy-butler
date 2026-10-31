@@ -15,7 +15,7 @@ examples_en:
   - Build a data-comparison slide in the consulting research style
   - Distill a reusable visual system from this reference image
   - Improve the hierarchy and density of this deck
-version: 2.7.0
+version: 2.8.0
 ---
 
 # 精美 PPT
@@ -57,8 +57,10 @@ version: 2.7.0
 先读 [审美门禁](references/taste-aesthetics.md)，再读风格配方。必做的五件事：
 
 1. 写主题清单、论点与 idea 句，idea 句过竞争者测试。
-2. 发牌定美术方向：跑 `python scripts/taste_deal.py --options 3` 发三张牌，选一张最契合主题的；
-   牌定色调气质（颜色按牌走），版式仍按风格配方走（比例按配方）。玩法见 [发牌指引](references/taste-deal.md)。
+2. 发牌定美术方向：跑 `python scripts/taste_cards.py --deal 3 --out ./deal/` 亮三张牌面图给用户看，
+   请用户选一张（可附一句话推荐，但绝不代选）；亮牌后主动说"不满意说'重发'，再来三张"。
+   用户选定后跑 `python scripts/taste_deal.py --palette <id>` 打印方向单，直接使用。
+   颜色按牌走，版式仍按风格配方走（比例按配方）。玩法见 [发牌指引](references/taste-deal.md)。
 3. 按主题契合度选一套风格配方并写一句话理由；不混搭（本条取代"有意识地组合两种风格"）。
 4. 生成前逐项过门禁清单：标题不超两行、无眉标、无编号标签、无细线、无渐变与静止阴影、
    无助手配色、无图标卡片阵、一页三种干活字号、特大与常规比拉开。
