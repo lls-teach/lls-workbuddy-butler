@@ -4,9 +4,9 @@ slug: lls-pptx
 display_name: PPT演示文稿
 displayName: "PPT演示文稿"
 display_name_en: "PPT Slides Toolkit"
-description: 为专业幻灯片和可复用 PPT 模板提供视觉设计指导。适用于创建或优化 PPT/PPTX、选择审美方向、从参考图提炼视觉系统，以及改善层级、信息密度、字体、间距、构图与一致性；覆盖咨询研报、正式工作汇报、中国社区党建活动、高饱和艺术市集、编辑画册和历史教学等风格。
-description_zh: "PPT 视觉设计指导：六套风格成片、从参考图提炼视觉系统、优化层级与密度。"
-description_en: "Visual design guidance for slides: six style systems, visual systems distilled from references, hierarchy and density tuning."
+description: 从一句话需求到可编辑 .pptx 成片：做 PPT，做美观、有审美的 PPT。发牌定美术方向（治 AI 默认审美）、六套风格成片、按槽位指派版式、渲染质检；也支持从参考图提炼视觉系统，优化已有 PPT 的层级、信息密度、字体、间距与构图。
+description_zh: "做 PPT，做美观、有审美的 PPT：发牌定方向、版式指派、渲染质检，一句话出可编辑 .pptx。"
+description_en: "Make PPTs — beautiful, tasteful ones: deal an art direction, assign layouts per slot, render-QC, one sentence to an editable .pptx."
 examples_zh:
   - 用咨询研报风格，做一页数据对比 PPT
   - 按这张参考图，提炼一套可复用的视觉系统
@@ -15,7 +15,7 @@ examples_en:
   - Build a data-comparison slide in the consulting research style
   - Distill a reusable visual system from this reference image
   - Improve the hierarchy and density of this deck
-version: 2.10.0
+version: 2.10.1
 ---
 
 # 精美 PPT
