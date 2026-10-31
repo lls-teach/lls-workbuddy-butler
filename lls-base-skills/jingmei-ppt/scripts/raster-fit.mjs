@@ -7,13 +7,8 @@ let sharp;
 try {
   sharp = require("sharp");
 } catch {
-  try {
-    // 吸收补丁：skill 包内不能带 node_modules，项目里装的 sharp 从调用方目录解析
-    sharp = createRequire(`${process.cwd()}/package.json`)("sharp");
-  } catch {
-    console.error("This helper requires the `sharp` package in the active Node.js environment.");
-    process.exit(2);
-  }
+  console.error("This helper requires the `sharp` package in the active Node.js environment.");
+  process.exit(2);
 }
 
 const args = process.argv.slice(2);
